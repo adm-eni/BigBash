@@ -13,8 +13,8 @@
               <li><a class="hover:text-fuchsia-200" href="">Villes</a></li>
               <li><a class="hover:text-fuchsia-200" href="">Campus</a></li>
               <li><a class="hover:text-fuchsia-200" href="">Accueil</a></li>
-              <li><a class="hover:text-fuchsia-200" href="">Mon profil</a></li>
               {% if app.user %}
+                <li><a class="hover:text-fuchsia-200" href="{{ path('user_profile') }}">Mon profil</a>
                 <li><a class="hover:text-fuchsia-200" href="{{ path('app_logout') }}">Se déconnecter</a>
               {% else%}
                 <li><a class="hover:text-fuchsia-200" href="{{ path('app_login') }}">Se connecter</a>
