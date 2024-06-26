@@ -32,15 +32,21 @@ class DeuxOrAuthenticator extends AbstractLoginFormAuthenticator
         $userIdentification = $request->getPayload()->getString('user_authenticator');
 
         if (str_contains($userIdentification, '@')) {
-            $user = $this->userRepository->findOneBy(['email' => $userIdentification]);
+            $userEmail = $this->userRepository->findOneBy(['email' => $userIdentification]);
         } else {
-            $user = $this->userRepository->findOneBy(['pseudo' => $userIdentification]);
+            $userEmail = $this->userRepository->findOneBy(['pseudo' => $userIdentification]);
+        }
+
+        if($userEmail == null) {
+            $userEmail = $userIdentification;
+        } else{
+            $userEmail = $userEmail->getEmail();
         }
 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $userIdentification);
 
         return new Passport(
-            new UserBadge($user->getEmail()),
+            new UserBadge($userEmail),
             new PasswordCredentials($request->getPayload()->getString('password')),
             [
                 new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
