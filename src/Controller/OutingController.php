@@ -17,25 +17,23 @@ class OutingController extends AbstractController
   ): Response
   {
 
-//    $outings = $outingRepo->findAll();
+    $outings = $outingRepo->findAll();
 
-    return $this->render('outing/outing.index.html.twig',
-//        [
-//        'outings' => $outings
-//    ]
-    );
+    return $this->render('outing/outing.index.html.twig', [
+        'outings' => $outings
+    ]);
   }
-//
-//  #[Route('/outings/{id}', name: 'outing', requirements: ['id' => '\d+'])]
-//  public function outing(
-//      int              $id,
-//      OutingRepository $outingRepo
-//  ): Response
-//  {
-//    $outing = $outingRepo->find($id);
-//
-//    return $this->render('outing/outing.show.html.twig', [
-//        'outing' => $outing
-//    ]);
-//  }
+
+  #[Route('/outings/{id}', name: 'outing', requirements: ['id' => '\d+'])]
+  public function outing(
+      int              $id,
+      OutingRepository $outingRepo
+  ): Response
+  {
+    $outing = $outingRepo->find($id);
+
+    return $this->render('outing/outing.show.html.twig', [
+        'outing' => $outing
+    ]);
+  }
 }
