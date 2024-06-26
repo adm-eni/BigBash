@@ -2,8 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Form\UserProfileType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 
@@ -11,8 +16,34 @@ use Symfony\Component\Routing\Attribute\Route;
 class UserController extends AbstractController
 {
     #[Route('/profile', name: 'profile')]
-    public function profile(): Response
+    public function profile(Request                     $request,
+                            UserPasswordHasherInterface $userPasswordHasher,
+                            EntityManagerInterface      $entityManager): Response
     {
-        return $this->render('user/user.profile.html.twig', []);
+        /** @var User $user */
+        $user = $this->getUser();
+        $form = $this->createForm(UserProfileType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if(!empty($form->get('plainPassword')->getData())){
+                $user->setPassword(
+                    $userPasswordHasher->hashPassword(
+                        $user,
+                        $form->get('plainPassword')->getData()
+                    )
+                );
+            }
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Profil mis à jour !');
+            return $this->redirectToRoute('user_profile');
+        }
+
+        return $this->render('user/user.profile.html.twig', [
+            'profileForm' => $form,
+        ]);
     }
 }
