@@ -1,7 +1,58 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello OutingController!{% endblock %}
+{% block title %}Consulter les sorties{% endblock %}
 
 {% block body %}
-  <p class="text-fuchsia-50">test </p>
+  <div class="h-full border-separate overflow-clip border border-solid flex flex-col text-xs">
+    <table class="w-full table-fixed">
+      <thead class="sticky top-0">
+      <tr class="uppercase leading-normal">
+        <th class="py-3 px-6 text-left">Nom de la sortie</th>
+        <th class="py-3 px-6 text-center">Date de la sortie</th>
+        <th class="py-3 px-6 text-center">Inscrits / Places</th>
+        <th class="py-3 px-6 text-center">Etat</th>
+        <th class="py-3 px-6 text-center">Inscrit</th>
+        <th class="py-3 px-6 text-center">Organisateur</th>
+        <th class="py-3 px-6 text-center">Status</th>
+        <th class="py-3 px-6 text-center">Actions</th>
+      </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="flex-1 overflow-y-auto">
+    <table class="w-full table-fixed">
+      <tbody>
+      {% for outing in outings %}
+        <tr class="border-b border-gray-200">
+          <td class="py-3 px-6 text-left whitespace-nowrap">
+            <div class="flex items-center">
+              <span class="font-medium">{{ outing.title }}</span>
+            </div>
+          </td>
+          <td class="py-3 px-6 text-center">
+            {{ outing.startAt|date('Y-m-d') }}
+          </td>
+          <td class="py-3 px-6 text-center">
+            {{ outing.attendees.count }} / {{ outing.maxEntryCount }}
+          </td>
+          <td class="py-3 px-6 text-center">
+            {{ outing.status.name }}
+          </td>
+          <td class="py-3 px-6 text-center">
+            {{ outing.attendees.contains(app.user) ? 'Yes' : 'No' }}
+          </td>
+          <td class="py-3 px-6 text-center">
+            {{ outing.host.firstName ~ ' ' ~ outing.host.lastName }}
+          </td>
+          <td class="py-3 px-6 text-center">
+            {{ outing.status.name }}
+          </td>
+          <td class="py-3 px-6 text-center">
+            <!-- Actions go here -->
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}
