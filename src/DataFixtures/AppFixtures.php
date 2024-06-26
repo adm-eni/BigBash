@@ -26,13 +26,18 @@ class AppFixtures extends Fixture
 
     }
 
-    public function addCampus(int $number, ObjectManager $manager): void {
-        $campus = new Campus();
-        $campus->setName("Rennes");
-        $manager->persist($campus);
+    public function addCampus(int $number, ObjectManager $manager): void
+    {
+        for ($i = 0; $i < $number; $i++) {
+            $campus = new Campus();
+            $campus->setName($this->faker->city());
+            $manager->persist($campus);
+        }
         $manager->flush();
     }
-    public function addUsers(int $number, ObjectManager $manager): void {
+
+    public function addUsers(int $number, ObjectManager $manager): void
+    {
         $campus = $manager->getRepository(Campus::class)->findAll();
         for ($i = 0; $i < $number; $i++) {
             $user = new User();
