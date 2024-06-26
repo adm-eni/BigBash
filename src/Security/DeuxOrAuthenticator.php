@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,18 +23,24 @@ class DeuxOrAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_login';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private UrlGeneratorInterface $urlGenerator, private readonly UserRepository $userRepository)
     {
     }
 
     public function authenticate(Request $request): Passport
     {
-        $email = $request->getPayload()->getString('email');
+        $userIdentification = $request->getPayload()->getString('user_authenticator');
 
-        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
+        if (str_contains($userIdentification, '@')) {
+            $user = $this->userRepository->findOneBy(['email' => $userIdentification]);
+        } else {
+            $user = $this->userRepository->findOneBy(['pseudo' => $userIdentification]);
+        }
+
+        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $userIdentification);
 
         return new Passport(
-            new UserBadge($email),
+            new UserBadge($user->getEmail()),
             new PasswordCredentials($request->getPayload()->getString('password')),
             [
                 new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
@@ -48,7 +55,7 @@ class DeuxOrAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-         return new RedirectResponse($this->urlGenerator->generate('outing_list'));
+        return new RedirectResponse($this->urlGenerator->generate('outing_list'));
     }
 
     protected function getLoginUrl(Request $request): string
