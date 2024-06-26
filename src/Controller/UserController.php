@@ -26,6 +26,10 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if($form->get('cancel')->isClicked()) {
+                return $this->redirectToRoute('outing_list');
+            }
+
             if(!empty($form->get('plainPassword')->getData())){
                 $user->setPassword(
                     $userPasswordHasher->hashPassword(
