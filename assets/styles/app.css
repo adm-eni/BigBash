@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+    input {
+        background-color: rgb(240 171 252);
+    }
+}
