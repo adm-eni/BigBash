@@ -34,7 +34,7 @@ class Location
     private Collection $outing;
 
     #[ORM\ManyToOne(inversedBy: 'locations')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?City $city = null;
 
     public function __construct()
