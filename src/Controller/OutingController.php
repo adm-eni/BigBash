@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Outing;
 use App\Form\Model\OutingsFilter;
 use App\Form\OutingsFilterType;
 use App\Repository\OutingRepository;
@@ -28,10 +27,8 @@ class OutingController extends AbstractController
     $filterForm = $this->createForm(OutingsFilterType::class, $filters);
     $filterForm->handleRequest($request);
 
-    dump($request);
-
     if ($filterForm->isSubmitted() && $filterForm->isValid()) {
-      $outings = $service->filterOutings($filters);
+      $outings = $service->filterOutings($filters, $this->getUser());
     } else {
       $outings = $repo->findAll();
     }

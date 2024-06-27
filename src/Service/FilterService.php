@@ -2,8 +2,10 @@
 
 namespace App\Service;
 
+use App\Entity\User;
 use App\Form\Model\OutingsFilter;
 use App\Repository\OutingRepository;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class FilterService
 {
@@ -14,17 +16,18 @@ class FilterService
     $this->outingRepo = $outingRepo;
   }
 
-  public function filterOutings(OutingsFilter $filter): array
+  public function filterOutings(OutingsFilter $filter, UserInterface $user): array
   {
     return $this->outingRepo->findByFilters(
-      $filter->getCampusChoice(),
-      $filter->getTitleSearch(),
-      $filter->getStartDate(),
-      $filter->getEndDate(),
-      $filter->getIsHost(),
-      $filter->getIsEntered(),
-      $filter->getIsNotEntered(),
-      $filter->getIsPast()
+        $filter->getCampusChoice(),
+        $filter->getTitleSearch(),
+        $filter->getStartDate(),
+        $filter->getEndDate(),
+        $filter->getIsHost(),
+        $filter->getIsEntered(),
+        $filter->getIsNotEntered(),
+        $filter->getIsPast(),
+        $user
     );
   }
 }

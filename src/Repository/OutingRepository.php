@@ -16,7 +16,7 @@ class OutingRepository extends ServiceEntityRepository
     parent::__construct($registry, Outing::class);
   }
 
-  public function findByFilters($campus, $title, $dateStart, $dateEnd, $isHost, $isEntered, $isNotEntered, $isPast): array
+  public function findByFilters($campus, $title, $dateStart, $dateEnd, $isHost, $isEntered, $isNotEntered, $isPast, $user): array
   {
     $qb = $this->createQueryBuilder('o');
     $qb->leftJoin('o.campus', 'c');
@@ -41,45 +41,20 @@ class OutingRepository extends ServiceEntityRepository
     }
     if ($isHost) {
       $qb->andWhere('u.id = :user')
-          ->setParameter('user', $this->getUser()->getId());
+          ->setParameter('user', $user->getId());
     }
     if ($isEntered) {
       $qb->andWhere('a.id = :user')
-          ->setParameter('user', $this->getUser()->getId());
+          ->setParameter('user', $user->getId());
     }
     if ($isNotEntered) {
       $qb->andWhere('a.id != :user')
-          ->setParameter('user', $this->getUser()->getId());
+          ->setParameter('user', $user->getId());
     }
     if ($isPast) {
-      $qb->andWhere('o.start_at < :now')
+      $qb->andWhere('o.startAt < :now')
           ->setParameter('now', new \DateTime());
     }
     return $qb->getQuery()->getResult();
   }
-
-//    /**
-//     * @return Outing[] Returns an array of Outing objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('o.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Outing
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }
