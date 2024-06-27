@@ -97,12 +97,12 @@ class AppFixtures extends Fixture
   public function addStatuses(ObjectManager $manager)
   {
     $statusNames = [
-        'Créée',
-        'Ouverte',
-        'Clôturée',
-        'Activité en cours',
-        'Passée',
-        'Annulée'
+        'En création',
+        'Ouvert',
+        'Clôturé',
+        'En cours',
+        'Passé',
+        'Annulé'
     ];
 
     foreach ($statusNames as $name) {
