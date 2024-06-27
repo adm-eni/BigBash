@@ -122,19 +122,29 @@ class AppFixtures extends Fixture
     for ($i = 0; $i < $number; $i++) {
       $outing = new Outing();
       $outing->setTitle($this->faker->sentence(3));
-      $outing->setStartAt($this->faker->dateTimeBetween('now', '+1 month'));
+      $outing->setStartAt($this->faker->dateTimeBetween('-1 year', '+1 year'));
       $outing->setDuration($this->faker->numberBetween(30, 240));
-      $outing->setEntryDeadline($this->faker->dateTimeBetween('now', '+1 month'));
+      $outing->setEntryDeadline($this->faker->dateTimeBetween('-1 year', '+1 month'));
       $outing->setMaxEntryCount($this->faker->numberBetween(5, 20));
       $outing->setDescription($this->faker->sentence(10));
       $outing->setLocation($locations[array_rand($locations)]);
       $outing->setStatus($statuses[array_rand($statuses)]);
       $outing->setCampus($campus[array_rand($campus)]);
-      $outing->setHost($users[array_rand($users)]);
+      $host = $users[array_rand($users)];
+      $outing->setHost($host);
 
-      $manager->persist($outing);
+      $attendees = array_udiff($users, [$host], function ($user1, $user2) {
+        return $user1->getId() - $user2->getId();
+      });
+
+      shuffle($attendees);
+      $numAttendees = rand(1, count($attendees));
+      for ($j = 0; $j < $numAttendees; $j++) {
+        $outing->addAttendee($attendees[$j]);
+
+        $manager->persist($outing);
+      }
+      $manager->flush();
     }
-    $manager->flush();
   }
-
 }
