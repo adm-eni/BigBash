@@ -4,9 +4,9 @@
 
 {% block body %}
   <div class="text-xs my-2">
-    {{ form_start(filters_form) }}
-    {{ form_widget(filters_form, { 'attr': { 'class': 'space-y-2', 'novalidate': 'novalidate' } }) }}
-    {{ form_end(filters_form) }}
+    {{ form_start(filter_form) }}
+    {{ form_widget(filter_form, { 'attr': { 'class': 'space-y-2'} }) }}
+    {{ form_end(filter_form) }}
   </div>
   <div class="border-separate overflow-clip border border-solid flex flex-col text-xs h-[40vh]">
     <table class="w-full table-fixed">

@@ -2,8 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Outing;
+use App\Form\Model\OutingsFilter;
+use App\Form\OutingsFilterType;
 use App\Repository\OutingRepository;
+use App\Service\FilterService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -13,14 +18,27 @@ class OutingController extends AbstractController
 {
   #[Route('', name: 'list')]
   public function list(
-      OutingRepository $outingRepo
+      Request          $request,
+      OutingRepository $repo,
+      FilterService    $service
   ): Response
   {
 
-    $outings = $outingRepo->findAll();
+    $filters = new OutingsFilter();
+    $filterForm = $this->createForm(OutingsFilterType::class, $filters);
+    $filterForm->handleRequest($request);
+
+    dump($request);
+
+    if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+      $outings = $service->filterOutings($filters);
+    } else {
+      $outings = $repo->findAll();
+    }
 
     return $this->render('outing/outing.index.html.twig', [
-        'outings' => $outings
+        'outings' => $outings,
+        'filter_form' => $filterForm
     ]);
   }
 
@@ -35,5 +53,7 @@ class OutingController extends AbstractController
     return $this->render('outing/outing.show.html.twig', [
         'outing' => $outing
     ]);
+
+
   }
 }
