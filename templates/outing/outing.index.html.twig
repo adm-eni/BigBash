@@ -28,29 +28,30 @@
         <tbody class="whitespace-nowrap overflow-hidden overflow-ellipsis">
         {% for outing in outings %}
           <tr class="border-b border-gray-200 cursor-pointer">
-            <td class="py-3 px-6 text-left">
-              {{ outing.title }}
-            </td>
+            <td class="py-3 px-6 text-left">{{ outing.title }}</td>
+            <td class="py-3 px-6 text-center">{{ outing.startAt|date('d-m-Y') }}</td>
+            <td class="py-3 px-6 text-center">{{ outing.attendees.count }} / {{ outing.maxEntryCount }}</td>
+            <td class="py-3 px-6 text-center">{{ outing.status.name }}</td>
+            <td class="py-3 px-6 text-center">{{ outing.attendees.contains(app.user) ? 'Oui' : 'Non' }}</td>
+            <td class="py-3 px-6 text-center">{{ outing.host.firstName ~ ' ' ~ outing.host.lastName }}</td>
+            <td class="py-3 px-6 text-center">{{ outing.status.name }}</td>
             <td class="py-3 px-6 text-center">
-              {{ outing.startAt|date('d-m-Y') }}
-            </td>
-            <td class="py-3 px-6 text-center">
-              {{ outing.attendees.count }} / {{ outing.maxEntryCount }}
-            </td>
-            <td class="py-3 px-6 text-center">
-              {{ outing.status.name }}
-            </td>
-            <td class="py-3 px-6 text-center">
-              {{ outing.attendees.contains(app.user) ? 'Oui' : 'Non' }}
-            </td>
-            <td class="py-3 px-6 text-center">
-              {{ outing.host.firstName ~ ' ' ~ outing.host.lastName }}
-            </td>
-            <td class="py-3 px-6 text-center">
-              {{ outing.status.name }}
-            </td>
-            <td class="py-3 px-6 text-center">
-              <!-- Actions go here -->
+              {% if outing.host == app.user %}
+                {% if outing.status.id == 1 %}
+                  <a href="{{ path('outing_edit', {'id': outing.id}) }}" class="border border-gray-200 p-2">Modifier</a>
+                  <a href="" class="border border-gray-200 p-2">Publier</a>
+                {% elseif outing.status.id == 2 %}
+                  <a href="" class="border border-gray-200 p-2">Annuler</a>
+                {% endif %}
+              {% endif %}
+              {% if outing.status.id == 2 and not outing.attendees.contains(app.user) and outing.host != app.user %}
+                <a href="" class="border border-gray-200 p-2">S'inscrire</a>
+              {% elseif outing.status.id == 2 and outing.attendees.contains(app.user) %}
+                <a href="" class="border border-gray-200 p-2">Se désister</a>
+              {% endif %}
+              {% if outing.status.id != 1 %}
+                <a href="{{ path('outing_show', {'id': outing.id}) }}" class="border border-gray-200 p-2">Afficher</a>
+              {% endif %}
             </td>
           </tr>
         {% endfor %}
@@ -60,6 +61,6 @@
   </div>
 
   <div class=" m-1 mt-4">
-    <a class="border border-gray-200 p-2 text-center" href="{{ path('outing_new') }}" >Créer une sortie</a>
+    <a class="border border-gray-200 p-2 text-center" href="{{ path('outing_new') }}">Créer une sortie</a>
   </div>
 {% endblock %}
