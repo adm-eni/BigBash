@@ -8,11 +8,13 @@ use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserProfileType extends AbstractType
@@ -42,6 +44,19 @@ class UserProfileType extends AbstractType
                 'required' => false,
             ])
             ->add('phoneNumber')
+            ->add('image', FileType::class, [
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new Image(
+                        [
+                            'maxSize' => '10000k',
+                            'mimeTypesMessage' => 'Format d\'image non autorisé !',
+                            'maxSizeMessage' => 'Fichier trop volumineux !'
+                        ]
+                    )
+                ]
+            ])
             ->add('save', SubmitType::class, [
                 'label' => 'Enregistrer',
             ])
