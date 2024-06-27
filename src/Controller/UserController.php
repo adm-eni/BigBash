@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserProfileType;
+use App\Utils\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +19,8 @@ class UserController extends AbstractController
     #[Route('/profile', name: 'profile')]
     public function profile(Request                     $request,
                             UserPasswordHasherInterface $userPasswordHasher,
-                            EntityManagerInterface      $entityManager): Response
+                            EntityManagerInterface      $entityManager,
+                            FileUploader                $fileUploader): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -26,13 +28,23 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if(!empty($form->get('plainPassword')->getData())){
+            if ($form->get('cancel')->isClicked()) {
+                return $this->redirectToRoute('outing_list');
+            }
+
+            if (!empty($form->get('plainPassword')->getData())) {
                 $user->setPassword(
                     $userPasswordHasher->hashPassword(
                         $user,
                         $form->get('plainPassword')->getData()
                     )
                 );
+            }
+
+            if (!empty($form->get('image')->getData())) {
+                $file = $form->get('image')->getData();
+                $newFilename = $fileUploader->upload($file, $this->getParameter('profile_image_directory'), $user->getPseudo());
+                $user->setImage($newFilename);
             }
 
             $entityManager->persist($user);
@@ -44,6 +56,7 @@ class UserController extends AbstractController
 
         return $this->render('user/user.profile.html.twig', [
             'profileForm' => $form,
+            'user' => $user,
         ]);
     }
 }
