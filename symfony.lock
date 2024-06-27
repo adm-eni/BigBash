@@ -52,6 +52,9 @@
             "./tests/bootstrap.php"
         ]
     },
+    "spiriitlabs/form-filter-bundle": {
+        "version": "dev-master"
+    },
     "symfony/apache-pack": {
         "version": "1.0",
         "recipe": {
