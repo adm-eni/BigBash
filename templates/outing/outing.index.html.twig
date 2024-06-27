@@ -3,7 +3,12 @@
 {% block title %}Consulter les sorties{% endblock %}
 
 {% block body %}
-  <div class="h-full border-separate overflow-clip border border-solid flex flex-col text-xs">
+  <div class="text-xs my-2">
+    {{ form_start(filters_form) }}
+    {{ form_widget(filters_form, { 'attr': { 'class': 'space-y-2', 'novalidate': 'novalidate' } }) }}
+    {{ form_end(filters_form) }}
+  </div>
+  <div class="border-separate overflow-clip border border-solid flex flex-col text-xs h-[40vh]">
     <table class="w-full table-fixed">
       <thead class="sticky top-0">
       <tr class="uppercase leading-normal">
@@ -18,41 +23,39 @@
       </tr>
       </thead>
     </table>
-  </div>
-  <div class="flex-1 overflow-y-auto">
-    <table class="w-full table-fixed">
-      <tbody>
-      {% for outing in outings %}
-        <tr class="border-b border-gray-200">
-          <td class="py-3 px-6 text-left whitespace-nowrap">
-            <div class="flex items-center">
-              <span class="font-medium">{{ outing.title }}</span>
-            </div>
-          </td>
-          <td class="py-3 px-6 text-center">
-            {{ outing.startAt|date('Y-m-d') }}
-          </td>
-          <td class="py-3 px-6 text-center">
-            {{ outing.attendees.count }} / {{ outing.maxEntryCount }}
-          </td>
-          <td class="py-3 px-6 text-center">
-            {{ outing.status.name }}
-          </td>
-          <td class="py-3 px-6 text-center">
-            {{ outing.attendees.contains(app.user) ? 'Yes' : 'No' }}
-          </td>
-          <td class="py-3 px-6 text-center">
-            {{ outing.host.firstName ~ ' ' ~ outing.host.lastName }}
-          </td>
-          <td class="py-3 px-6 text-center">
-            {{ outing.status.name }}
-          </td>
-          <td class="py-3 px-6 text-center">
-            <!-- Actions go here -->
-          </td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
+    <div class="flex-1 overflow-y-auto">
+      <table class="w-full table-fixed">
+        <tbody class="whitespace-nowrap overflow-hidden overflow-ellipsis">
+        {% for outing in outings %}
+          <tr class="border-b border-gray-200 cursor-pointer">
+            <td class="py-3 px-6 text-left">
+              {{ outing.title }}
+            </td>
+            <td class="py-3 px-6 text-center">
+              {{ outing.startAt|date('d-m-Y') }}
+            </td>
+            <td class="py-3 px-6 text-center">
+              {{ outing.attendees.count }} / {{ outing.maxEntryCount }}
+            </td>
+            <td class="py-3 px-6 text-center">
+              {{ outing.status.name }}
+            </td>
+            <td class="py-3 px-6 text-center">
+              {{ outing.attendees.contains(app.user) ? 'Oui' : 'Non' }}
+            </td>
+            <td class="py-3 px-6 text-center">
+              {{ outing.host.firstName ~ ' ' ~ outing.host.lastName }}
+            </td>
+            <td class="py-3 px-6 text-center">
+              {{ outing.status.name }}
+            </td>
+            <td class="py-3 px-6 text-center">
+              <!-- Actions go here -->
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 {% endblock %}
