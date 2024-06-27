@@ -16,16 +16,16 @@ class Outing
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: false)]
     private ?string $title = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $startAt = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $duration = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $entryDeadline = null;
 
     #[ORM\Column(nullable: true)]
@@ -49,7 +49,7 @@ class Outing
     private ?Location $location = null;
 
     #[ORM\ManyToOne(inversedBy: 'outings')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Campus $campus = null;
 
     #[ORM\ManyToOne(inversedBy: 'outings')]
@@ -83,7 +83,7 @@ class Outing
         return $this->startAt;
     }
 
-    public function setStartAt(\DateTimeInterface $startAt): static
+    public function setStartAt(?\DateTimeInterface $startAt): static
     {
         $this->startAt = $startAt;
 
@@ -107,7 +107,7 @@ class Outing
         return $this->entryDeadline;
     }
 
-    public function setEntryDeadline(\DateTimeInterface $entryDeadline): static
+    public function setEntryDeadline(?\DateTimeInterface $entryDeadline): static
     {
         $this->entryDeadline = $entryDeadline;
 
