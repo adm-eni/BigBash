@@ -8,7 +8,7 @@ use App\Form\OutingsFilterType;
 use App\Form\OutingType;
 use App\Repository\OutingRepository;
 use App\Repository\StatusRepository;
-use App\Service\FilterService;
+use App\Service\OutingService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,22 +21,21 @@ class OutingController extends AbstractController
 {
   #[Route('', name: 'list')]
   public function list(
-      Request          $request,
-      OutingRepository $repo,
-      FilterService    $service
+      Request       $request,
+      OutingService $service
   ): Response
   {
+
+    $user = $this->getUser();
 
     $filters = new OutingsFilter();
     $filterForm = $this->createForm(OutingsFilterType::class, $filters);
     $filterForm->handleRequest($request);
 
-    dump($request);
+    $outings = ($this->isGranted('ROLE_ADMIN') ? $service->getOutings() : $service->getDefaultOutings($user));
 
     if ($filterForm->isSubmitted() && $filterForm->isValid()) {
-      $outings = $service->filterOutings($filters, $this->getUser());
-    } else {
-      $outings = $repo->findAll();
+      $outings = $service->getFilteredOutings($outings, $user, $filters);
     }
 
     return $this->render('outing/outing.index.html.twig', [
@@ -125,7 +124,7 @@ class OutingController extends AbstractController
       return $this->redirectToRoute('user_profile');
     }
 
-    return $this->render('outing/outing.index.html.twig', [
+    return $this->render('outing/outing.edit.html.twig', [
         'outingForm' => $form,
     ]);
   }

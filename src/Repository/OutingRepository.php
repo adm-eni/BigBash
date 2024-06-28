@@ -16,13 +16,31 @@ class OutingRepository extends ServiceEntityRepository
     parent::__construct($registry, Outing::class);
   }
 
-  public function findByFilters($campus, $title, $dateStart, $dateEnd, $isHost, $isEntered, $isNotEntered, $isPast, $user): array
+  public function findByDefault($user): array
+  {
+    $qb = $this->createQueryBuilder('o');
+    $qb->leftJoin('o.attendees', 'a');
+    $qb->leftJoin('o.host', 'h');
+    $qb->leftJoin('o.status', 's');
+
+    $qb->where('s.name != :statusClosed')
+        ->andWhere('(s.name != :statusCreated OR (s.name = :statusCreated AND h.id = :userId))')
+        ->setParameter('statusClosed', 'Clôturé')
+        ->setParameter('statusCreated', 'En création')
+        ->setParameter('userId', $user->getId());
+
+    return $qb->getQuery()->getResult();
+  }
+
+  public function findByFilters(array $initialOutings, $user, $campus, $title, $dateStart, $dateEnd, $isHost, $isEntered, $isNotEntered, $isPast): array
   {
     $qb = $this->createQueryBuilder('o');
     $qb->leftJoin('o.campus', 'c');
     $qb->leftJoin('o.attendees', 'a');
-    $qb->leftJoin('o.host', 'u');
+    $qb->leftJoin('o.host', 'h');
     $qb->where('1 = 1');
+    $qb->andwhere('o IN (:outings)')
+        ->setParameter('outings', $initialOutings);
     if ($campus) {
       $qb->andWhere('c.id = :campus')
           ->setParameter('campus', $campus->getId());
@@ -40,7 +58,7 @@ class OutingRepository extends ServiceEntityRepository
           ->setParameter('dateEnd', $dateEnd);
     }
     if ($isHost) {
-      $qb->andWhere('u.id = :user')
+      $qb->andWhere('h.id = :user')
           ->setParameter('user', $user->getId());
     }
     if ($isEntered) {
@@ -48,7 +66,14 @@ class OutingRepository extends ServiceEntityRepository
           ->setParameter('user', $user->getId());
     }
     if ($isNotEntered) {
-      $qb->andWhere('a.id != :user')
+      $subQuery = $this->createQueryBuilder('o2')
+          ->select('1')
+          ->leftJoin('o2.attendees', 'a2')
+          ->where('a2.id = :user AND o2.id = o.id')
+          ->setParameter('user', $user->getId())
+          ->getDQL();
+
+      $qb->andWhere(sprintf('NOT EXISTS (%s) AND h.id != :user', $subQuery))
           ->setParameter('user', $user->getId());
     }
     if ($isPast) {

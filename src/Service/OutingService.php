@@ -2,23 +2,36 @@
 
 namespace App\Service;
 
-use App\Entity\User;
 use App\Form\Model\OutingsFilter;
 use App\Repository\OutingRepository;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class FilterService
+class OutingService
 {
   private OutingRepository $outingRepo;
+  private UserInterface $user;
 
   public function __construct(OutingRepository $outingRepo)
   {
     $this->outingRepo = $outingRepo;
   }
 
-  public function filterOutings(OutingsFilter $filter, UserInterface $user): array
+  public function getDefaultOutings(UserInterface $user): array
   {
+    return $this->outingRepo->findByDefault($user);
+  }
+
+  public function getOutings(): array
+  {
+    return $this->outingRepo->findAll();
+  }
+
+  public function getFilteredOutings(array $outings, UserInterface $user, OutingsFilter $filter): array
+  {
+
     return $this->outingRepo->findByFilters(
+        $outings,
+        $user,
         $filter->getCampusChoice(),
         $filter->getTitleSearch(),
         $filter->getStartDate(),
@@ -26,8 +39,7 @@ class FilterService
         $filter->getIsHost(),
         $filter->getIsEntered(),
         $filter->getIsNotEntered(),
-        $filter->getIsPast(),
-        $user
+        $filter->getIsPast()
     );
   }
 }
