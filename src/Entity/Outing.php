@@ -102,6 +102,11 @@ class Outing
         return $this;
     }
 
+    public function getEndAt(): ?\DateTimeInterface
+    {
+        return $this->startAt?->modify(sprintf('+%d minutes', $this->duration));
+    }
+
     public function getEntryDeadline(): ?\DateTimeInterface
     {
         return $this->entryDeadline;
