@@ -26,6 +26,8 @@ class OutingController extends AbstractController
   ): Response
   {
 
+    $service->updateOutingStatuses();
+
     $user = $this->getUser();
 
     $filters = new OutingsFilter();

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Outing;
+use App\Entity\Status;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -81,5 +82,24 @@ class OutingRepository extends ServiceEntityRepository
           ->setParameter('now', new \DateTime());
     }
     return $qb->getQuery()->getResult();
+  }
+
+// In OutingRepository.php
+
+  public function findOutingsToUpdate(): array
+  {
+    return $this->createQueryBuilder('o')
+        ->leftJoin('o.status', 's')
+        ->where('s.name NOT IN (:excludedStatuses)')
+        ->setParameter('excludedStatuses', ['En création', 'Clôturé', 'Annulé'])
+        ->getQuery()
+        ->getResult();
+  }
+
+  public function findStatusByName(string $name): ?Status
+  {
+    return $this->getEntityManager()
+        ->getRepository(Status::class)
+        ->findOneBy(['name' => $name]);
   }
 }

@@ -42,4 +42,28 @@ class OutingService
         $filter->getIsPast()
     );
   }
+
+// In OutingService.php
+
+  public function updateOutingStatuses(): void
+  {
+    $outings = $this->outingRepo->findOutingsToUpdate();
+    $now = new \DateTime();
+
+    $ongoingStatus = $this->outingRepo->findStatusByName('En cours');
+    $pastStatus = $this->outingRepo->findStatusByName('Passé');
+
+    foreach ($outings as $outing) {
+      $startAt = $outing->getStartAt();
+      $endAt = $outing->getEndAt();
+
+      if ($now >= $startAt && $now < $endAt) {
+        $outing->setStatus($ongoingStatus);
+      } elseif ($now >= $endAt) {
+        $outing->setStatus($pastStatus);
+      }
+    }
+
+    $this->outingRepo->getEntityManager()->flush();
+  }
 }
