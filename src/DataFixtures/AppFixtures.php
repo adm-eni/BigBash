@@ -118,33 +118,65 @@ class AppFixtures extends Fixture
     $campus = $manager->getRepository(Campus::class)->findAll();
     $users = $manager->getRepository(User::class)->findAll();
     $locations = $manager->getRepository(Location::class)->findAll();
-    $statuses = $manager->getRepository(Status::class)->findAll();
+    $statuses = $manager->getRepository(Status::class)->findBy(['name' => ['En création', 'Ouvert', 'Clôturé', 'En cours', 'Passé', 'Annulé']]);
+    $now = new \DateTime();
+
     for ($i = 0; $i < $number; $i++) {
       $outing = new Outing();
       $outing->setTitle($this->faker->sentence(3));
-      $outing->setStartAt($this->faker->dateTimeBetween('-1 year', '+1 year'));
+
+      $startAt = $this->faker->dateTimeBetween('-1 year', '+1 year');
+      $outing->setStartAt($startAt);
+
+      $entryDeadline = clone $startAt;
+      $entryDeadline->modify('-' . $this->faker->numberBetween(1, 30) . ' days');
+      $outing->setEntryDeadline($entryDeadline);
+
       $outing->setDuration($this->faker->numberBetween(30, 240));
-      $outing->setEntryDeadline($this->faker->dateTimeBetween('-1 year', '+1 month'));
       $outing->setMaxEntryCount($this->faker->numberBetween(5, 20));
       $outing->setDescription($this->faker->sentence(10));
       $outing->setLocation($locations[array_rand($locations)]);
-      $outing->setStatus($statuses[array_rand($statuses)]);
+
+      $oneDayAgo = (clone $now)->modify('-1 day');
+      $oneMonthAgo = (clone $now)->modify('-1 month');
+      if ($startAt < $oneMonthAgo) {
+        $status = $this->getStatusByName($statuses, 'Clôturé');
+      } elseif ($startAt < $oneDayAgo) {
+        $status = $this->getStatusByName($statuses, 'Passé');
+      } else {
+        $status = $statuses[array_rand($statuses)];
+      }
+      $outing->setStatus($status);
+
       $outing->setCampus($campus[array_rand($campus)]);
       $host = $users[array_rand($users)];
       $outing->setHost($host);
 
-      $attendees = array_udiff($users, [$host], function ($user1, $user2) {
-        return $user1->getId() - $user2->getId();
-      });
+      // Only add attendees if the status is not "En création"
+      if ($status->getName() !== 'En création') {
+        $attendees = array_udiff($users, [$host], function ($user1, $user2) {
+          return $user1->getId() - $user2->getId();
+        });
 
-      shuffle($attendees);
-      $numAttendees = rand(1, count($attendees));
-      for ($j = 0; $j < $numAttendees; $j++) {
-        $outing->addAttendee($attendees[$j]);
-
-        $manager->persist($outing);
+        shuffle($attendees);
+        $numAttendees = rand(1, min(count($attendees), $outing->getMaxEntryCount()));
+        for ($j = 0; $j < $numAttendees; $j++) {
+          $outing->addAttendee($attendees[$j]);
+        }
       }
-      $manager->flush();
+
+      $manager->persist($outing);
     }
+    $manager->flush();
+  }
+
+  private function getStatusByName(array $statuses, string $name): Status
+  {
+    foreach ($statuses as $status) {
+      if ($status->getName() === $name) {
+        return $status;
+      }
+    }
+    throw new \RuntimeException("Status '$name' not found");
   }
 }
