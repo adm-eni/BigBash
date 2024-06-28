@@ -23,20 +23,25 @@ class OutingType extends AbstractType
         $builder
             ->add('title', null, [
                 'required' => true,
+                'label' => 'Titre',
             ])
             ->add('startAt', DateTimeType::class, [
                 'widget' => 'single_text',
                 'required' => false,
+                'label' => 'Date et heure de la sortie',
             ])
             ->add('entryDeadline', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false,
+                'label' => 'Date limite d\'inscription',
             ])
             ->add('maxEntryCount', null, [
                 'required' => false,
+                'label' => 'Nombre de places',
             ])
             ->add('duration', null, [
                 'required' => false,
+                'label' => 'Durée',
             ])
             ->add('description', null, [
                 'required' => false,
@@ -53,6 +58,7 @@ class OutingType extends AbstractType
                 'choice_label' => 'name',
                 'choice_value' => 'id',
                 'required' => true,
+                'label' => 'Lieu'
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Enregistrer',

@@ -23,8 +23,12 @@ class UserProfileType extends AbstractType
     {
         $builder
             ->add('pseudo')
-            ->add('lastName')
-            ->add('firstName')
+            ->add('lastName', null, [
+                'label' => 'Nom',
+            ])
+            ->add('firstName', null, [
+                'label' => 'Prénom',
+            ])
             ->add('email', EmailType::class)
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
@@ -43,10 +47,13 @@ class UserProfileType extends AbstractType
                 'mapped' => false,
                 'required' => false,
             ])
-            ->add('phoneNumber')
+            ->add('phoneNumber', null, [
+                'label' => 'Téléphone',
+            ])
             ->add('image', FileType::class, [
                 'mapped' => false,
                 'required' => false,
+                'label' => 'Image de profil',
                 'constraints' => [
                     new Image(
                         [
