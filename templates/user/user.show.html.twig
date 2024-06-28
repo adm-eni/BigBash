@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block body %}
+    <div class="flex flex-col items-center">
+        <h1 class="text-3xl mb-4">{{ user.pseudo }}</h1>
+        <div class="flex">
+            {% if user is not null and user.image is not null %}
+                <img class="pr-5 max-w-52" src="{{ asset('img/profile-image/' ~ user.image) }}" alt="{{ user.image }}">
+            {% endif %}
+            <table class="table">
+                <tr>
+                    <th class="text-right" scope="row">Prénom :</th>
+                    <td class="pl-5">{{ user.firstName }}</td>
+                </tr>
+                <tr>
+                    <th class="text-right" scope="row">Nom :</th>
+                    <td class="pl-5">{{ user.lastName }}</td>
+                </tr>
+                <tr>
+                    <th class="text-right" scope="row">Téléphone :</th>
+                    <td class="pl-5">{{ user.phoneNumber }}</td>
+                </tr>
+                <tr>
+                    <th class="text-right" scope="row">Email :</th>
+                    <td class="pl-5">{{ user.email }}</td>
+                </tr>
+                <tr>
+                    <th class="text-right" scope="row">Campus :</th>
+                    <td class="pl-5">{{ user.campus.name }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+
+

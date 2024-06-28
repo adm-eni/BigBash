@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserProfileType;
+use App\Repository\UserRepository;
 use App\Utils\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -56,6 +57,22 @@ class UserController extends AbstractController
 
         return $this->render('user/user.profile.html.twig', [
             'profileForm' => $form,
+            'user' => $user,
+        ]);
+    }
+
+    #[Route('/{id}', name: 'show', requirements: ['id' => '\d+'])]
+    public function show(Request $request,
+                         UserRepository $userRepository,
+                         int     $id = null): Response
+    {
+        if ($id === null) {
+            throw $this->createNotFoundException('Page non trouvée.');
+        } else {
+            $user = $userRepository->find($id);
+        }
+
+        return $this->render('user/user.show.html.twig', [
             'user' => $user,
         ]);
     }
