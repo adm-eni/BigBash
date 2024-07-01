@@ -3,66 +3,107 @@
 {% block title %}Consulter les sorties{% endblock %}
 
 {% block body %}
-  <div class="text-xs my-2">
-    {{ form_start(filter_form) }}
-    {{ form_widget(filter_form, { 'attr': { 'class': 'space-y-2'} }) }}
-    {{ form_end(filter_form) }}
-  </div>
-  <div class="border-separate overflow-clip border border-solid flex flex-col text-xs h-[40vh]">
-    <table class="w-full table-fixed">
-      <thead class="sticky top-0">
-      <tr class="uppercase leading-normal">
-        <th class="py-3 px-6 text-left">Nom de la sortie</th>
-        <th class="py-3 px-6 text-center">Date de la sortie</th>
-        <th class="py-3 px-6 text-center">Inscrits / Places</th>
-        <th class="py-3 px-6 text-center">Etat</th>
-        <th class="py-3 px-6 text-center">Inscrit</th>
-        <th class="py-3 px-6 text-center">Organisateur</th>
-        <th class="py-3 px-6 text-center">Actions</th>
-      </tr>
-      </thead>
-    </table>
-    <div class="flex-1 overflow-y-auto">
-      <table class="w-full table-fixed">
-        <tbody class="whitespace-nowrap overflow-hidden overflow-ellipsis">
-        {% for outing in outings %}
-          <tr class="border-b border-gray-200">
-            <td class="py-3 px-6 text-left">{{ outing.title }}</td>
-            <td class="py-3 px-6 text-center">{{ outing.startAt|date('d-m-Y') }}</td>
-            <td class="py-3 px-6 text-center">{{ outing.attendees.count }} / {{ outing.maxEntryCount }}</td>
-            <td class="py-3 px-6 text-center">{{ outing.status.value }}</td>
-            <td class="py-3 px-6 text-center">{{ outing.host == app.user ? 'Organisateur' : (outing.attendees.contains(app.user) ? 'Oui' : 'Non') }}
-            </td>
-            <td class="py-3 px-6 text-center"><a
-                  href="{{ path('user_show', {'id': outing.host.id} ) }}"
-                  class="border border-gray-200 p-2">{{ outing.host.firstName ~ ' ' ~ outing.host.lastName }}</a>
-            </td>
-            <td class="py-3 px-6 text-center">
-              {% if outing.host == app.user %}
-                {% if outing.status.value == 'En création' %}
-                  <a href="{{ path('outing_edit', {'id': outing.id}) }}" class="border border-gray-200 p-2">Modifier</a>
-                  <a href="" class="border border-gray-200 p-2">Publier</a>
-                {% elseif outing.status.value == 'Ouvert' %}
-                  <a href="" class="border border-gray-200 p-2">Annuler</a>
-                {% endif %}
-              {% endif %}
-              {% if outing.status.value == 'Ouvert' and not outing.attendees.contains(app.user) and outing.host != app.user %}
-                <a href="" class="border border-gray-200 p-2">S'inscrire</a>
-              {% elseif outing.status.value == 'Ouvert' and outing.attendees.contains(app.user) %}
-                <a href="" class="border border-gray-200 p-2">Se désister</a>
-              {% endif %}
-              {% if outing.status.value != 'En création' %}
-                <a href="{{ path('outing_show', {'id': outing.id}) }}" class="border border-gray-200 p-2">Afficher</a>
-              {% endif %}
-            </td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
+  <div class="flex flex-col h-full">
+    <div class="flex-none mb-4">
+      <div class="text-xs grid grid-cols-3 gap-4">
+        <div class="space-y-3 items-center">
+          <div class="flex justify-end w-full text-right space-x-4 items-center">
+            {{ form_label(filter_form.campusChoice, null, {'label_attr': {'class': 'inline-block w-1/2'}}) }}
+            {{ form_widget(filter_form.campusChoice, {'attr': {'class': 'inline-block w-1/2'}}) }}
+          </div>
+          <div class="flex justify-end w-full text-right space-x-4 items-center">
+            {{ form_label(filter_form.titleSearch, null, {'label_attr': {'class': 'inline-block w-1/2'}}) }}
+            {{ form_widget(filter_form.titleSearch, {'attr': {'class': 'inline-block w-1/2'}}) }}
+          </div>
+          <div class="flex justify-end space-x-4 items-center">
+            {{ form_row(filter_form.startDate) }}
+            {{ form_row(filter_form.endDate) }}
+          </div>
+        </div>
+        <div class="flex flex-col justify-center items-center">
+          <div class="space-y-3">
+            <div class="space-x-4">
+              {{ form_widget(filter_form.isHost) }}
+              {{ form_label(filter_form.isHost) }}
+            </div>
+            <div class="space-x-4">
+              {{ form_widget(filter_form.isEntered) }}
+              {{ form_label(filter_form.isEntered) }}
+            </div>
+            <div class="space-x-4">
+              {{ form_widget(filter_form.isNotEntered) }}
+              {{ form_label(filter_form.isNotEntered) }}
+            </div>
+            <div class="space-x-4">
+              {{ form_widget(filter_form.isPast) }}
+              {{ form_label(filter_form.isPast) }}
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col justify-center items-left">
+          {{ form_row(filter_form.submit, {'attr': {'class': 'border border-gray-200 p-4'}}) }}
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class=" m-1 mt-4">
-    <a class="border border-gray-200 p-2 text-center" href="{{ path('outing_new') }}">Créer une sortie</a>
+    <div class="flex-grow overflow-hidden border border-solid flex flex-col">
+      <table class="w-full table-fixed">
+        <thead class="bg-slate-950 bg-opacity-90">
+        <tr class="uppercase leading-normal">
+          <th class="py-3 px-6 text-left">Nom de la sortie</th>
+          <th class="py-3 px-6 text-center">Date de la sortie</th>
+          <th class="py-3 px-6 text-center">Inscrits / Places</th>
+          <th class="py-3 px-6 text-center">Etat</th>
+          <th class="py-3 px-6 text-center">Inscrit</th>
+          <th class="py-3 px-6 text-center">Organisateur</th>
+          <th class="py-3 px-6 text-center">Actions</th>
+        </tr>
+        </thead>
+      </table>
+      <div class="flex-grow overflow-y-auto">
+        <table class="w-full table-fixed">
+          <tbody class="bg-slate-950 bg-opacity-50">
+          {% for outing in outings %}
+            <tr class="border-b border-gray-700">
+                <td class="py-3 px-6 text-left truncate">{{ outing.title }}</td>
+                <td class="py-3 px-6 text-center">{{ outing.startAt|date('d-m-Y') }}</td>
+                <td class="py-3 px-6 text-center">{{ outing.attendees.count }} / {{ outing.maxEntryCount }}</td>
+                <td class="py-3 px-6 text-center">{{ outing.status.value }}</td>
+                <td class="py-3 px-6 text-center">{{ outing.host == app.user ? 'Organisateur' : (outing.attendees.contains(app.user) ? 'Oui' : 'Non') }}</td>
+                <td class="py-3 px-6 text-center">
+                  <a href="{{ path('user_show', {'id': outing.host.id} ) }}" class="border border-gray-200 p-2">
+                    {{ outing.host.firstName ~ ' ' ~ outing.host.lastName }}
+                  </a>
+                </td>
+                <td class="py-3 px-6 text-center">
+                  {% if outing.host == app.user %}
+                    {% if outing.status.value == 'En création' %}
+                      <a href="{{ path('outing_edit', {'id': outing.id}) }}"
+                         class="border border-gray-200 p-2">Modifier</a>
+                      <a href="" class="border border-gray-200 p-2">Publier</a>
+                    {% elseif outing.status.value == 'Ouvert' %}
+                      <a href="" class="border border-gray-200 p-2">Annuler</a>
+                    {% endif %}
+                  {% endif %}
+                  {% if outing.status.value == 'Ouvert' and not outing.attendees.contains(app.user) and outing.host != app.user %}
+                    <a href="" class="border border-gray-200 p-2">S'inscrire</a>
+                  {% elseif outing.status.value == 'Ouvert' and outing.attendees.contains(app.user) %}
+                    <a href="" class="border border-gray-200 p-2">Se désister</a>
+                  {% endif %}
+                  {% if outing.status.value != 'En création' %}
+                    <a href="{{ path('outing_show', {'id': outing.id}) }}"
+                       class="border border-gray-200 p-2">Afficher</a>
+                  {% endif %}
+                </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="flex-none mt-4">
+      <a class="border border-gray-200 p-2 text-center inline-block" href="{{ path('outing_new') }}">Créer une sortie</a>
+    </div>
   </div>
 {% endblock %}

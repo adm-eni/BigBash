@@ -22,7 +22,7 @@ class OutingsFilterType extends AbstractType
             'class' => Campus::class,
             'choice_label' => 'name',
             'label' => 'Campus',
-            'placeholder' => 'Filtrer par campus',
+            'placeholder' => 'Filtrer par campus'
         ])
         ->add('titleSearch', SearchType::class, [
             'label' => 'Le nom de la sortie contient'
@@ -30,10 +30,16 @@ class OutingsFilterType extends AbstractType
         ->add('startDate', DateType::class, [
             'widget' => 'single_text',
             'label' => 'Entre',
+            'row_attr' => [
+                'class' => 'space-x-4'
+            ]
         ])
         ->add('endDate', DateType::class, [
             'widget' => 'single_text',
             'label' => 'et',
+            'row_attr' => [
+                'class' => 'space-x-4'
+            ]
         ])
         ->add('isHost', CheckboxType::class, [
             'label' => 'Sorties dont je suis l\'organisateur/trice'
