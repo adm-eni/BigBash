@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% form_theme locationForm 'views/form_theme.html.twig' %}
+
+{% block title %}Création Lieu{% endblock %}
+
+{% block body %}
+    {{ form_start(locationForm) }}
+    {{ form_widget(locationForm) }}
+    {{ form_end(locationForm) }}
+{% endblock %}
