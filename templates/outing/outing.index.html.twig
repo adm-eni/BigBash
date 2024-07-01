@@ -30,24 +30,24 @@
             <td class="py-3 px-6 text-left">{{ outing.title }}</td>
             <td class="py-3 px-6 text-center">{{ outing.startAt|date('d-m-Y') }}</td>
             <td class="py-3 px-6 text-center">{{ outing.attendees.count }} / {{ outing.maxEntryCount }}</td>
-            <td class="py-3 px-6 text-center">{{ outing.status.name }}</td>
+            <td class="py-3 px-6 text-center">{{ outing.status.value }}</td>
             <td class="py-3 px-6 text-center">{{ outing.host == app.user ? 'Organisateur' : (outing.attendees.contains(app.user) ? 'Oui' : 'Non') }}</td>
             <td class="py-3 px-6 text-center">{{ outing.host.firstName ~ ' ' ~ outing.host.lastName }}</td>
             <td class="py-3 px-6 text-center">
               {% if outing.host == app.user %}
-                {% if outing.status.name == 'En création' %}
+                {% if outing.status.value == 'En création' %}
                   <a href="{{ path('outing_edit', {'id': outing.id}) }}" class="border border-gray-200 p-2">Modifier</a>
                   <a href="" class="border border-gray-200 p-2">Publier</a>
-                {% elseif outing.status.name == 'Ouvert' %}
+                {% elseif outing.status.value == 'Ouvert' %}
                   <a href="" class="border border-gray-200 p-2">Annuler</a>
                 {% endif %}
               {% endif %}
-              {% if outing.status.name == 'Ouvert' and not outing.attendees.contains(app.user) and outing.host != app.user %}
+              {% if outing.status.value == 'Ouvert' and not outing.attendees.contains(app.user) and outing.host != app.user %}
                 <a href="" class="border border-gray-200 p-2">S'inscrire</a>
-              {% elseif outing.status.name == 'Ouvert' and outing.attendees.contains(app.user) %}
+              {% elseif outing.status.value == 'Ouvert' and outing.attendees.contains(app.user) %}
                 <a href="" class="border border-gray-200 p-2">Se désister</a>
               {% endif %}
-              {% if outing.status.name != 'En création' %}
+              {% if outing.status.value != 'En création' %}
                 <a href="{{ path('outing_show', {'id': outing.id}) }}" class="border border-gray-200 p-2">Afficher</a>
               {% endif %}
             </td>

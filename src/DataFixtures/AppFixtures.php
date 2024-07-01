@@ -6,7 +6,7 @@ use App\Entity\Campus;
 use App\Entity\City;
 use App\Entity\Location;
 use App\Entity\Outing;
-use App\Entity\Status;
+use App\Enum\Status;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -26,11 +26,10 @@ class AppFixtures extends Fixture
   public function load(ObjectManager $manager): void
   {
     $this->addCampus(5, $manager);
-    $this->addUsers(3, $manager);
+    $this->addUsers(20, $manager);
     $this->addCities(8, $manager);
-    $this->addLocations(15, $manager);
-    $this->addStatuses($manager);
-    $this->addOutings(50, $manager);
+    $this->addLocations(22, $manager);
+    $this->addOutings(80, $manager);
   }
 
   public function addCampus(int $number, ObjectManager $manager): void
@@ -94,31 +93,12 @@ class AppFixtures extends Fixture
     $manager->flush();
   }
 
-  public function addStatuses(ObjectManager $manager)
-  {
-    $statusNames = [
-        'En création',
-        'Ouvert',
-        'Clôturé',
-        'En cours',
-        'Passé',
-        'Annulé'
-    ];
-
-    foreach ($statusNames as $name) {
-      $status = new Status();
-      $status->setName($name);
-      $manager->persist($status);
-    }
-    $manager->flush();
-  }
-
   public function addOutings(int $number, ObjectManager $manager): void
   {
     $campus = $manager->getRepository(Campus::class)->findAll();
     $users = $manager->getRepository(User::class)->findAll();
     $locations = $manager->getRepository(Location::class)->findAll();
-    $statuses = $manager->getRepository(Status::class)->findBy(['name' => ['En création', 'Ouvert', 'Clôturé', 'En cours', 'Passé', 'Annulé']]);
+    $statuses = Status::cases();
     $now = new \DateTime();
 
     for ($i = 0; $i < $number; $i++) {
@@ -140,9 +120,9 @@ class AppFixtures extends Fixture
       $oneDayAgo = (clone $now)->modify('-1 day');
       $oneMonthAgo = (clone $now)->modify('-1 month');
       if ($startAt < $oneMonthAgo) {
-        $status = $this->getStatusByName($statuses, 'Clôturé');
+        $status = Status::CLOSED;
       } elseif ($startAt < $oneDayAgo) {
-        $status = $this->getStatusByName($statuses, 'Passé');
+        $status = Status::PAST;
       } else {
         $status = $statuses[array_rand($statuses)];
       }
@@ -152,8 +132,7 @@ class AppFixtures extends Fixture
       $host = $users[array_rand($users)];
       $outing->setHost($host);
 
-      // Only add attendees if the status is not "En création"
-      if ($status->getName() !== 'En création') {
+      if ($status !== Status::CREATED) {
         $attendees = array_udiff($users, [$host], function ($user1, $user2) {
           return $user1->getId() - $user2->getId();
         });
@@ -168,15 +147,5 @@ class AppFixtures extends Fixture
       $manager->persist($outing);
     }
     $manager->flush();
-  }
-
-  private function getStatusByName(array $statuses, string $name): Status
-  {
-    foreach ($statuses as $status) {
-      if ($status->getName() === $name) {
-        return $status;
-      }
-    }
-    throw new \RuntimeException("Status '$name' not found");
   }
 }

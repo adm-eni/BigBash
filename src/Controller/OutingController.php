@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Outing;
+use App\Enum\Status;
 use App\Form\Model\OutingsFilter;
 use App\Form\OutingsFilterType;
 use App\Form\OutingType;
 use App\Repository\OutingRepository;
-use App\Repository\StatusRepository;
 use App\Service\OutingService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -64,7 +64,6 @@ class OutingController extends AbstractController
   public function create(
       Request                $request,
       EntityManagerInterface $entityManager,
-      StatusRepository       $statusRepository,
       int                    $id = null)
   {
     $user = $this->getUser();
@@ -81,19 +80,19 @@ class OutingController extends AbstractController
       if ($outing->getHost() !== $user) {
         throw $this->createAccessDeniedException('Vous n\'avez pas accès à cette sortie.');
       }
-      if ($outing->getStatus()->getName() === 'Clôturé') {
+      if ($outing->getStatus() === Status::CLOSED) {
         throw $this->createAccessDeniedException('Cette sortie a été clôturée.');
       }
-      if ($outing->getStatus()->getName() === 'En cours') {
+      if ($outing->getStatus() === Status::ONGOING) {
         throw $this->createAccessDeniedException('Cette sortie est en cours.');
       }
-      if ($outing->getStatus()->getName() === 'Passé') {
+      if ($outing->getStatus() === Status::PAST) {
         throw $this->createAccessDeniedException('Cette sortie est terminée.');
       }
-      if ($outing->getStatus()->getName() === 'Annulé') {
+      if ($outing->getStatus() === Status::CANCELED) {
         throw $this->createAccessDeniedException('Cette sortie a été annulée.');
       }
-      if ($outing->getStatus()->getName() === 'Ouvert') {
+      if ($outing->getStatus() === Status::OPEN) {
         throw $this->createAccessDeniedException('Cette sortie a été publiée, et ne peut donc plus être modifiée.');
       }
     }
@@ -108,7 +107,7 @@ class OutingController extends AbstractController
         return $this->redirectToRoute('outing_list');
       }
       if ($form->get('save')->isClicked()) {
-        $status = $statusRepository->findOneBy(['name' => 'En création']);
+        $status = Status::CREATED;
         $outing->setStatus($status);
 
         $entityManager->persist($outing);
@@ -117,7 +116,7 @@ class OutingController extends AbstractController
         return $this->redirectToRoute('outing_list');
       }
 
-      $status = $statusRepository->findOneBy(['name' => 'Ouvert']);
+      $status = Status::OPEN;
 
       $entityManager->persist($outing);
       $entityManager->flush();

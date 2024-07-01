@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\Status;
 use App\Repository\OutingRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -52,9 +53,8 @@ class Outing
   #[ORM\JoinColumn(nullable: true)]
   private ?Campus $campus = null;
 
-  #[ORM\ManyToOne(inversedBy: 'outings')]
-  #[ORM\JoinColumn(nullable: false)]
-  private ?Status $status = null;
+  #[ORM\Column(type: 'string', enumType: Status::class)]
+  private Status $status;
 
   public function __construct()
   {

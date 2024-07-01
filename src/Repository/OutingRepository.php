@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Outing;
-use App\Entity\Status;
+use App\Enum\Status;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,17 +17,27 @@ class OutingRepository extends ServiceEntityRepository
     parent::__construct($registry, Outing::class);
   }
 
+  public function findOutingsToUpdate(): array
+  {
+    $qb = $this->createQueryBuilder('o')
+        ->where('o.status IN (:updatableStatuses)')
+        ->setParameter('updatableStatuses', [Status::OPEN, Status::ONGOING]);
+
+    $query = $qb->getQuery();
+
+    return $query->getResult();
+  }
+
   public function findByDefault($user): array
   {
     $qb = $this->createQueryBuilder('o');
     $qb->leftJoin('o.attendees', 'a');
     $qb->leftJoin('o.host', 'h');
-    $qb->leftJoin('o.status', 's');
 
-    $qb->where('s.name != :statusClosed')
-        ->andWhere('(s.name != :statusCreated OR (s.name = :statusCreated AND h.id = :userId))')
-        ->setParameter('statusClosed', 'Clôturé')
-        ->setParameter('statusCreated', 'En création')
+    $qb->where('o.status != :statusClosed')
+        ->andWhere('(o.status != :statusCreated OR (o.status = :statusCreated AND h.id = :userId))')
+        ->setParameter('statusClosed', Status::CLOSED)
+        ->setParameter('statusCreated', Status::CREATED)
         ->setParameter('userId', $user->getId());
 
     return $qb->getQuery()->getResult();
@@ -82,24 +92,5 @@ class OutingRepository extends ServiceEntityRepository
           ->setParameter('now', new \DateTime());
     }
     return $qb->getQuery()->getResult();
-  }
-
-// In OutingRepository.php
-
-  public function findOutingsToUpdate(): array
-  {
-    return $this->createQueryBuilder('o')
-        ->leftJoin('o.status', 's')
-        ->where('s.name NOT IN (:excludedStatuses)')
-        ->setParameter('excludedStatuses', ['En création', 'Clôturé', 'Annulé'])
-        ->getQuery()
-        ->getResult();
-  }
-
-  public function findStatusByName(string $name): ?Status
-  {
-    return $this->getEntityManager()
-        ->getRepository(Status::class)
-        ->findOneBy(['name' => $name]);
   }
 }
