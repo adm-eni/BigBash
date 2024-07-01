@@ -43,8 +43,6 @@ class OutingService
     );
   }
 
-// In OutingService.php
-
   public function updateOutingStatuses(): void
   {
     $outings = $this->outingRepo->findOutingsToUpdate();
@@ -54,18 +52,10 @@ class OutingService
       $startAt = $outing->getStartAt();
       $endAt = $outing->getEndAt();
 
-      $oldStatus = $outing->getStatus();
-
       if ($startAt <= $now && $now < $endAt) {
         $outing->setStatus(Status::ONGOING);
       } elseif ($endAt <= $now) {
         $outing->setStatus(Status::PAST);
-      }
-
-      $newStatus = $outing->getStatus();
-
-      if ($oldStatus !== $newStatus) {
-        echo "Outing {$outing->getId()} status changed from {$oldStatus} to {$newStatus}<br>";
       }
     }
     $this->outingRepo->getEntityManager()->flush();

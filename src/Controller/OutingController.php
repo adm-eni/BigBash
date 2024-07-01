@@ -19,10 +19,15 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('', name: 'outing_')]
 class OutingController extends AbstractController
 {
+  /**
+   * @param Request $request
+   * @param OutingService $service
+   * @return Response
+   */
   #[Route('', name: 'list')]
   public function list(
-      Request       $request,
-      OutingService $service
+      Request                $request,
+      OutingService          $service
   ): Response
   {
 
@@ -117,6 +122,9 @@ class OutingController extends AbstractController
       }
 
       $status = Status::OPEN;
+      $outing->setStatus($status);
+
+      //TODO: vérifier que lorsqu'une sortie est créée, l'organisateur soit aussitôt inscrit en tant que participant.
 
       $entityManager->persist($outing);
       $entityManager->flush();
