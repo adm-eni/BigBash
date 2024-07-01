@@ -37,3 +37,5 @@ yarn-error.log
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+/assets/img/profile-image/
