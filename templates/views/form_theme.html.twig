@@ -1,0 +1,7 @@
+{%  block form_row %}
+    <div class="flex justify-between items-center">
+        <div class="label lg:min-w-48 min-w-24">{{ form_label(form) }}</div>
+        <div class="input">{{ form_widget(form) }}</div>
+        <div class="error">{{ form_errors(form) }}</div>
+    </div>
+{% endblock %}
