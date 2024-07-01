@@ -26,13 +26,17 @@
       <table class="w-full table-fixed">
         <tbody class="whitespace-nowrap overflow-hidden overflow-ellipsis">
         {% for outing in outings %}
-          <tr class="border-b border-gray-200 cursor-pointer">
+          <tr class="border-b border-gray-200">
             <td class="py-3 px-6 text-left">{{ outing.title }}</td>
             <td class="py-3 px-6 text-center">{{ outing.startAt|date('d-m-Y') }}</td>
             <td class="py-3 px-6 text-center">{{ outing.attendees.count }} / {{ outing.maxEntryCount }}</td>
             <td class="py-3 px-6 text-center">{{ outing.status.value }}</td>
-            <td class="py-3 px-6 text-center">{{ outing.host == app.user ? 'Organisateur' : (outing.attendees.contains(app.user) ? 'Oui' : 'Non') }}</td>
-            <td class="py-3 px-6 text-center">{{ outing.host.firstName ~ ' ' ~ outing.host.lastName }}</td>
+            <td class="py-3 px-6 text-center">{{ outing.host == app.user ? 'Organisateur' : (outing.attendees.contains(app.user) ? 'Oui' : 'Non') }}
+            </td>
+            <td class="py-3 px-6 text-center"><a
+                  href="{{ path('user_show', {'id': outing.host.id} ) }}"
+                  class="border border-gray-200 p-2">{{ outing.host.firstName ~ ' ' ~ outing.host.lastName }}</a>
+            </td>
             <td class="py-3 px-6 text-center">
               {% if outing.host == app.user %}
                 {% if outing.status.value == 'En création' %}
