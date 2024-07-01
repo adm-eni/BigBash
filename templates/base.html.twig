@@ -14,7 +14,7 @@
   {% endblock %}
 </head>
 <body class="text-amber-100 font-sans bg-cover bg-center h-full flex flex-col" style="background-image: url('../public/img/wallpaper.jpg')">
-<div class="container mx-auto px-4 bg-slate-950 bg-opacity-40">
+<div class="container mx-auto px-4 bg-slate-950 bg-opacity-70">
   {% include 'menu/menu.nav.html.twig' %}
   {% for label, messages in app.flashes %}
     {% for message in messages %}
@@ -24,10 +24,10 @@
     {% endfor %}
   {% endfor %}
 </div>
-<main class="container mx-auto px-4 py-6 flex-grow bg-slate-950 bg-opacity-70 backdrop-blur flex flex-col overflow-hidden">
+<main class="container mx-auto px-4 py-6 flex-grow bg-slate-950 bg-opacity-50 backdrop-blur flex flex-col overflow-hidden">
   {% block body %}{% endblock %}
 </main>
-<footer class="container mx-auto px-4 py-6 text-center text-sm bg-slate-950 bg-opacity-50 backdrop-blur">
+<footer class="container mx-auto px-4 py-6 text-center text-sm bg-slate-950 bg-opacity-70 backdrop-blur">
   2or
 </footer>
 </body>
