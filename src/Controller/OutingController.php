@@ -123,8 +123,7 @@ class OutingController extends AbstractController
 
       $status = Status::OPEN;
       $outing->setStatus($status);
-
-      //TODO: vérifier que lorsqu'une sortie est créée, l'organisateur soit aussitôt inscrit en tant que participant.
+      $outing->addAttendee($user);
 
       $entityManager->persist($outing);
       $entityManager->flush();

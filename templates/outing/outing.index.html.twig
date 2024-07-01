@@ -38,20 +38,26 @@
                   class="border border-gray-200 p-2">{{ outing.host.firstName ~ ' ' ~ outing.host.lastName }}</a>
             </td>
             <td class="py-3 px-6 text-center">
-              {% if outing.host == app.user %}
-                {% if outing.status.value == 'En création' %}
+              {% set isHost = outing.host == app.user %}
+              {% set isAttendee = outing.attendees.contains(app.user) %}
+              {% set status = outing.status.value %}
+
+              {% if isHost %}
+                {% if status == 'En création' %}
                   <a href="{{ path('outing_edit', {'id': outing.id}) }}" class="border border-gray-200 p-2">Modifier</a>
-                  <a href="" class="border border-gray-200 p-2">Publier</a>
-                {% elseif outing.status.value == 'Ouvert' %}
-                  <a href="" class="border border-gray-200 p-2">Annuler</a>
+                  <a href="#" class="border border-gray-200 p-2">Publier</a>
+                {% elseif status == 'Ouvert' %}
+                  <a href="#" class="border border-gray-200 p-2">Annuler</a>
+                {% endif %}
+              {% elseif status == 'Ouvert' %}
+                {% if not isAttendee %}
+                  <a href="{{ path('user_join', {'outingId': outing.id}) }}" class="border border-gray-200 p-2">S'inscrire</a>
+                {% else %}
+                  <a href="{{ path('user_withdraw', {'outingId': outing.id}) }}" class="border border-gray-200 p-2">Se désister</a>
                 {% endif %}
               {% endif %}
-              {% if outing.status.value == 'Ouvert' and not outing.attendees.contains(app.user) and outing.host != app.user %}
-                <a href="" class="border border-gray-200 p-2">S'inscrire</a>
-              {% elseif outing.status.value == 'Ouvert' and outing.attendees.contains(app.user) %}
-                <a href="" class="border border-gray-200 p-2">Se désister</a>
-              {% endif %}
-              {% if outing.status.value != 'En création' %}
+
+              {% if status != 'En création' %}
                 <a href="{{ path('outing_show', {'id': outing.id}) }}" class="border border-gray-200 p-2">Afficher</a>
               {% endif %}
             </td>
