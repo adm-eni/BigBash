@@ -26,6 +26,7 @@ class OutingController extends AbstractController
      * @return Response
      */
     #[Route('', name: 'list')]
+    #[Route('/outings')]
     public function list(
         Request       $request,
         OutingService $service
