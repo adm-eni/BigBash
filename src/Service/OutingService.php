@@ -64,19 +64,21 @@ class OutingService extends AbstractController
 
   public function validateOutingPermissions(Outing $outing): void
   {
+    $status = $outing->getStatus();
+
     if ($outing->getHost() !== $this->getUser()) {
       throw $this->createAccessDeniedException('Vous n\'avez pas accès à cette sortie.');
     }
-    if ($outing->getStatus() === Status::CLOSED) {
+    if ($status === Status::CLOSED) {
       throw $this->createAccessDeniedException('Cette sortie a été clôturée.');
     }
-    if ($outing->getStatus() === Status::ONGOING) {
+    if ($status === Status::ONGOING) {
       throw $this->createAccessDeniedException('Cette sortie est en cours.');
     }
-    if ($outing->getStatus() === Status::PAST) {
+    if ($status === Status::PAST) {
       throw $this->createAccessDeniedException('Cette sortie est terminée.');
     }
-    if ($outing->getStatus() === Status::CANCELED) {
+    if ($status === Status::CANCELED) {
       throw $this->createAccessDeniedException('Cette sortie a été annulée.');
     }
   }
