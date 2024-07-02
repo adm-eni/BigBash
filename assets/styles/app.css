@@ -3,7 +3,19 @@
 @tailwind utilities;
 
 @layer components {
-    input, textarea, select {
-        @apply bg-slate-950/50 backdrop-blur-lg !important
-    }
+  input, textarea, select {
+    @apply bg-slate-950/50 backdrop-blur-lg !important
+  }
+}
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
 }
