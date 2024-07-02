@@ -10,6 +10,7 @@ use App\Form\OutingsFilterType;
 use App\Form\OutingType;
 use App\Repository\OutingRepository;
 use App\Service\OutingService;
+use App\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,6 +36,7 @@ class OutingController extends AbstractController
 
         $service->updateOutingStatuses();
 
+        /** @var User $user */
         $user = $this->getUser();
 
         $filters = new OutingsFilter();
@@ -60,6 +62,9 @@ class OutingController extends AbstractController
     ): Response
     {
         $outing = $outingRepo->find($id);
+        if($outing === null) {
+            throw $this->createNotFoundException('Sortie non trouvée.');
+        }
 
         return $this->render('outing/outing.show.html.twig', [
             'outing' => $outing
@@ -71,12 +76,13 @@ class OutingController extends AbstractController
     public function create(
         Request                $request,
         EntityManagerInterface $entityManager,
-        OutingService          $service,
+        OutingService          $outingService,
+        UserService             $userService,
         int                    $id = null): Response
     {
         /** @var User $user */
         $user = $this->getUser();
-        if ($user == null) {
+        if ($user === null) {
             return $this->redirectToRoute('app_login');
         }
 
@@ -84,12 +90,9 @@ class OutingController extends AbstractController
             $outing = new Outing();
             $outing->setCampus($user->getCampus());
         } else {
-            $outing = $service->getOuting($id);
-
-            $service->validateOutingPermissions($outing);
-            if ($outing->getStatus() === Status::OPEN) {
-                throw $this->createAccessDeniedException('Cette sortie a été publiée, et ne peut donc plus être modifiée.');
-            }
+            $outing = $outingService->getOuting($id);
+            $userService->checkUserIsHost($outing, $user, 'Vous n\'avez pas accès à cette sortie.');
+            $outingService->checkOutingStatus($outing, 1, 1, 1, 1, 1, 0);
         }
         $outing->setHost($user);
 
@@ -116,7 +119,7 @@ class OutingController extends AbstractController
                 if ($outing->getStatus() !== Status::CREATED) {
                     throw $this->createAccessDeniedException('Cette sortie ne peut pas être supprimée.');
                 }
-                    $service->deleteOuting($outing);
+                    $outingService->deleteOuting($outing);
                     $this->addFlash('success', 'Sortie supprimée.');
                     return $this->redirectToRoute('user_profile');
 
@@ -142,9 +145,11 @@ class OutingController extends AbstractController
     public function cancel(
         Request                $request,
         EntityManagerInterface $entityManager,
-        OutingService          $service,
+        UserService             $userService,
+        OutingService          $outingService,
         int                    $id = null): Response
     {
+        /** @var User $user */
         $user = $this->getUser();
         if ($user == null) {
             return $this->redirectToRoute('app_login');
@@ -153,12 +158,13 @@ class OutingController extends AbstractController
             throw $this->createNotFoundException('Sortie non trouvée.');
         }
 
-        $outing = $service->getOuting($id);
+        $outing = $outingService->getOuting($id);
 
-        $service->validateOutingPermissions($outing);
+        $userService->checkUserIsHost($outing, $user, 'Vous n\'avez pas accès à cette sortie.');
+        $outingService->checkOutingStatus($outing,true, true, true, true, false, false);
 
         if ($outing->getStatus() === Status::CREATED) {
-            $service->deleteOuting($outing);
+            $outingService->deleteOuting($outing);
             $this->addFlash('success', 'Sortie supprimée.');
             return $this->redirectToRoute('user_profile');
         }

@@ -69,6 +69,7 @@ class UserProfileType extends AbstractType
             ])
             ->add('cancel', SubmitType::class, [
                 'label' => 'Annuler',
+                'validate' => false,
             ])
         ;
     }

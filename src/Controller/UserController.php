@@ -4,9 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Outing;
 use App\Entity\User;
-use App\Enum\Status;
 use App\Form\UserProfileType;
 use App\Repository\UserRepository;
+use App\Service\OutingService;
+use App\Service\UserService;
 use App\Utils\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,11 +20,13 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/user', name: 'user_')]
 class UserController extends AbstractController
 {
+    public function __construct(private UserService $userService, private OutingService $outingService)
+    {
+    }
+
     #[Route('/profile', name: 'profile')]
     public function profile(Request                     $request,
-                            UserPasswordHasherInterface $userPasswordHasher,
-                            EntityManagerInterface      $entityManager,
-                            FileUploader                $fileUploader): Response
+                            EntityManagerInterface      $entityManager): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -35,22 +38,7 @@ class UserController extends AbstractController
                 return $this->redirectToRoute('outing_list');
             }
 
-            if (!empty($form->get('plainPassword')->getData())) {
-                $user->setPassword(
-                    $userPasswordHasher->hashPassword(
-                        $user,
-                        $form->get('plainPassword')->getData()
-                    )
-                );
-            }
-
-            if (!empty($form->get('image')->getData())) {
-                $file = $form->get('image')->getData();
-                $newFilename = $fileUploader->upload($file, $this->getParameter('profile_image_directory'), $user->getPseudo());
-                $user->setImage($newFilename);
-            }
-
-            $entityManager->persist($user);
+            $this->userService->updateUserProfile($user, $form);
             $entityManager->flush();
 
             $this->addFlash('success', 'Profil mis à jour !');
@@ -70,8 +58,12 @@ class UserController extends AbstractController
     {
         if ($id === null) {
             throw $this->createNotFoundException('Page non trouvée.');
-        } else {
-            $user = $userRepository->find($id);
+        }
+
+        $user = $userRepository->find($id);
+
+        if ($user === null) {
+            throw $this->createNotFoundException('Utilisateur non trouvé.');
         }
 
         return $this->render('user/user.show.html.twig', [
@@ -89,26 +81,8 @@ class UserController extends AbstractController
         if (!$outingId) {
             throw $this->createNotFoundException('Sortie non trouvée. Inscription non effectuée.');
         }
-
-        if($outingId->getStatus() === Status::CLOSED) {
-            throw $this->createNotFoundException('Incription impossible. Sortie terminée.');
-        }
-        if($outingId->getStatus() === Status::CANCELED) {
-            throw $this->createNotFoundException('Incription impossible. Sortie annulée.');
-        }
-        if($outingId->getStatus() === Status::CREATED) {
-            throw $this->createNotFoundException('Incription impossible.');
-        }
-        if($outingId->getStatus() === Status::PAST) {
-            throw $this->createNotFoundException('Incription impossible. Sortie passée.');
-        }
-        if($outingId->getStatus() === Status::ONGOING) {
-            throw $this->createNotFoundException('Incription impossible. Sortie déjà débutée!');
-        }
-
-        if($outingId->getHost() === $user) {
-            throw $this->createAccessDeniedException('Vous êtes déjà inscrit à une sortie dont vous êtes l\'organisateur.');
-        }
+        $this->userService->checkUserIsNotHost($outingId, $user, 'Vous êtes déjà inscrit à une sortie dont vous êtes l\'organisateur.');
+        $this->outingService->checkOutingStatus($outingId, true, true, true, true, false, true);
 
         $user->addEnteredOuting($outingId);
         $entityManager->persist($user);
@@ -128,26 +102,8 @@ class UserController extends AbstractController
         if (!$outingId) {
             throw $this->createNotFoundException('Sortie non trouvée. Désistement non effectué.');
         }
-
-        if($outingId->getStatus() === Status::CLOSED) {
-            throw $this->createNotFoundException('Désistement impossible. Sortie terminée.');
-        }
-        if($outingId->getStatus() === Status::CANCELED) {
-            throw $this->createNotFoundException('Désistement impossible. Sortie annulée.');
-        }
-        if($outingId->getStatus() === Status::CREATED) {
-            throw $this->createNotFoundException('Désistement impossible.');
-        }
-        if($outingId->getStatus() === Status::PAST) {
-            throw $this->createNotFoundException('Désistement impossible. Sortie passée.');
-        }
-        if($outingId->getStatus() === Status::ONGOING) {
-            throw $this->createNotFoundException('Désistement impossible. Sortie déjà débutée!');
-        }
-
-        if($outingId->getHost() === $user) {
-            throw $this->createAccessDeniedException('Impossible de se désister d\'une sortie dont vous êtes l\'organisateur.');
-        }
+        $this->userService->checkUserIsNotHost($outingId, $user, 'Impossible de se désister d\'une sortie dont vous êtes l\'organisateur.');
+        $this->outingService->checkOutingStatus($outingId, true, true, true, true, false, true);
 
         $user->removeEnteredOuting($outingId);
         $entityManager->persist($user);

@@ -1,8 +1,7 @@
 {% extends 'base.html.twig' %}
 {% form_theme outingForm 'views/form_theme.html.twig' %}
 
-{% block title %}
-{% endblock %}
+{% block title %}Nouvelle sortie{% endblock %}
 
 {% block body %}
     <div class="container mx-auto px-4">
@@ -32,11 +31,12 @@
 
             {{ form_row(outingForm.campus) }}
         </div>
-
+<div class="lg:min-w-4"></div>
         <div class="col-span-full flex justify-center space-x-4 mt-6">
-            {{ form_widget(outingForm.save, {'attr': {'class': 'bg-green-500 text-white px-4 py-2 rounded'}}) }}
-            {{ form_widget(outingForm.create, {'attr': {'class': 'bg-blue-500 text-white px-4 py-2 rounded'}}) }}
-            {{ form_widget(outingForm.cancel, {'attr': {'class': 'bg-red-500 text-white px-4 py-2 rounded'}}) }}
+            {{ form_widget(outingForm.save, {'attr': {'class': 'border border-gray-200 bg-blue-500 bg-opacity-50 min-w-28 px-4 py-2'}}) }}
+            {{ form_widget(outingForm.create, {'attr': {'class': 'border border-gray-200 bg-amber-400 bg-opacity-30 min-w-28 px-4 py-2'}}) }}
+            {{ form_widget(outingForm.cancel, {'attr': {'class': 'border border-gray-200 bg-red-500 bg-opacity-30 min-w-28 px-4 py-2'}}) }}
+            {{ form_widget(outingForm.delete, {'attr': {'class': 'border border-gray-200 bg-pink-500 bg-opacity-30 min-w-28 px-4 py-2'}}) }}
         </div>
 
         {{ form_end(outingForm) }}

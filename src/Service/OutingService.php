@@ -36,19 +36,19 @@ class OutingService extends AbstractController
   public function getUserFilteredOutings(array $outings, UserInterface $user, OutingsFilter $filter): array
   {
 
-    return $this->outingRepo->findByFilters(
-        $outings,
-        $user,
-        $filter->getCampusChoice(),
-        $filter->getTitleSearch(),
-        $filter->getStartDate(),
-        $filter->getEndDate(),
-        $filter->getIsHost(),
-        $filter->getIsEntered(),
-        $filter->getIsNotEntered(),
-        $filter->getIsPast()
-    );
-  }
+        return $this->outingRepo->findByFilters(
+            $outings,
+            $user,
+            $filter->getCampusChoice(),
+            $filter->getTitleSearch(),
+            $filter->getStartDate(),
+            $filter->getEndDate(),
+            $filter->getIsHost(),
+            $filter->getIsEntered(),
+            $filter->getIsNotEntered(),
+            $filter->getIsPast()
+        );
+    }
 
   public function updateOutingStatuses(): void
   {
@@ -62,30 +62,33 @@ class OutingService extends AbstractController
     $this->outingRepo->getEntityManager()->flush();
   }
 
-  public function validateOutingPermissions(Outing $outing): void
-  {
-    $status = $outing->getStatus();
+    public function checkOutingStatus(Outing $outing, bool $closed, bool $ongoing, bool $past, bool $canceled, bool $open, bool $created): void
+    {
+        $status = $outing->getStatus();
 
-    if ($outing->getHost() !== $this->getUser()) {
-      throw $this->createAccessDeniedException('Vous n\'avez pas accès à cette sortie.');
+        if ($closed && $status === Status::CLOSED) {
+            throw $this->createAccessDeniedException('Cette sortie a été clôturée.');
+        }
+        if ($ongoing && $status === Status::ONGOING) {
+            throw $this->createAccessDeniedException('Cette sortie est en cours.');
+        }
+        if ($past && $status === Status::PAST) {
+            throw $this->createAccessDeniedException('Cette sortie est terminée.');
+        }
+        if ($canceled && $status === Status::CANCELED) {
+            throw $this->createAccessDeniedException('Cette sortie a été annulée.');
+        }
+        if ($open && $status === Status::OPEN) {
+            throw $this->createAccessDeniedException('Cette sortie est déjà publiée.');
+        }
+        if ($created && $status === Status::CREATED) {
+            throw $this->createAccessDeniedException('Cette sortie est en cours de création.');
+        }
     }
-    if ($status === Status::CLOSED) {
-      throw $this->createAccessDeniedException('Cette sortie a été clôturée.');
-    }
-    if ($status === Status::ONGOING) {
-      throw $this->createAccessDeniedException('Cette sortie est en cours.');
-    }
-    if ($status === Status::PAST) {
-      throw $this->createAccessDeniedException('Cette sortie est terminée.');
-    }
-    if ($status === Status::CANCELED) {
-      throw $this->createAccessDeniedException('Cette sortie a été annulée.');
-    }
-  }
 
-  public function deleteOuting(Outing $outing): void
-  {
-    $this->outingRepo->getEntityManager()->remove($outing);
-    $this->outingRepo->getEntityManager()->flush();
-  }
+    public function deleteOuting(Outing $outing): void
+    {
+        $this->outingRepo->getEntityManager()->remove($outing);
+        $this->outingRepo->getEntityManager()->flush();
+    }
 }
