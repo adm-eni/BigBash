@@ -19,9 +19,18 @@ class OutingRepository extends ServiceEntityRepository
 
   public function findOutingsToUpdate(): array
   {
+    $now = new \DateTime();
+    $oneMonthAgo = date_modify($now, '-1 month');
+
     $qb = $this->createQueryBuilder('o')
-        ->where('o.status IN (:updatableStatuses)')
-        ->setParameter('updatableStatuses', [Status::OPEN, Status::ONGOING]);
+        ->where('o.status = :openStatus AND o.startAt <= :now AND :now < (o.startAt + o.duration)')
+        ->orWhere('o.status = :ongoingStatus AND (o.startAt + o.duration) <= :now AND :oneMonthAgo < (o.startAt + o.duration)')
+        ->orWhere('o.status IN (:endStatuses) AND (o.startAt + o.duration) <= :oneMonthAgo')
+        ->setParameter('now', $now)
+        ->setParameter('oneMonthAgo', $oneMonthAgo)
+        ->setParameter('openStatus', Status::OPEN)
+        ->setParameter('ongoingStatus', Status::ONGOING)
+        ->setParameter('endStatuses', [Status::CANCELED, Status::PAST]);
 
     $query = $qb->getQuery();
 

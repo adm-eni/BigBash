@@ -40,10 +40,10 @@ class OutingController extends AbstractController
         $filterForm = $this->createForm(OutingsFilterType::class, $filters);
         $filterForm->handleRequest($request);
 
-        $outings = ($this->isGranted('ROLE_ADMIN') ? $service->getOutings() : $service->getDefaultOutings($user));
+        $outings = ($this->isGranted('ROLE_ADMIN') ? $service->getAllOutings() : $service->getDefaultFilteredOutings($user));
 
         if ($filterForm->isSubmitted() && $filterForm->isValid()) {
-            $outings = $service->getFilteredOutings($outings, $user, $filters);
+            $outings = $service->getUserFilteredOutings($outings, $user, $filters);
         }
 
         return $this->render('outing/outing.index.html.twig', [
