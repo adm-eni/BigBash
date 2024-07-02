@@ -3,69 +3,73 @@
 {% block title %}Détails de la sortie{% endblock %}
 
 {% block body %}
-  <div class="flex flex-col h-full px-16 py-6">
-    <div class="flex-none mb-4">
-      <h1 class="text-2xl font-bold mb-4 text-center">Afficher une sortie</h1>
+  <div class="flex flex-col h-full px-16 py-6 space-y-8">
+    <div>
+      <h1 class="text-2xl font-bold text-center">Afficher une sortie</h1>
     </div>
 
-    <div class="flex-grow overflow-hidden p-4 flex justify-center items-center">
-      <div class="flex-grow grid md:grid-cols-4 sm:grid-cols-2 gap-x-6 gap-y-6 w-2/3 text-nowrap">
+    <div class="p-4 flex justify-center items-center">
+      <div class="grid md:grid-cols-4 sm:grid-cols-2 gap-x-6 gap-y-6 w-2/3 text-nowrap">
         <div class="font-semibold text-right">Nom de la sortie :</div>
-        <div class="truncate">{{ outing.title }}</div>
+        <div class="truncate">{{ outing.title|default('') }}</div>
         <div class="font-semibold text-right">Campus :</div>
-        <div class="truncate">{{ outing.campus.name }}</div>
+        <div class="truncate">{{ outing.campus.name|default('') }}</div>
 
         <div class="font-semibold text-right truncate">Date et heure de la sortie :</div>
-        <div class="truncate">{{ outing.startAt|format_datetime(locale='fr_FR',pattern="EEEE dd MMMM YYYY 'à' HH:MM")|capitalize }}</div>
+        <div
+            class="truncate">{{ outing.startAt|format_datetime(locale='fr_FR',pattern="EEEE dd MMMM YYYY 'à' HH:MM")|capitalize|default('') }}</div>
         <div class="font-semibold text-right truncate">Lieu :</div>
-        <div class="truncate">{{ outing.location.name }}</div>
+        <div class="truncate">{{ outing.location.name|default('') }}</div>
 
         <div class="font-semibold text-right truncate">Date limite d'inscription :</div>
-        <div class="truncate">{{ outing.entryDeadline|format_datetime(locale='fr_FR',pattern="EEEE dd MMMM YYYY 'à' HH:MM")|capitalize }}</div>
+        <div
+            class="truncate">{{ outing.entryDeadline|format_datetime(locale='fr_FR',pattern="EEEE dd MMMM YYYY 'à' HH:MM")|capitalize|default('') }}</div>
         <div class="font-semibold text-right truncate">Rue :</div>
-        <div class="truncate">{{ outing.location.street }}</div>
+        <div class="truncate">{{ outing.location.street|default('') }}</div>
 
         <div class="font-semibold text-right truncate">Nombre de places :</div>
-        <div class="truncate">{{ outing.maxEntryCount }}</div>
+        <div class="truncate">{{ outing.maxEntryCount|default('') }}</div>
         <div class="font-semibold text-right truncate">Code postal :</div>
-        <div class="truncate">{{ outing.location.city.postCode }}</div>
+        <div class="truncate">{{ outing.location.city.postCode|default('') }}</div>
 
         <div class="font-semibold text-right truncate">Durée :</div>
-        <div class="truncate">{{ outing.duration }} minutes</div>
+        <div class="truncate">{{ outing.duration|default('') }} minutes</div>
         <div class="font-semibold text-right truncate">Latitude :</div>
-        <div class="truncate">{{ outing.location.latitude }}</div>
+        <div class="truncate">{{ outing.location.latitude|default('') }}</div>
 
         <div class="font-semibold text-right truncate">Description et infos :</div>
-        <div class="text-wrap">{{ outing.description }}</div>
+        <div class="text-wrap">{{ outing.description|default('') }}</div>
 
         <div class="font-semibold text-right truncate">Longitude :</div>
-        <div class="truncate">{{ outing.location.longitude }}</div>
+        <div class="truncate">{{ outing.location.longitude|default('') }}</div>
       </div>
     </div>
 
-    <div class="flex-none">
-      <h2 class="text-xl font-bold mb-4">Liste des participants inscrits :</h2>
-      <div class="inline-block min-w-0 overflow-y-auto border border-solid lg:text-base md:text-sm sm:text-xs">
-        <table class="border-collapse table-auto">
-          <thead class="bg-amber-300 bg-opacity-60">
-          <tr class="uppercase leading-normal">
-            <th class="py-3 px-6 text-left whitespace-nowrap">Pseudo</th>
-            <th class="py-3 px-6 text-left whitespace-nowrap">Nom</th>
-          </tr>
-          </thead>
-          <tbody class="bg-slate-950 bg-opacity-50">
-          {% for attendee in outing.attendees %}
-            <tr class="border-b border-gray-700">
-              <td class="py-3 px-6 text-left whitespace-nowrap">
-                <a href="{{ path('user_show', {'id': attendee.id}) }}">
-                  {{ attendee.pseudo }}
-                </a>
-              </td>
-              <td class="py-3 px-6 text-left whitespace-nowrap">{{ attendee.firstName }} {{ attendee.lastName }}</td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      </div>
+    <div>
+      <h2 class="text-xl font-bold">Liste des participants inscrits :</h2>
     </div>
+
+    <div class="flex overflow-y-auto border border-solid max-w-fit max-h-max text-sm no-scrollbar">
+      <table class="table-auto">
+        <thead class="bg-amber-300 bg-opacity-60 sticky">
+        <tr class="uppercase leading-normal">
+          <th class="py-3 px-6 whitespace-nowrap">Pseudo</th>
+          <th class="py-3 px-6 whitespace-nowrap">Nom</th>
+        </tr>
+        </thead>
+        <tbody class="bg-slate-950 bg-opacity-50">
+        {% for attendee in outing.attendees %}
+          <tr class="border-b border-gray-700">
+            <td class="py-3 px-6 text-left whitespace-nowrap">
+              <a href="{{ path('user_show', {'id': attendee.id}) }}">
+                {{ attendee.pseudo }}
+              </a>
+            </td>
+            <td class="py-3 px-6 text-left whitespace-nowrap">{{ attendee.firstName }} {{ attendee.lastName }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 {% endblock %}
