@@ -13,8 +13,8 @@
     {{ encore_entry_script_tags('app') }}
   {% endblock %}
 </head>
-<body class="text-amber-100 font-sans bg-cover bg-center h-full flex flex-col" style="background-image: url('../public/img/wallpaper.jpg')">
-<div class="container mx-auto px-4 bg-slate-950 bg-opacity-70">
+<body class="text-amber-100 font-sans bg-cover bg-center h-full flex flex-col" style="background-image: url('{{ asset('img/wallpaper.jpg') }}'); background-size: cover; background-position: center;">
+<div class="container mx-auto px-4 bg-amber-400 bg-opacity-60">
   {% include 'menu/menu.nav.html.twig' %}
   {% for label, messages in app.flashes %}
     {% for message in messages %}
@@ -27,7 +27,7 @@
 <main class="container mx-auto px-4 py-6 flex-grow bg-slate-950 bg-opacity-50 backdrop-blur flex flex-col overflow-hidden">
   {% block body %}{% endblock %}
 </main>
-<footer class="container mx-auto px-4 py-6 text-center text-sm bg-slate-950 bg-opacity-70 backdrop-blur">
+<footer class="container mx-auto px-4 py-4 text-center bg-amber-400 bg-opacity-40 backdrop-blur">
   2or
 </footer>
 </body>
