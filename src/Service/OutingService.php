@@ -2,12 +2,14 @@
 
 namespace App\Service;
 
+use App\Entity\Outing;
 use App\Enum\Status;
 use App\Form\Model\OutingsFilter;
 use App\Repository\OutingRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class OutingService
+class OutingService extends AbstractController
 {
   private OutingRepository $outingRepo;
 
@@ -25,6 +27,10 @@ class OutingService
   {
     return $this->outingRepo->findAll();
   }
+    public function getOuting(int $id): ?Outing
+    {
+        return $this->outingRepo->find($id);
+    }
 
   public function getFilteredOutings(array $outings, UserInterface $user, OutingsFilter $filter): array
   {
@@ -59,5 +65,28 @@ class OutingService
       }
     }
     $this->outingRepo->getEntityManager()->flush();
+  }
+
+  public function validateOutingPermissions(Outing $outing): void {
+      if ($outing->getHost() !== $this->getUser()) {
+          throw $this->createAccessDeniedException('Vous n\'avez pas accès à cette sortie.');
+      }
+      if ($outing->getStatus() === Status::CLOSED) {
+          throw $this->createAccessDeniedException('Cette sortie a été clôturée.');
+      }
+      if ($outing->getStatus() === Status::ONGOING) {
+          throw $this->createAccessDeniedException('Cette sortie est en cours.');
+      }
+      if ($outing->getStatus() === Status::PAST) {
+          throw $this->createAccessDeniedException('Cette sortie est terminée.');
+      }
+      if ($outing->getStatus() === Status::CANCELED) {
+          throw $this->createAccessDeniedException('Cette sortie a été annulée.');
+      }
+  }
+
+  public function deleteOuting(Outing $outing): void {
+      $this->outingRepo->getEntityManager()->remove($outing);
+      $this->outingRepo->getEntityManager()->flush();
   }
 }

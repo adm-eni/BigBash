@@ -88,7 +88,7 @@
                        class="border border-gray-200 p-2">Modifier</a>
                     <a href="#" class="border border-gray-200 p-2">Publier</a>
                   {% elseif status == 'Ouvert' %}
-                    <a href="#" class="border border-gray-200 p-2">Annuler</a>
+                    <a href="{{ path('outing_cancel', {'id': outing.id}) }}" class="border border-gray-200 p-2">Annuler</a>
                   {% endif %}
                 {% elseif status == 'Ouvert' %}
                   {% if not isAttendee %}

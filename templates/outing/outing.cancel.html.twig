@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+{% form_theme outingCancelForm 'views/form_theme.html.twig' %}
+
+{% block body %}
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold mb-6 text-center">Annuler une sortie</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="space-y-4">
+                <div class="font-semibold text-right">Nom de la sortie :</div>
+                <div class="font-semibold text-right">Date de la sortie :</div>
+                <div class="font-semibold text-right">Campus :</div>
+                <div class="font-semibold text-right">Lieu :</div>
+            </div>
+            <div class="space-y-4">
+                <div>{{ outing.title }}</div>
+                <div>{{ outing.startAt | date("d/m/Y") }}</div>
+                <div>{{ outing.campus.name }}</div>
+                <div>{{ outing.location.name ~ ', ' ~ outing.location.street ~ ', ' ~ outing.location.city.name }}</div>
+            </div>
+        </div>
+
+        {{ form_start(outingCancelForm, {'attr': {'class': 'space-y-6'}}) }}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="font-semibold text-right">{{ form_label(outingCancelForm.description) }}</div>
+            <div>{{ form_widget(outingCancelForm.description, {'attr': {'class': 'w-6/12 p-2 border rounded'}}) }}</div>
+        </div>
+
+        <div class="flex justify-center space-x-4 mt-6">
+            {{ form_widget(outingCancelForm.cancelOuting, {'attr': {'class': 'bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition duration-300'}}) }}
+            {{ form_widget(outingCancelForm.cancel, {'attr': {'class': 'bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition duration-300'}}) }}
+        </div>
+
+        {{ form_end(outingCancelForm) }}
+    </div>
+{% endblock %}
+
+{% block title %}Annuler une sortie{% endblock %}
