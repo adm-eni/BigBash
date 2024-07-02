@@ -3,46 +3,95 @@
 {% block title %}Consulter les sorties{% endblock %}
 
 {% block body %}
-  <div class="flex flex-col h-full">
-    <div class="flex-none mb-4">
+  <div class="flex flex-col h-full space-y-6">
+    <div class="flex-none">
       {{ form_start(filter_form) }}
-      <div class="text-xs grid grid-cols-3 gap-4">
-        <div class="space-y-3 items-center">
-          <div class="flex justify-end w-full text-right space-x-4 items-center">
-            {{ form_label(filter_form.campusChoice, null, {'label_attr': {'class': 'inline-block w-1/2'}}) }}
-            {{ form_widget(filter_form.campusChoice, {'attr': {'class': 'inline-block w-1/2'}}) }}
+      <div class="grid lg:grid-cols-3 sm:grid-cols-1 gap-6">
+        <div class="space-y-4 items-center">
+          <div class="flex lg:justify-end sm:justify-center w-full text-right space-x-4 items-center">
+            {{ form_label(filter_form.campusChoice, null, {'label_attr': {'class': 'inline-block lg:w-1/2'}}) }}
+            {{ form_widget(filter_form.campusChoice, {'attr': {'class': 'inline-block lg:w-1/2'}}) }}
           </div>
-          <div class="flex justify-end w-full text-right space-x-4 items-center">
-            {{ form_label(filter_form.titleSearch, null, {'label_attr': {'class': 'inline-block w-1/2'}}) }}
-            {{ form_widget(filter_form.titleSearch, {'attr': {'class': 'inline-block w-1/2'}}) }}
+          <div class="flex lg:justify-end sm:justify-center w-full text-right space-x-4 items-center">
+            {{ form_label(filter_form.titleSearch, null, {'label_attr': {'class': 'inline-block lg:w-1/2'}}) }}
+            {{ form_widget(filter_form.titleSearch, {'attr': {'class': 'inline-block lg:w-1/2'}}) }}
           </div>
-          <div class="flex justify-end space-x-4 items-center">
+          <div class="flex lg:justify-end sm:justify-center space-x-4 items-center">
             {{ form_row(filter_form.startDate) }}
             {{ form_row(filter_form.endDate) }}
           </div>
         </div>
+
         <div class="flex flex-col justify-center items-center">
-          <div class="space-y-3">
-            <div class="space-x-4">
-              {{ form_widget(filter_form.isHost) }}
-              {{ form_label(filter_form.isHost) }}
+          <div class="space-y-3 w-full max-w-md">
+            <div class="flex items-center space-x-4">
+              <label class="relative inline-flex cursor-pointer items-center">
+                {{ form_widget(filter_form.isHost, {
+                  'attr': {
+                    'class': 'peer sr-only',
+                    'id': filter_form.isHost.vars.id
+                  }
+                }) }}
+                <label for="{{ filter_form.isHost.vars.id }}" class="hidden"></label>
+                <div
+                    class="peer h-4 w-11 rounded border bg-slate-200 after:absolute after:-top-1 after:left-0 after:h-6 after:w-6 after:rounded-md after:border after:border-gray-300 after:bg-purple-800 after:transition-all after:content-[''] peer-checked:bg-purple-400 peer-checked:after:translate-x-full peer-focus:ring-amber-300 bg-opacity-50"></div>
+              </label>
+              <label for="{{ filter_form.isHost.vars.id }}"
+                     class="cursor-pointer">{{ form_label(filter_form.isHost) }}</label>
             </div>
-            <div class="space-x-4">
-              {{ form_widget(filter_form.isEntered) }}
-              {{ form_label(filter_form.isEntered) }}
+
+            <div class="flex items-center space-x-4">
+              <label class="relative inline-flex cursor-pointer items-center">
+                {{ form_widget(filter_form.isEntered, {
+                  'attr': {
+                    'class': 'peer sr-only',
+                    'id': filter_form.isEntered.vars.id
+                  }
+                }) }}
+                <label for="{{ filter_form.isEntered.vars.id }}" class="hidden"></label>
+                <div
+                    class="peer h-4 w-11 rounded border bg-slate-200 after:absolute after:-top-1 after:left-0 after:h-6 after:w-6 after:rounded-md after:border after:border-gray-300 after:bg-purple-800 after:transition-all after:content-[''] peer-checked:bg-purple-400 peer-checked:after:translate-x-full peer-focus:ring-amber-300 bg-opacity-50"></div>
+              </label>
+              <label for="{{ filter_form.isEntered.vars.id }}"
+                     class="cursor-pointer">{{ form_label(filter_form.isEntered) }}</label>
             </div>
-            <div class="space-x-4">
-              {{ form_widget(filter_form.isNotEntered) }}
-              {{ form_label(filter_form.isNotEntered) }}
+
+            <div class="flex items-center space-x-4">
+              <label class="relative inline-flex cursor-pointer items-center">
+                {{ form_widget(filter_form.isNotEntered, {
+                  'attr': {
+                    'class': 'peer sr-only',
+                    'id': filter_form.isNotEntered.vars.id
+                  }
+                }) }}
+                <label for="{{ filter_form.isNotEntered.vars.id }}" class="hidden"></label>
+                <div
+                    class="peer h-4 w-11 rounded border bg-slate-200 after:absolute after:-top-1 after:left-0 after:h-6 after:w-6 after:rounded-md after:border after:border-gray-300 after:bg-purple-800 after:transition-all after:content-[''] peer-checked:bg-purple-400 peer-checked:after:translate-x-full peer-focus:ring-amber-300 bg-opacity-50"></div>
+              </label>
+              <label for="{{ filter_form.isNotEntered.vars.id }}"
+                     class="cursor-pointer">{{ form_label(filter_form.isNotEntered) }}</label>
             </div>
-            <div class="space-x-4">
-              {{ form_widget(filter_form.isPast) }}
-              {{ form_label(filter_form.isPast) }}
+
+            <div class="flex items-center space-x-4">
+              <label class="relative inline-flex cursor-pointer items-center">
+                {{ form_widget(filter_form.isPast, {
+                  'attr': {
+                    'class': 'peer sr-only',
+                    'id': filter_form.isPast.vars.id
+                  }
+                }) }}
+                <label for="{{ filter_form.isPast.vars.id }}" class="hidden"></label>
+                <div
+                    class="peer h-4 w-11 rounded border bg-slate-200 after:absolute after:-top-1 after:left-0 after:h-6 after:w-6 after:rounded-md after:border after:border-gray-300 after:bg-purple-800 after:transition-all after:content-[''] peer-checked:bg-purple-400 peer-checked:after:translate-x-full peer-focus:ring-purple-400 bg-opacity-50"></div>
+              </label>
+              <label for="{{ filter_form.isPast.vars.id }}"
+                     class="cursor-pointer">{{ form_label(filter_form.isPast) }}</label>
             </div>
           </div>
         </div>
-        <div class="flex flex-col justify-center items-left">
-          {{ form_row(filter_form.submit, {'attr': {'class': 'border border-gray-200 p-4'}}) }}
+
+        <div class="flex flex-col justify-center lg:items-start sm:items-center">
+          {{ form_row(filter_form.submit, {'attr': {'class': 'border border-gray-200 p-4 bg-amber-500 bg-opacity-40'}}) }}
         </div>
       </div>
       {{ form_end(filter_form) }}
@@ -88,7 +137,8 @@
                        class="border border-gray-200 p-2">Modifier</a>
                     <a href="#" class="border border-gray-200 p-2">Publier</a>
                   {% elseif status == 'Ouvert' %}
-                    <a href="{{ path('outing_cancel', {'id': outing.id}) }}" class="border border-gray-200 p-2">Annuler</a>
+                    <a href="{{ path('outing_cancel', {'id': outing.id}) }}"
+                       class="border border-gray-200 p-2">Annuler</a>
                   {% endif %}
                 {% elseif status == 'Ouvert' %}
                   {% if not isAttendee %}
@@ -110,8 +160,9 @@
       </div>
     </div>
 
-    <div class=" m-1 mt-4">
-      <a class="border border-gray-200 p-2 text-center" href="{{ path('outing_new') }}">Créer une sortie</a>
+    <div class="flex-none py-4">
+      <a class="border border-gray-200 p-4 text-center bg-amber-400 bg-opacity-40"
+         href="{{ path('outing_new') }}">Créer une sortie</a>
     </div>
   </div>
 {% endblock %}

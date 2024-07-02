@@ -42,16 +42,28 @@ class OutingsFilterType extends AbstractType
             ]
         ])
         ->add('isHost', CheckboxType::class, [
-            'label' => 'Sorties dont je suis l\'organisateur/trice'
+            'label' => 'Sorties dont je suis l\'organisateur/trice',
+            'label_attr' => [
+                'class' => 'cursor-pointer'
+            ]
         ])
         ->add('isEntered', CheckboxType::class, [
-            'label' => 'Sorties auxquelles je suis inscrit/e'
+            'label' => 'Sorties auxquelles je suis inscrit/e',
+            'label_attr' => [
+                'class' => 'cursor-pointer'
+            ]
         ])
         ->add('isNotEntered', CheckboxType::class, [
-            'label' => 'Sorties auxquelles je ne suis pas inscrit/e'
+            'label' => 'Sorties auxquelles je ne suis pas inscrit/e',
+            'label_attr' => [
+                'class' => 'cursor-pointer'
+            ]
         ])
         ->add('isPast', CheckboxType::class, [
-            'label' => 'Sorties passées'
+            'label' => 'Sorties passées',
+            'label_attr' => [
+                'class' => 'cursor-pointer'
+            ]
         ])
         ->add('submit', SubmitType::class, [
             'label' => 'Rechercher'
