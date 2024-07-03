@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class CampusController extends AbstractController
 {
   #[Route('/', name: 'list')]
-  public function index(
+  public function list(
     CampusRepository $repo
   ): Response
   {

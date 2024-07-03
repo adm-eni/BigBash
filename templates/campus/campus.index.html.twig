@@ -1,20 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CampusController!{% endblock %}
+{% block title %}Liste des Campus{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+  <div class="flex flex-col h-full space-y-8 p-6">
+    <h1 class="text-3xl font-bold text-center">Liste des Campus</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for campus in campuses %}
+        <div class="bg-blue-500 bg-opacity-60 shadow-md overflow-hidden">
+          <div class="p-6">
+            <h2 class="text-xl font-semibold text-center">{{ campus.name }}</h2>
+          </div>
+        </div>
+      {% else %}
+        <p class="col-span-full text-center text-gray-400">Aucun campus trouvé.</p>
+      {% endfor %}
+    </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/var/www/html/BigBash/src/Controller/CampusController.php</code></li>
-        <li>Your template at <code>/var/www/html/BigBash/templates/campus/index.html.twig</code></li>
-    </ul>
-</div>
+    <div class="flex justify-center mt-6">
+      <a href="{# { path('campus_new') } #}"
+         class="button bg-amber-400 bg-opacity-40 text-white px-6 py-3">Ajouter un
+        campus</a>
+    </div>
+  </div>
 {% endblock %}
