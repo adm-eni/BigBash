@@ -3,9 +3,18 @@
 @tailwind utilities;
 
 @layer components {
-  input, textarea, select {
-    @apply bg-slate-950/50 backdrop-blur-lg !important
-  }
+    input, textarea, select {
+        @apply bg-slate-950/50 backdrop-blur-lg !important
+    }
+    .flash-error, .flash-success {
+        text-align: center;
+    }
+    .flash-error {
+        background-color: rgb(221 0 89 / 60%);
+    }
+    .flash-success {
+        background-color: rgb(27 95 207 / 60%);
+    }
 }
 
 @layer utilities {

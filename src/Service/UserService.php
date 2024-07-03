@@ -19,20 +19,6 @@ class UserService extends AbstractController
     {
     }
 
-    public function checkUserIsHost(Outing $outing, User $user, string $message): void
-    {
-        if ($outing->getHost() !== $user) {
-            throw $this->createAccessDeniedException($message);
-        }
-    }
-
-    public function checkUserIsNotHost(Outing $outing, User $user, string $message): void
-    {
-        if ($outing->getHost() === $user) {
-            throw $this->createAccessDeniedException($message);
-        }
-    }
-
     public function updateUserProfile(User $user, FormInterface $form): void
     {
         if (!empty($form->get('plainPassword')->getData())) {

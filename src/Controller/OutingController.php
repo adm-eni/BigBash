@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Outing;
 use App\Entity\User;
 use App\Enum\Status;
+use App\Exception\OutingStatusException;
 use App\Form\Model\OutingsFilter;
 use App\Form\OutingsFilterType;
 use App\Form\OutingType;
@@ -62,8 +63,9 @@ class OutingController extends AbstractController
     ): Response
     {
         $outing = $outingRepo->find($id);
-        if($outing === null) {
-            throw $this->createNotFoundException('Sortie non trouvée.');
+        if ($outing === null) {
+            $this->addFlash('error', 'Sortie non trouvée.');
+            return $this->redirectToRoute('outing_list');
         }
 
         return $this->render('outing/outing.show.html.twig', [
@@ -77,7 +79,6 @@ class OutingController extends AbstractController
         Request                $request,
         EntityManagerInterface $entityManager,
         OutingService          $outingService,
-        UserService             $userService,
         int                    $id = null): Response
     {
         /** @var User $user */
@@ -86,13 +87,23 @@ class OutingController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        if ($id == null) {
+        if ($id == null || $outingService->getOuting($id) === null) {
             $outing = new Outing();
             $outing->setCampus($user->getCampus());
         } else {
             $outing = $outingService->getOuting($id);
-            $userService->checkUserIsHost($outing, $user, 'Vous n\'avez pas accès à cette sortie.');
-            $outingService->checkOutingStatus($outing, 1, 1, 1, 1, 1, 0);
+
+            if ($outing->getHost() !== $user) {
+                $this->addFlash('error', 'Vous n\'avez pas accès à cette sortie.');
+                return $this->redirectToRoute('outing_list');
+            }
+
+            try {
+                $outingService->checkOutingStatus($outing, 1, 1, 1, 1, 1, 0);
+            } catch (OutingStatusException $e) {
+                $this->addFlash($e->getFlashType(), $e->getMessage());
+                return $this->redirectToRoute('outing_list');
+            }
         }
         $outing->setHost($user);
 
@@ -117,20 +128,21 @@ class OutingController extends AbstractController
             }
             if ($form->get('delete')->isClicked()) {
                 if ($outing->getStatus() !== Status::CREATED) {
-                    throw $this->createAccessDeniedException('Cette sortie ne peut pas être supprimée.');
-                }
-                    $outingService->deleteOuting($outing);
-                    $this->addFlash('success', 'Sortie supprimée.');
+                    $this->addFlash('error', 'Cette sortie ne peut pas être supprimée.');
                     return $this->redirectToRoute('user_profile');
+                }
+                $outingService->deleteOuting($outing);
+                $this->addFlash('success', 'Sortie supprimée.');
+                return $this->redirectToRoute('user_profile');
 
             }
 
-      $status = Status::OPEN;
-      $outing->setStatus($status);
-      $outing->addAttendee($user);
+            $status = Status::OPEN;
+            $outing->setStatus($status);
+            $outing->addAttendee($user);
 
-      $entityManager->persist($outing);
-      $entityManager->flush();
+            $entityManager->persist($outing);
+            $entityManager->flush();
 
             $this->addFlash('success', 'Sortie publiée!');
             return $this->redirectToRoute('user_profile');
@@ -145,23 +157,35 @@ class OutingController extends AbstractController
     public function cancel(
         Request                $request,
         EntityManagerInterface $entityManager,
-        UserService             $userService,
         OutingService          $outingService,
         int                    $id = null): Response
     {
         /** @var User $user */
         $user = $this->getUser();
-        if ($user == null) {
+        if ($user === null) {
             return $this->redirectToRoute('app_login');
         }
-        if ($id == null) {
-            throw $this->createNotFoundException('Sortie non trouvée.');
+        if ($id === null) {
+            $this->addFlash('error', 'Sortie non trouvée.');
+            return $this->redirectToRoute('outing_list');
         }
 
         $outing = $outingService->getOuting($id);
+        if($outing === null) {
+            $this->addFlash('error', 'Sortie non trouvée.');
+            return $this->redirectToRoute('outing_list');
+        }
 
-        $userService->checkUserIsHost($outing, $user, 'Vous n\'avez pas accès à cette sortie.');
-        $outingService->checkOutingStatus($outing,true, true, true, true, false, false);
+        if ($outing->getHost() !== $user) {
+            $this->addFlash('error', 'Vous n\'avez pas accès à cette sortie.');
+            return $this->redirectToRoute('outing_list');
+        }
+        try {
+            $outingService->checkOutingStatus($outing, true, true, true, true, false, false);
+        } catch (OutingStatusException $e) {
+            $this->addFlash($e->getFlashType(), $e->getMessage());
+            return $this->redirectToRoute('outing_list');
+        }
 
         if ($outing->getStatus() === Status::CREATED) {
             $outingService->deleteOuting($outing);
@@ -173,7 +197,7 @@ class OutingController extends AbstractController
             'create' => false,
             'cancelOuting' => true,
         ]);
-//        dd($request);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

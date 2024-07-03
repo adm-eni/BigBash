@@ -9,7 +9,7 @@
         <h1 class="text-3xl mb-4">{{ user.pseudo }}</h1>
         <div class="flex">
             {% if user is not null and user.image is not null %}
-                <img class="pr-5 max-w-52" src="{{ asset('img/profile-image/' ~ user.image) }}" alt="{{ user.image }}">
+                <img class="pr-5 max-w-xl" src="{{ asset('img/profile-image/' ~ user.image) }}" alt="{{ user.image }}">
             {% endif %}
             <table class="table">
                 <tr>

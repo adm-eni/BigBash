@@ -4,37 +4,37 @@ namespace App\Service;
 
 use App\Entity\Outing;
 use App\Enum\Status;
+use App\Exception\OutingStatusException;
 use App\Form\Model\OutingsFilter;
 use App\Repository\OutingRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class OutingService extends AbstractController
+class OutingService
 {
-  private OutingRepository $outingRepo;
+    private OutingRepository $outingRepo;
 
-  public function __construct(OutingRepository $outingRepo)
-  {
-    $this->outingRepo = $outingRepo;
-  }
+    public function __construct(OutingRepository $outingRepo)
+    {
+        $this->outingRepo = $outingRepo;
+    }
 
-  public function getDefaultFilteredOutings(UserInterface $user): array
-  {
-    return $this->outingRepo->findByDefault($user);
-  }
+    public function getDefaultFilteredOutings(UserInterface $user): array
+    {
+        return $this->outingRepo->findByDefault($user);
+    }
 
-  public function getAllOutings(): array
-  {
-    return $this->outingRepo->findAll();
-  }
+    public function getAllOutings(): array
+    {
+        return $this->outingRepo->findAll();
+    }
 
-  public function getOuting(int $id): ?Outing
-  {
-    return $this->outingRepo->find($id);
-  }
+    public function getOuting(int $id): ?Outing
+    {
+        return $this->outingRepo->find($id);
+    }
 
-  public function getUserFilteredOutings(array $outings, UserInterface $user, OutingsFilter $filter): array
-  {
+    public function getUserFilteredOutings(array $outings, UserInterface $user, OutingsFilter $filter): array
+    {
 
         return $this->outingRepo->findByFilters(
             $outings,
@@ -50,39 +50,48 @@ class OutingService extends AbstractController
         );
     }
 
-  public function updateOutingStatuses(): void
-  {
-    $outings = $this->outingRepo->findOutingsToUpdate();
+    public function updateOutingStatuses(): void
+    {
+        $outings = $this->outingRepo->findOutingsToUpdate();
 
-    foreach ($outings as $outing) {
-      if ($outing->getStatus() === Status::OPEN) $outing->setStatus(Status::ONGOING);
-      elseif ($outing->getStatus() === Status::ONGOING) $outing->setStatus(Status::PAST);
-      else $outing->setStatus(Status::CLOSED);
+        foreach ($outings as $outing) {
+            if ($outing->getStatus() === Status::OPEN) $outing->setStatus(Status::ONGOING);
+            elseif ($outing->getStatus() === Status::ONGOING) $outing->setStatus(Status::PAST);
+            else $outing->setStatus(Status::CLOSED);
+        }
+        $this->outingRepo->getEntityManager()->flush();
     }
-    $this->outingRepo->getEntityManager()->flush();
-  }
 
-    public function checkOutingStatus(Outing $outing, bool $closed, bool $ongoing, bool $past, bool $canceled, bool $open, bool $created): void
+    /**
+     * @throws OutingStatusException
+     */
+    public function checkOutingStatus(Outing $outing,
+                                      bool   $closed,
+                                      bool   $ongoing,
+                                      bool   $past,
+                                      bool   $canceled,
+                                      bool   $open,
+                                      bool   $created): void
     {
         $status = $outing->getStatus();
 
         if ($closed && $status === Status::CLOSED) {
-            throw $this->createAccessDeniedException('Cette sortie a été clôturée.');
+            throw new OutingStatusException('Cette sortie a été clôturée.');
         }
         if ($ongoing && $status === Status::ONGOING) {
-            throw $this->createAccessDeniedException('Cette sortie est en cours.');
+            throw new OutingStatusException('Cette sortie est en cours.');
         }
         if ($past && $status === Status::PAST) {
-            throw $this->createAccessDeniedException('Cette sortie est terminée.');
+            throw new OutingStatusException('Cette sortie est terminée.');
         }
         if ($canceled && $status === Status::CANCELED) {
-            throw $this->createAccessDeniedException('Cette sortie a été annulée.');
+            throw new OutingStatusException('Cette sortie a été annulée.');
         }
         if ($open && $status === Status::OPEN) {
-            throw $this->createAccessDeniedException('Cette sortie est déjà publiée.');
+            throw new OutingStatusException('Cette sortie est déjà publiée.');
         }
         if ($created && $status === Status::CREATED) {
-            throw $this->createAccessDeniedException('Cette sortie est en cours de création.');
+            throw new OutingStatusException('Cette sortie est en cours de création.');
         }
     }
 

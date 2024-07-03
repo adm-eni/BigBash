@@ -4,16 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Outing;
 use App\Entity\User;
+use App\Exception\OutingStatusException;
 use App\Form\UserProfileType;
 use App\Repository\UserRepository;
 use App\Service\OutingService;
 use App\Service\UserService;
-use App\Utils\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 
@@ -57,13 +56,14 @@ class UserController extends AbstractController
                          int            $id = null): Response
     {
         if ($id === null) {
-            throw $this->createNotFoundException('Page non trouvée.');
+            return $this->redirectToRoute('user_profile');
         }
 
         $user = $userRepository->find($id);
 
         if ($user === null) {
-            throw $this->createNotFoundException('Utilisateur non trouvé.');
+            $this->addFlash('error','Utilisateur non trouvé.');
+            return $this->redirectToRoute('outing_list');
         }
 
         return $this->render('user/user.show.html.twig', [
@@ -79,10 +79,21 @@ class UserController extends AbstractController
         $user = $this->getUser();
 
         if (!$outingId) {
-            throw $this->createNotFoundException('Sortie non trouvée. Inscription non effectuée.');
+            $this->addFlash('error','Sortie non trouvée. Inscription non effectuée.');
+            return $this->redirectToRoute('outing_list');
         }
-        $this->userService->checkUserIsNotHost($outingId, $user, 'Vous êtes déjà inscrit à une sortie dont vous êtes l\'organisateur.');
-        $this->outingService->checkOutingStatus($outingId, true, true, true, true, false, true);
+
+        if ($outingId->getHost() === $user) {
+            $this->addFlash('error', 'Vous êtes déjà inscrit à une sortie dont vous êtes l\'organisateur.');
+            return $this->redirectToRoute('outing_list');
+        }
+
+        try {
+            $this->outingService->checkOutingStatus($outingId, true, true, true, true, false, true);
+        } catch (OutingStatusException $e) {
+            $this->addFlash($e->getFlashType(), $e->getMessage());
+            return $this->redirectToRoute('outing_list');
+        }
 
         $user->addEnteredOuting($outingId);
         $entityManager->persist($user);
@@ -100,10 +111,21 @@ class UserController extends AbstractController
         $user = $this->getUser();
 
         if (!$outingId) {
-            throw $this->createNotFoundException('Sortie non trouvée. Désistement non effectué.');
+            $this->addFlash('error', 'Sortie non trouvée. Désistement non effectué.');
+            return $this->redirectToRoute('outing_list');
         }
-        $this->userService->checkUserIsNotHost($outingId, $user, 'Impossible de se désister d\'une sortie dont vous êtes l\'organisateur.');
-        $this->outingService->checkOutingStatus($outingId, true, true, true, true, false, true);
+
+        if ($outingId->getHost() === $user) {
+            $this->addFlash('error', 'Impossible de se désister d\'une sortie dont vous êtes l\'organisateur.');
+            return $this->redirectToRoute('outing_list');
+        }
+
+        try {
+            $this->outingService->checkOutingStatus($outingId, true, true, true, true, false, true);
+        } catch (OutingStatusException $e) {
+            $this->addFlash($e->getFlashType(), $e->getMessage());
+            return $this->redirectToRoute('outing_list');
+        }
 
         $user->removeEnteredOuting($outingId);
         $entityManager->persist($user);
