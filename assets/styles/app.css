@@ -3,18 +3,25 @@
 @tailwind utilities;
 
 @layer components {
-    input, textarea, select {
-        @apply bg-slate-950/50 backdrop-blur-lg !important
-    }
-    .flash-error, .flash-success {
-        text-align: center;
-    }
-    .flash-error {
-        background-color: rgb(221 0 89 / 60%);
-    }
-    .flash-success {
-        background-color: rgb(27 95 207 / 60%);
-    }
+  input, textarea, select {
+    @apply bg-slate-950/50 backdrop-blur-lg !important
+  }
+
+  .flash-error, .flash-success {
+    @apply text-center
+  }
+
+  .flash-error {
+    @apply text-red-800
+  }
+
+  .flash-success {
+    @apply text-blue-700
+  }
+
+  a:hover {
+    @apply text-blue-500
+  }
 }
 
 @layer utilities {
@@ -22,9 +29,10 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
   /* Hide scrollbar for IE, Edge and Firefox */
   .no-scrollbar {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 }
