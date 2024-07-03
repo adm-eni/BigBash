@@ -5,23 +5,23 @@
             <div class="relative flex items-center">
 
                 <a href="{{ path('outing_public_list') }}"
-                   class="flex items-center text-lg mix-blend-lighten hover:text-fuchsia-200">
+                   class="flex items-center text-lg mix-blend-lighten">
                     <h1 class="font-bold">2or</h1>
                 </a>
                 <div class="relative hidden lg:flex items-center ml-auto">
                     <nav class="leading-6 font-semibold mix-blend-lighten">
                         <ul class="flex space-x-8">
-                            <li><a class="hover:text-fuchsia-200" href="{{ path('city_list') }}">Villes</a></li>
-                            <li><a class="hover:text-fuchsia-200" href="{{ path('campus_list') }}">Campus</a></li>
-                            <li><a class="hover:text-fuchsia-200" href="{{ path('outing_private_list') }}">Accueil</a></li>
+                            <li><a href="{{ path('city_list') }}">Villes</a></li>
+                            <li><a href="{{ path('campus_list') }}">Campus</a></li>
+                            <li><a href="{{ path('outing_private_list') }}">Accueil</a></li>
                             {% if app.user %}
-                            <li><a class="hover:text-fuchsia-200" href="{{ path('user_profile') }}">Mon profil</a></li>
-                            <li><a class="hover:text-fuchsia-200" href="{{ path('app_logout') }}">Se déconnecter</a></li>
+                            <li><a href="{{ path('user_profile') }}">Mon profil</a></li>
+                            <li><a href="{{ path('app_logout') }}">Se déconnecter</a></li>
                             {% else %}
-                            <li><a class="hover:text-fuchsia-200" href="{{ path('app_login') }}">Se connecter</a></li>
+                            <li><a href="{{ path('app_login') }}">Se connecter</a></li>
                             {% endif %}
                             {% if app.user %}
-                            <li>Bonjour, <a class="hover:text-fuchsia-200 font-bold" href="{{ path('user_profile') }}">{{ app.user.pseudo }}</a></li>
+                            <li>Bonjour, <a class="font-bold" href="{{ path('user_profile') }}">{{ app.user.pseudo }}</a></li>
                             {% endif %}
                         </ul>
                     </nav>

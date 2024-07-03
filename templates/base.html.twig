@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="fr" class="h-full">
+<html lang="fr" class="h-full"
+      style="background-image: url('{{ asset('img/wallpaper.jpg') }}'); background-size: cover; background-position: center;">
 <head>
   <meta charset="UTF-8">
   <title>{% block title %}Welcome!{% endblock %}</title>
@@ -9,26 +10,38 @@
   {% endblock %}
 
   {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
     {{ encore_entry_script_tags('app') }}
   {% endblock %}
 </head>
-<body class="text-amber-100 font-sans bg-cover bg-center h-full flex flex-col" style="background-image: url('{{ asset('img/wallpaper.jpg') }}'); background-size: cover; background-position: center;">
-<div class="container mx-auto px-4 bg-amber-400 bg-opacity-60">
-  {% include 'menu/menu.nav.html.twig' %}
+<body
+    class="text-amber-100 font-sans backdrop-blur-sm h-full flex flex-col items-center">
+<div class="w-full relative">
+  <div class="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/60 to-transparent"></div>
+  <div
+      class="absolute inset-0 backdrop-blur-sm [mask-image:linear-gradient(to_right,transparent,black_25%,black_75%,transparent)]"></div>
+  <div class="container mx-auto px-4 relative">
+    {% include 'menu/menu.nav.html.twig' %}
+  </div>
 </div>
 {% for label, messages in app.flashes %}
-    {% for message in messages %}
-        <div class="flash flash-{{ label }} container mx-auto px-4">
-            {{ message }}
-        </div>
-    {% endfor %}
+  {% for message in messages %}
+    <div class="flash flash-{{ label }} container mx-auto px-4">
+      {{ message }}
+    </div>
+  {% endfor %}
 {% endfor %}
-<main class="container mx-auto px-4 py-6 flex-grow bg-slate-950 bg-opacity-50 backdrop-blur flex flex-col overflow-hidden">
+<main
+    class="container mx-auto px-4 py-6 flex-grow flex flex-col overflow-hidden bg-[linear-gradient(90deg,rgba(0,0,0,0)0%,rgba(0,0,0,.7)25%,rgba(0,0,0,.75)75%,rgba(0,0,0,0)100%)]">
   {% block body %}{% endblock %}
 </main>
-<footer class="container mx-auto px-4 py-4 text-center bg-amber-400 bg-opacity-40 backdrop-blur">
-  2or
+<footer class="w-full relative">
+  <div class="absolute inset-0 bg-gradient-to-r from-transparent via-amber-400/40 to-transparent"></div>
+  <div
+      class="absolute inset-0 backdrop-blur-sm [mask-image:linear-gradient(to_right,transparent,black_25%,black_75%,transparent)]"></div>
+  <div class="container mx-auto px-4 py-4 text-center relative">
+    2or
+  </div>
 </footer>
 </body>
 </html>
