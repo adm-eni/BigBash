@@ -34,7 +34,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get('cancel')->isClicked()) {
-                return $this->redirectToRoute('outing_list');
+                return $this->redirectToRoute('outing_private_list');
             }
 
             $this->userService->updateUserProfile($user, $form);
@@ -63,7 +63,7 @@ class UserController extends AbstractController
 
         if ($user === null) {
             $this->addFlash('error','Utilisateur non trouvé.');
-            return $this->redirectToRoute('outing_list');
+            return $this->redirectToRoute('outing_public_list');
         }
 
         return $this->render('user/user.show.html.twig', [
@@ -80,19 +80,19 @@ class UserController extends AbstractController
 
         if (!$outingId) {
             $this->addFlash('error','Sortie non trouvée. Inscription non effectuée.');
-            return $this->redirectToRoute('outing_list');
+            return $this->redirectToRoute('outing_public_list');
         }
 
         if ($outingId->getHost() === $user) {
             $this->addFlash('error', 'Vous êtes déjà inscrit à une sortie dont vous êtes l\'organisateur.');
-            return $this->redirectToRoute('outing_list');
+            return $this->redirectToRoute('outing_public_list');
         }
 
         try {
             $this->outingService->checkOutingStatus($outingId, true, true, true, true, false, true);
         } catch (OutingStatusException $e) {
             $this->addFlash($e->getFlashType(), $e->getMessage());
-            return $this->redirectToRoute('outing_list');
+            return $this->redirectToRoute('outing_public_list');
         }
 
         $user->addEnteredOuting($outingId);
@@ -100,7 +100,7 @@ class UserController extends AbstractController
         $entityManager->flush();
 
         $this->addFlash('success', 'Inscription réussie');
-        return $this->redirectToRoute('outing_list');
+        return $this->redirectToRoute('outing_private_list');
     }
 
     #[Route('/withdraw/{outingId}', name: 'withdraw', requirements: ['id' => '\d+'])]
@@ -112,19 +112,19 @@ class UserController extends AbstractController
 
         if (!$outingId) {
             $this->addFlash('error', 'Sortie non trouvée. Désistement non effectué.');
-            return $this->redirectToRoute('outing_list');
+            return $this->redirectToRoute('outing_public_list');
         }
 
         if ($outingId->getHost() === $user) {
             $this->addFlash('error', 'Impossible de se désister d\'une sortie dont vous êtes l\'organisateur.');
-            return $this->redirectToRoute('outing_list');
+            return $this->redirectToRoute('outing_public_list');
         }
 
         try {
             $this->outingService->checkOutingStatus($outingId, true, true, true, true, false, true);
         } catch (OutingStatusException $e) {
             $this->addFlash($e->getFlashType(), $e->getMessage());
-            return $this->redirectToRoute('outing_list');
+            return $this->redirectToRoute('outing_public_list');
         }
 
         $user->removeEnteredOuting($outingId);
@@ -132,6 +132,6 @@ class UserController extends AbstractController
         $entityManager->flush();
 
         $this->addFlash('success', 'Désistement réussie');
-        return $this->redirectToRoute('outing_list');
+        return $this->redirectToRoute('outing_private_list');
     }
 }

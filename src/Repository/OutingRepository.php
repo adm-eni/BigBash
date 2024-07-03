@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Outing;
+use App\Entity\User;
 use App\Enum\Status;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -37,22 +38,27 @@ class OutingRepository extends ServiceEntityRepository
     return $query->getResult();
   }
 
-  public function findByDefault($user): array
+  public function findByDefault(?User $user = null): array
   {
     $qb = $this->createQueryBuilder('o');
     $qb->leftJoin('o.attendees', 'a');
     $qb->leftJoin('o.host', 'h');
 
-    $qb->where('o.status != :statusClosed')
-        ->andWhere('(o.status != :statusCreated OR (o.status = :statusCreated AND h.id = :userId))')
-        ->setParameter('statusClosed', Status::CLOSED)
-        ->setParameter('statusCreated', Status::CREATED)
-        ->setParameter('userId', $user->getId());
+    if ($user) {
+      $qb->where('o.status != :statusClosed')
+          ->andWhere('(o.status != :statusCreated OR (o.status = :statusCreated AND h.id = :userId))')
+          ->setParameter('statusClosed', Status::CLOSED)
+          ->setParameter('statusCreated', Status::CREATED)
+          ->setParameter('userId', $user->getId());
+    } else {
+      $qb->where('o.status NOT IN (:excludedStatuses)')
+          ->setParameter('excludedStatuses', [Status::CLOSED, Status::CREATED]);
+    }
 
     return $qb->getQuery()->getResult();
   }
 
-  public function findByFilters(array $initialOutings, $user, $campus, $title, $dateStart, $dateEnd, $isHost, $isEntered, $isNotEntered, $isPast): array
+  public function findByFilters(array $initialOutings, ?User $user, $campus, $title, $dateStart, $dateEnd, $isHost, $isEntered, $isNotEntered, $isPast): array
   {
     $qb = $this->createQueryBuilder('o');
     $qb->leftJoin('o.campus', 'c');
@@ -61,6 +67,7 @@ class OutingRepository extends ServiceEntityRepository
     $qb->where('1 = 1');
     $qb->andwhere('o IN (:outings)')
         ->setParameter('outings', $initialOutings);
+
     if ($campus) {
       $qb->andWhere('c.id = :campus')
           ->setParameter('campus', $campus->getId());
@@ -77,29 +84,32 @@ class OutingRepository extends ServiceEntityRepository
       $qb->andWhere('o.startAt <= :dateEnd')
           ->setParameter('dateEnd', $dateEnd);
     }
-    if ($isHost) {
-      $qb->andWhere('h.id = :user')
-          ->setParameter('user', $user->getId());
-    }
-    if ($isEntered) {
-      $qb->andWhere('a.id = :user')
-          ->setParameter('user', $user->getId());
-    }
-    if ($isNotEntered) {
-      $subQuery = $this->createQueryBuilder('o2')
-          ->select('1')
-          ->leftJoin('o2.attendees', 'a2')
-          ->where('a2.id = :user AND o2.id = o.id')
-          ->setParameter('user', $user->getId())
-          ->getDQL();
-
-      $qb->andWhere(sprintf('NOT EXISTS (%s) AND h.id != :user', $subQuery))
-          ->setParameter('user', $user->getId());
-    }
     if ($isPast) {
       $qb->andWhere('o.startAt < :now')
           ->setParameter('now', new \DateTime());
     }
+
+    if ($user) {
+      if ($isHost) {
+        $qb->andWhere('h.id = :user')
+            ->setParameter('user', $user->getId());
+      }
+      if ($isEntered) {
+        $qb->andWhere('a.id = :user')
+            ->setParameter('user', $user->getId());
+      }
+      if ($isNotEntered) {
+        $subQuery = $this->createQueryBuilder('o2')
+            ->select('1')
+            ->leftJoin('o2.attendees', 'a2')
+            ->where('a2.id = :user AND o2.id = o.id')
+            ->getDQL();
+
+        $qb->andWhere(sprintf('NOT EXISTS (%s) AND h.id != :user', $subQuery))
+            ->setParameter('user', $user->getId());
+      }
+    }
+
     return $qb->getQuery()->getResult();
   }
 }

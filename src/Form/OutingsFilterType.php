@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Campus;
 use App\Form\Model\OutingsFilter;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -15,6 +16,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class OutingsFilterType extends AbstractType
 {
+  private Security $security;
+
+  public function __construct(Security $security)
+  {
+    $this->security = $security;
+  }
+
   public function buildForm(FormBuilderInterface $builder, array $options): void
   {
     $builder
@@ -40,25 +48,29 @@ class OutingsFilterType extends AbstractType
             'row_attr' => [
                 'class' => 'space-x-4'
             ]
-        ])
-        ->add('isHost', CheckboxType::class, [
-            'label' => 'Sorties dont je suis l\'organisateur/trice',
-            'label_attr' => [
-                'class' => 'cursor-pointer'
-            ]
-        ])
-        ->add('isEntered', CheckboxType::class, [
-            'label' => 'Sorties auxquelles je suis inscrit/e',
-            'label_attr' => [
-                'class' => 'cursor-pointer'
-            ]
-        ])
-        ->add('isNotEntered', CheckboxType::class, [
-            'label' => 'Sorties auxquelles je ne suis pas inscrit/e',
-            'label_attr' => [
-                'class' => 'cursor-pointer'
-            ]
-        ])
+        ]);
+    if ($this->security->isGranted('IS_AUTHENTICATED')) {
+      $builder
+          ->add('isHost', CheckboxType::class, [
+              'label' => 'Sorties dont je suis l\'organisateur/trice',
+              'label_attr' => [
+                  'class' => 'cursor-pointer'
+              ]
+          ])
+          ->add('isEntered', CheckboxType::class, [
+              'label' => 'Sorties auxquelles je suis inscrit/e',
+              'label_attr' => [
+                  'class' => 'cursor-pointer'
+              ]
+          ])
+          ->add('isNotEntered', CheckboxType::class, [
+              'label' => 'Sorties auxquelles je ne suis pas inscrit/e',
+              'label_attr' => [
+                  'class' => 'cursor-pointer'
+              ]
+          ]);
+    }
+    $builder
         ->add('isPast', CheckboxType::class, [
             'label' => 'Sorties passées',
             'label_attr' => [

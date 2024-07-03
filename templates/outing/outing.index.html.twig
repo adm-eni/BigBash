@@ -24,53 +24,24 @@
 
         <div class="flex flex-col justify-center items-center">
           <div class="space-y-3 w-full max-w-md">
-            <div class="flex items-center space-x-4">
-              <label class="relative inline-flex cursor-pointer items-center">
-                {{ form_widget(filter_form.isHost, {
-                  'attr': {
-                    'class': 'peer sr-only',
-                    'id': filter_form.isHost.vars.id
-                  }
-                }) }}
-                <label for="{{ filter_form.isHost.vars.id }}" class="hidden"></label>
-                <div
-                    class="peer h-4 w-11 rounded border bg-slate-200 after:absolute after:-top-1 after:left-0 after:h-6 after:w-6 after:rounded-md after:border after:border-gray-300 after:bg-purple-800 after:transition-all after:content-[''] peer-checked:bg-purple-400 peer-checked:after:translate-x-full peer-focus:ring-amber-300 bg-opacity-50"></div>
-              </label>
-              <label for="{{ filter_form.isHost.vars.id }}"
-                     class="cursor-pointer">{{ form_label(filter_form.isHost) }}</label>
-            </div>
-
-            <div class="flex items-center space-x-4">
-              <label class="relative inline-flex cursor-pointer items-center">
-                {{ form_widget(filter_form.isEntered, {
-                  'attr': {
-                    'class': 'peer sr-only',
-                    'id': filter_form.isEntered.vars.id
-                  }
-                }) }}
-                <label for="{{ filter_form.isEntered.vars.id }}" class="hidden"></label>
-                <div
-                    class="peer h-4 w-11 rounded border bg-slate-200 after:absolute after:-top-1 after:left-0 after:h-6 after:w-6 after:rounded-md after:border after:border-gray-300 after:bg-purple-800 after:transition-all after:content-[''] peer-checked:bg-purple-400 peer-checked:after:translate-x-full peer-focus:ring-amber-300 bg-opacity-50"></div>
-              </label>
-              <label for="{{ filter_form.isEntered.vars.id }}"
-                     class="cursor-pointer">{{ form_label(filter_form.isEntered) }}</label>
-            </div>
-
-            <div class="flex items-center space-x-4">
-              <label class="relative inline-flex cursor-pointer items-center">
-                {{ form_widget(filter_form.isNotEntered, {
-                  'attr': {
-                    'class': 'peer sr-only',
-                    'id': filter_form.isNotEntered.vars.id
-                  }
-                }) }}
-                <label for="{{ filter_form.isNotEntered.vars.id }}" class="hidden"></label>
-                <div
-                    class="peer h-4 w-11 rounded border bg-slate-200 after:absolute after:-top-1 after:left-0 after:h-6 after:w-6 after:rounded-md after:border after:border-gray-300 after:bg-purple-800 after:transition-all after:content-[''] peer-checked:bg-purple-400 peer-checked:after:translate-x-full peer-focus:ring-amber-300 bg-opacity-50"></div>
-              </label>
-              <label for="{{ filter_form.isNotEntered.vars.id }}"
-                     class="cursor-pointer">{{ form_label(filter_form.isNotEntered) }}</label>
-            </div>
+            {% if filter_form.isHost is defined and filter_form.isEntered is defined and filter_form.isNotEntered is defined %}
+              {% for field in [filter_form.isHost, filter_form.isEntered, filter_form.isNotEntered] %}
+                <div class="flex items-center space-x-4">
+                  <label class="relative inline-flex cursor-pointer items-center">
+                    {{ form_widget(field, {
+                      'attr': {
+                        'class': 'peer sr-only',
+                        'id': field.vars.id
+                      }
+                    }) }}
+                    <label for="{{ field.vars.id }}" class="hidden"></label>
+                    <div
+                        class="peer h-4 w-11 rounded border bg-slate-200 after:absolute after:-top-1 after:left-0 after:h-6 after:w-6 after:rounded-md after:border after:border-gray-300 after:bg-purple-800 after:transition-all after:content-[''] peer-checked:bg-purple-400 peer-checked:after:translate-x-full peer-focus:ring-amber-300 bg-opacity-50"></div>
+                  </label>
+                  <label for="{{ field.vars.id }}" class="cursor-pointer">{{ form_label(field) }}</label>
+                </div>
+              {% endfor %}
+            {% endif %}
 
             <div class="flex items-center space-x-4">
               <label class="relative inline-flex cursor-pointer items-center">
@@ -127,29 +98,28 @@
                 </a>
               </td>
               <td class="py-3 px-6 text-center flex space-x-2">
-                {% set isHost = outing.host == app.user %}
-                {% set isAttendee = outing.attendees.contains(app.user) %}
-                {% set status = outing.status.value %}
+                {% if app.user %}
+                  {% set isHost = outing.host == app.user %}
+                  {% set isAttendee = outing.attendees.contains(app.user) %}
+                  {% set status = outing.status.value %}
 
-                {% if isHost %}
-                  {% if status == 'En création' %}
-                    <a href="{{ path('outing_edit', {'id': outing.id}) }}"
-                       class="border border-gray-200 p-2">Modifier</a>
-                    <a href="#" class="border border-gray-200 p-2">Publier</a>
+                  {% if isHost %}
+                    {% if status == 'En création' %}
+                      <a href="{{ path('outing_edit', {'id': outing.id}) }}"
+                         class="border border-gray-200 p-2">Modifier</a>
+                      <a href="#" class="border border-gray-200 p-2">Publier</a>
+                    {% elseif status == 'Ouvert' %}
+                      <a href="{{ path('outing_cancel', {'id': outing.id}) }}" class="border border-gray-200 p-2">Annuler</a>
+                    {% endif %}
                   {% elseif status == 'Ouvert' %}
-                    <a href="{{ path('outing_cancel', {'id': outing.id}) }}"
-                       class="border border-gray-200 p-2">Annuler</a>
-                  {% endif %}
-                {% elseif status == 'Ouvert' %}
-                  {% if not isAttendee %}
-                    <a href="{{ path('user_join', {'outingId': outing.id}) }}" class="border border-gray-200 p-2">S'inscrire</a>
-                  {% else %}
-                    <a href="{{ path('user_withdraw', {'outingId': outing.id}) }}" class="border border-gray-200 p-2">Se
-                      désister</a>
+                    <a href="{{ path(isAttendee ? 'user_withdraw' : 'user_join', {'outingId': outing.id}) }}"
+                       class="border border-gray-200 p-2">
+                      {{ isAttendee ? 'Se désister' : 'S\'inscrire' }}
+                    </a>
                   {% endif %}
                 {% endif %}
 
-                {% if status != 'En création' %}
+                {% if app.user is null or outing.status.value != 'En création' %}
                   <a href="{{ path('outing_show', {'id': outing.id}) }}" class="border border-gray-200 p-2">Afficher</a>
                 {% endif %}
               </td>

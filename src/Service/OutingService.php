@@ -7,60 +7,64 @@ use App\Enum\Status;
 use App\Exception\OutingStatusException;
 use App\Form\Model\OutingsFilter;
 use App\Repository\OutingRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class OutingService
+class OutingService extends AbstractController
 {
-    private OutingRepository $outingRepo;
+  private OutingRepository $outingRepo;
 
-    public function __construct(OutingRepository $outingRepo)
-    {
-        $this->outingRepo = $outingRepo;
+  public function __construct(OutingRepository $outingRepo)
+  {
+    $this->outingRepo = $outingRepo;
+  }
+
+  public function getDefaultFilteredOutings(?UserInterface $user = null): array
+  {
+    return $this->outingRepo->findByDefault($user);
+  }
+
+  public function getAllOutings(): array
+  {
+    return $this->outingRepo->findAll();
+  }
+
+  public function getOuting(int $id): ?Outing
+  {
+    return $this->outingRepo->find($id);
+  }
+
+  public function getFormFilteredOutings(array $outings, OutingsFilter $filter, ?UserInterface $user = null): array
+  {
+    $isHost = $user ? $filter->getIsHost() : null;
+    $isEntered = $user ? $filter->getIsEntered() : null;
+    $isNotEntered = $user ? $filter->getIsNotEntered() : null;
+
+    return $this->outingRepo->findByFilters(
+        $outings,
+        $user,
+        $filter->getCampusChoice(),
+        $filter->getTitleSearch(),
+        $filter->getStartDate(),
+        $filter->getEndDate(),
+        $isHost,
+        $isEntered,
+        $isNotEntered,
+        $filter->getIsPast()
+    );
+  }
+
+  public function updateOutingStatuses(): void
+  {
+    $outings = $this->outingRepo->findOutingsToUpdate();
+
+    foreach ($outings as $outing) {
+      if ($outing->getStatus() === Status::OPEN) $outing->setStatus(Status::ONGOING);
+      elseif ($outing->getStatus() === Status::ONGOING) $outing->setStatus(Status::PAST);
+      else $outing->setStatus(Status::CLOSED);
     }
-
-    public function getDefaultFilteredOutings(UserInterface $user): array
-    {
-        return $this->outingRepo->findByDefault($user);
-    }
-
-    public function getAllOutings(): array
-    {
-        return $this->outingRepo->findAll();
-    }
-
-    public function getOuting(int $id): ?Outing
-    {
-        return $this->outingRepo->find($id);
-    }
-
-    public function getUserFilteredOutings(array $outings, UserInterface $user, OutingsFilter $filter): array
-    {
-
-        return $this->outingRepo->findByFilters(
-            $outings,
-            $user,
-            $filter->getCampusChoice(),
-            $filter->getTitleSearch(),
-            $filter->getStartDate(),
-            $filter->getEndDate(),
-            $filter->getIsHost(),
-            $filter->getIsEntered(),
-            $filter->getIsNotEntered(),
-            $filter->getIsPast()
-        );
-    }
-
-    public function updateOutingStatuses(): void
-    {
-        $outings = $this->outingRepo->findOutingsToUpdate();
-
-        foreach ($outings as $outing) {
-            if ($outing->getStatus() === Status::OPEN) $outing->setStatus(Status::ONGOING);
-            elseif ($outing->getStatus() === Status::ONGOING) $outing->setStatus(Status::PAST);
-            else $outing->setStatus(Status::CLOSED);
-        }
-        $this->outingRepo->getEntityManager()->flush();
-    }
+    $this->outingRepo->getEntityManager()->flush();
+  }
 
     /**
      * @throws OutingStatusException

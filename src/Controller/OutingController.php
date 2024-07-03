@@ -14,6 +14,7 @@ use App\Service\OutingService;
 use App\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -22,39 +23,69 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('', name: 'outing_')]
 class OutingController extends AbstractController
 {
-    /**
-     * @param Request $request
-     * @param OutingService $service
-     * @return Response
-     */
-    #[Route('', name: 'list')]
-    #[Route('/outings')]
-    public function list(
-        Request       $request,
-        OutingService $service
-    ): Response
-    {
+  /**
+   * @param Request $request
+   * @param OutingService $service
+   * @return Response
+   */
 
-        $service->updateOutingStatuses();
+  #[Route('', name: 'public_list')]
+  public function listPublic(
+      Request       $request,
+      OutingService $service,
+      Security      $security
+  ): Response
+  {
 
-        /** @var User $user */
-        $user = $this->getUser();
+    $service->updateOutingStatuses();
 
-        $filters = new OutingsFilter();
-        $filterForm = $this->createForm(OutingsFilterType::class, $filters);
-        $filterForm->handleRequest($request);
-
-        $outings = ($this->isGranted('ROLE_ADMIN') ? $service->getAllOutings() : $service->getDefaultFilteredOutings($user));
-
-        if ($filterForm->isSubmitted() && $filterForm->isValid()) {
-            $outings = $service->getUserFilteredOutings($outings, $user, $filters);
-        }
-
-        return $this->render('outing/outing.index.html.twig', [
-            'outings' => $outings,
-            'filter_form' => $filterForm
-        ]);
+    if ($security->isGranted('IS_AUTHENTICATED')) {
+      return $this->redirectToRoute('outing_private_list');
     }
+
+    $filters = new OutingsFilter();
+    $filterForm = $this->createForm(OutingsFilterType::class, $filters);
+    $filterForm->handleRequest($request);
+
+    $outings = $service->getDefaultFilteredOutings();
+
+    if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+      $outings = $service->getFormFilteredOutings($outings, $filters);
+    }
+
+    return $this->render('outing/outing.index.html.twig', [
+        'outings' => $outings,
+        'filter_form' => $filterForm
+    ]);
+  }
+
+  #[Route('/outings', name: 'private_list')]
+  public function listPrivate(
+      Request       $request,
+      OutingService $service
+  ): Response
+  {
+
+    $service->updateOutingStatuses();
+
+    /** @var User $user */
+    $user = $this->getUser();
+
+    $filters = new OutingsFilter();
+    $filterForm = $this->createForm(OutingsFilterType::class, $filters);
+    $filterForm->handleRequest($request);
+
+    $outings = ($this->isGranted('ROLE_ADMIN') ? $service->getAllOutings() : $service->getDefaultFilteredOutings($user));
+
+    if ($filterForm->isSubmitted() && $filterForm->isValid()) {
+      $outings = $service->getFormFilteredOutings($outings, $filters, $user);
+    }
+
+    return $this->render('outing/outing.index.html.twig', [
+        'outings' => $outings,
+        'filter_form' => $filterForm
+    ]);
+  }
 
     #[Route('/outings/{id}', name: 'show', requirements: ['id' => '\d+'])]
     public function show(
@@ -65,7 +96,7 @@ class OutingController extends AbstractController
         $outing = $outingRepo->find($id);
         if ($outing === null) {
             $this->addFlash('error', 'Sortie non trouvée.');
-            return $this->redirectToRoute('outing_list');
+            return $this->redirectToRoute('outing_public_list');
         }
 
         return $this->render('outing/outing.show.html.twig', [
@@ -95,14 +126,14 @@ class OutingController extends AbstractController
 
             if ($outing->getHost() !== $user) {
                 $this->addFlash('error', 'Vous n\'avez pas accès à cette sortie.');
-                return $this->redirectToRoute('outing_list');
+                return $this->redirectToRoute('outing_public_list');
             }
 
             try {
                 $outingService->checkOutingStatus($outing, 1, 1, 1, 1, 1, 0);
             } catch (OutingStatusException $e) {
                 $this->addFlash($e->getFlashType(), $e->getMessage());
-                return $this->redirectToRoute('outing_list');
+                return $this->redirectToRoute('outing_public_list');
             }
         }
         $outing->setHost($user);
@@ -115,7 +146,7 @@ class OutingController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get('cancel')->isClicked()) {
-                return $this->redirectToRoute('outing_list');
+                return $this->redirectToRoute('outing_public_list');
             }
             if ($form->get('save')->isClicked()) {
                 $status = Status::CREATED;
@@ -124,7 +155,7 @@ class OutingController extends AbstractController
                 $entityManager->persist($outing);
                 $entityManager->flush();
                 $this->addFlash('success', 'Sortie sauvegardée, mais non publiée.');
-                return $this->redirectToRoute('outing_list');
+                return $this->redirectToRoute('outing_public_list');
             }
             if ($form->get('delete')->isClicked()) {
                 if ($outing->getStatus() !== Status::CREATED) {
@@ -167,24 +198,24 @@ class OutingController extends AbstractController
         }
         if ($id === null) {
             $this->addFlash('error', 'Sortie non trouvée.');
-            return $this->redirectToRoute('outing_list');
+            return $this->redirectToRoute('outing_public_list');
         }
 
         $outing = $outingService->getOuting($id);
         if($outing === null) {
             $this->addFlash('error', 'Sortie non trouvée.');
-            return $this->redirectToRoute('outing_list');
+            return $this->redirectToRoute('outing_public_list');
         }
 
         if ($outing->getHost() !== $user) {
             $this->addFlash('error', 'Vous n\'avez pas accès à cette sortie.');
-            return $this->redirectToRoute('outing_list');
+            return $this->redirectToRoute('outing_public_list');
         }
         try {
             $outingService->checkOutingStatus($outing, true, true, true, true, false, false);
         } catch (OutingStatusException $e) {
             $this->addFlash($e->getFlashType(), $e->getMessage());
-            return $this->redirectToRoute('outing_list');
+            return $this->redirectToRoute('outing_public_list');
         }
 
         if ($outing->getStatus() === Status::CREATED) {
@@ -202,7 +233,7 @@ class OutingController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($form->get('cancel')->isClicked()) {
-                return $this->redirectToRoute('outing_list');
+                return $this->redirectToRoute('outing_public_list');
             }
 
             $status = Status::CANCELED;

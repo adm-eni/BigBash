@@ -48,7 +48,7 @@ class DeuxOrAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('outing_list'));
+        return new RedirectResponse($this->urlGenerator->generate('outing_public_list'));
     }
 
     protected function getLoginUrl(Request $request): string
