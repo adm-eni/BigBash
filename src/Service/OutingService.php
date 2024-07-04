@@ -59,7 +59,8 @@ class OutingService extends AbstractController
     $outings = $this->outingRepo->findOutingsToUpdate();
 
     foreach ($outings as $outing) {
-      if ($outing->getStatus() === Status::OPEN) $outing->setStatus(Status::ONGOING);
+      if ($outing->getStatus() === Status::OPEN) $outing->setStatus(Status::BOOKED);
+      elseif ($outing->getStatus() === Status::BOOKED) $outing->setStatus(Status::ONGOING);
       elseif ($outing->getStatus() === Status::ONGOING) $outing->setStatus(Status::PAST);
       else $outing->setStatus(Status::CLOSED);
     }

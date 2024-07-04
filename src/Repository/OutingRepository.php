@@ -24,11 +24,13 @@ class OutingRepository extends ServiceEntityRepository
     $oneMonthAgo = date_modify($now, '-1 month');
 
     $qb = $this->createQueryBuilder('o')
-        ->where('o.status = :openStatus AND o.startAt <= :now AND :now < (o.startAt + o.duration)')
+        ->where('o.status = :openStatus AND o.startAt <= :now AND :now < o.entryDeadline')
+        ->orWhere('o.status = :bookedStatus AND o.entryDeadline <= :now AND :now < (o.startAt + o.duration)')
         ->orWhere('o.status = :ongoingStatus AND (o.startAt + o.duration) <= :now AND :oneMonthAgo < (o.startAt + o.duration)')
         ->orWhere('o.status IN (:endStatuses) AND (o.startAt + o.duration) <= :oneMonthAgo')
         ->setParameter('now', $now)
         ->setParameter('oneMonthAgo', $oneMonthAgo)
+        ->setParameter('bookedStatus', Status::BOOKED)
         ->setParameter('openStatus', Status::OPEN)
         ->setParameter('ongoingStatus', Status::ONGOING)
         ->setParameter('endStatuses', [Status::CANCELED, Status::PAST]);

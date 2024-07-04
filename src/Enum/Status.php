@@ -6,10 +6,11 @@ enum Status: string
 {
   case CREATED = 'En création';
   case OPEN = 'Ouvert';
+  case BOOKED = 'Complet';
   case ONGOING = 'En cours';
-  case CLOSED = 'Clôturé';
-  case PAST = 'Passé';
   case CANCELED = 'Annulé';
+  case PAST = 'Terminé';
+  case CLOSED = 'Clôturé';
 
   public static function fromString(string $status): self
   {

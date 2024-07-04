@@ -74,7 +74,8 @@
           <thead class="bg-yellow-600 sticky top-0">
           <tr class="uppercase leading-normal">
             <th class="py-3 px-4 text-left whitespace-nowrap">Nom de la sortie</th>
-            <th class="py-3 px-4 text-center whitespace-nowrap">Date de la sortie</th>
+            <th class="py-3 px-4 text-center whitespace-nowrap">Date</th>
+            <th class="py-3 px-4 text-center whitespace-nowrap">Heure</th>
             <th class="py-3 px-4 text-center whitespace-nowrap">Inscrits / Places</th>
             <th class="py-3 px-4 text-center whitespace-nowrap">Etat</th>
             {% if app.user %}
@@ -88,7 +89,8 @@
           {% for outing in outings %}
             <tr class="border-b border-gray-700">
               <td class="py-3 px-4 text-left">{{ outing.title }}</td>
-              <td class="py-3 px-4 text-center whitespace-nowrap">{{ outing.startAt|date('d-m-Y') }}</td>
+              <td class="py-3 px-4 text-center whitespace-nowrap">{{ outing.startAt|format_datetime(locale='fr_FR',pattern="dd-MM-YYYY") }}</td>
+              <td class="py-3 px-4 text-center whitespace-nowrap">{{ outing.startAt|format_datetime(locale='fr_FR',pattern="HH:mm") }}</td>
               <td class="py-3 px-4 text-center whitespace-nowrap">{{ outing.attendees.count }}
                 / {{ outing.maxEntryCount }}</td>
               <td class="py-3 px-4 text-center whitespace-nowrap">{{ outing.status.value }}</td>
@@ -108,17 +110,17 @@
                   {% if app.user %}
                     {% set isHost = outing.host == app.user %}
                     {% set isAttendee = outing.attendees.contains(app.user) %}
-                    {% set status = outing.status.value %}
+                    {% set status = outing.status %}
                     {% if isHost %}
-                      {% if status == 'En création' %}
+                      {% if status == constant('App\\Enum\\Status::CREATED') %}
                         <a href="{{ path('outing_edit', {'id': outing.id}) }}"
                            class="button p-2 bg-amber-400 bg-opacity-30 ">Modifier</a>
                         <a href="#" class="button bg-amber-400 bg-opacity-30 p-2">Publier</a>
-                      {% elseif status == 'Ouvert' %}
+                      {% elseif status == constant('App\\Enum\\Status::OPEN') %}
                         <a href="{{ path('outing_cancel', {'id': outing.id}) }}"
                            class="button bg-amber-400 bg-opacity-30 p-2">Annuler</a>
                       {% endif %}
-                    {% elseif status == 'Ouvert' %}
+                    {% elseif status == constant('App\\Enum\\Status::OPEN') %}
                       <a href="{{ path(isAttendee ? 'user_withdraw' : 'user_join', {'outingId': outing.id}) }}"
                          class="button bg-amber-400 bg-opacity-30 p-2">
                         {{ isAttendee ? 'Se désister' : 'S\'inscrire' }}
