@@ -16,12 +16,21 @@
       {% else %}
         <p class="col-span-full text-center text-gray-400">Aucun campus trouvé.</p>
       {% endfor %}
-    </div>
+      <div class="bg-blue-500 bg-opacity-60 shadow-md overflow-hidden">
+        <div class="p-6 flex flex-wrap items-center">
+          {{ form_start(form, {'attr': {'class': 'w-full'}}) }}
 
-    <div class="flex justify-center mt-6">
-      <a href="{# { path('campus_new') } #}"
-         class="button bg-amber-400 bg-opacity-40 text-white px-6 py-3">Ajouter un
-        campus</a>
+          <div class="w-full md:w-1/2 px-2">
+            {{ form_row(form.name) }}
+          </div>
+
+          <div class="w-full md:w-1/2 px-2">
+            {{ form_widget(form.save, {'attr': {'class': 'button bg-amber-300 bg-opacity-30 px-4 py-2'}}) }}
+          </div>
+
+          {{ form_end(form) }}
+        </div>
+      </div>
     </div>
   </div>
 {% endblock %}
