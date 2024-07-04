@@ -91,7 +91,7 @@ class UserController extends AbstractController
         }
 
         try {
-            $this->outingService->checkOutingStatus($outingId, true, true, true, true, false, true);
+            $this->outingService->checkOutingStatus($outingId, true, true, true, true, false, true, true);
         } catch (OutingStatusException $e) {
             $this->addFlash($e->getFlashType(), $e->getMessage());
             return $this->redirectToRoute('outing_public_list');
@@ -123,7 +123,7 @@ class UserController extends AbstractController
         }
 
         try {
-            $this->outingService->checkOutingStatus($outingId, true, true, true, true, false, true);
+            $this->outingService->checkOutingStatus($outingId, true, true, true, true, false, true, false);
         } catch (OutingStatusException $e) {
             $this->addFlash($e->getFlashType(), $e->getMessage());
             return $this->redirectToRoute('outing_public_list');

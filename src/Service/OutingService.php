@@ -76,7 +76,8 @@ class OutingService extends AbstractController
                                       bool   $past,
                                       bool   $canceled,
                                       bool   $open,
-                                      bool   $created): void
+                                      bool   $created,
+                                      bool   $full): void
     {
         $status = $outing->getStatus();
 
@@ -97,6 +98,9 @@ class OutingService extends AbstractController
         }
         if ($created && $status === Status::CREATED) {
             throw new OutingStatusException('Cette sortie est en cours de création.');
+        }
+        if($full && $outing->getAttendees()->count() >= $outing->getMaxEntryCount()) {
+            throw new OutingStatusException('Il n\'y a plus de place pour cette sortie.');
         }
     }
 

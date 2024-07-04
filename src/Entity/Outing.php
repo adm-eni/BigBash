@@ -54,7 +54,7 @@ class Outing
   private ?Campus $campus = null;
 
   #[ORM\Column(type: 'string', enumType: Status::class)]
-  private Status $status;
+  private ?Status $status = null;
 
   public function __construct()
   {
@@ -71,7 +71,7 @@ class Outing
     return $this->title;
   }
 
-  public function setTitle(string $title): static
+  public function setTitle(?string $title): static
   {
     $this->title = $title;
 

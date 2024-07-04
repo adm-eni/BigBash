@@ -130,7 +130,7 @@ class OutingController extends AbstractController
             }
 
             try {
-                $outingService->checkOutingStatus($outing, 1, 1, 1, 1, 1, 0);
+                $outingService->checkOutingStatus($outing, true, true, true, true, true, false, false);
             } catch (OutingStatusException $e) {
                 $this->addFlash($e->getFlashType(), $e->getMessage());
                 return $this->redirectToRoute('outing_public_list');
@@ -149,6 +149,14 @@ class OutingController extends AbstractController
                 return $this->redirectToRoute('outing_public_list');
             }
             if ($form->get('save')->isClicked()) {
+                if($form->get('title') === null) {
+                    $this->addFlash('error', 'Le titre est obligatoire.');
+                    return $this->redirectToRoute('outing_new');
+                }
+                if($form->get('location')->getData() === null) {
+                    $this->addFlash('error', 'Le lieu est obligatoire.');
+                    return $this->redirectToRoute('outing_new');
+                }
                 $status = Status::CREATED;
                 $outing->setStatus($status);
 
@@ -158,13 +166,17 @@ class OutingController extends AbstractController
                 return $this->redirectToRoute('outing_public_list');
             }
             if ($form->get('delete')->isClicked()) {
-                if ($outing->getStatus() !== Status::CREATED) {
+
+                if ($outing->getStatus() !== null && $outing->getStatus() !== Status::CREATED) {
                     $this->addFlash('error', 'Cette sortie ne peut pas être supprimée.');
-                    return $this->redirectToRoute('user_profile');
+                    return $this->redirectToRoute('outing_private_list');
                 }
-                $outingService->deleteOuting($outing);
+
+                if($outing->getId() !== null) {
+                    $outingService->deleteOuting($outing);
+                }
                 $this->addFlash('success', 'Sortie supprimée.');
-                return $this->redirectToRoute('user_profile');
+                return $this->redirectToRoute('outing_private_list');
 
             }
 
@@ -176,7 +188,7 @@ class OutingController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Sortie publiée!');
-            return $this->redirectToRoute('user_profile');
+            return $this->redirectToRoute('outing_private_list');
         }
 
         return $this->render('outing/outing.edit.html.twig', [
@@ -212,7 +224,7 @@ class OutingController extends AbstractController
             return $this->redirectToRoute('outing_public_list');
         }
         try {
-            $outingService->checkOutingStatus($outing, true, true, true, true, false, false);
+            $outingService->checkOutingStatus($outing, true, true, true, true, false, false, false);
         } catch (OutingStatusException $e) {
             $this->addFlash($e->getFlashType(), $e->getMessage());
             return $this->redirectToRoute('outing_public_list');
