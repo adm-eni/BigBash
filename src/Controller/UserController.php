@@ -6,8 +6,10 @@ use App\Entity\Outing;
 use App\Entity\User;
 use App\Exception\OutingStatusException;
 use App\Form\UserProfileType;
+use App\Form\UsersFileType;
 use App\Repository\UserRepository;
 use App\Service\OutingService;
+use App\Service\UserDeserialize;
 use App\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,13 +21,13 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/user', name: 'user_')]
 class UserController extends AbstractController
 {
-    public function __construct(private UserService $userService, private OutingService $outingService)
+    public function __construct(private UserService $userService, private OutingService $outingService, private UserDeserialize $userDeserialize)
     {
     }
 
     #[Route('/profile', name: 'profile')]
-    public function profile(Request                     $request,
-                            EntityManagerInterface      $entityManager): Response
+    public function profile(Request                $request,
+                            EntityManagerInterface $entityManager): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -62,7 +64,7 @@ class UserController extends AbstractController
         $user = $userRepository->find($id);
 
         if ($user === null) {
-            $this->addFlash('error','Utilisateur non trouvé.');
+            $this->addFlash('error', 'Utilisateur non trouvé.');
             return $this->redirectToRoute('outing_public_list');
         }
 
@@ -79,7 +81,7 @@ class UserController extends AbstractController
         $user = $this->getUser();
 
         if (!$outingId) {
-            $this->addFlash('error','Sortie non trouvée. Inscription non effectuée.');
+            $this->addFlash('error', 'Sortie non trouvée. Inscription non effectuée.');
             return $this->redirectToRoute('outing_public_list');
         }
 
@@ -133,5 +135,37 @@ class UserController extends AbstractController
 
         $this->addFlash('success', 'Désistement réussie');
         return $this->redirectToRoute('outing_private_list');
+    }
+
+    #[Route('/import', name: 'import')]
+    public function import(Request                $request,
+                           EntityManagerInterface $entityManager,): Response
+    {
+        $form = $this->createForm(UsersFileType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->get('cancel')->isClicked()) {
+                return $this->redirectToRoute('outing_public_list');
+            }
+            $users = $this->userDeserialize->deserialize($form);
+
+            if(empty($users)) {
+                $this->addFlash('error', 'Aucun utilisateur ajouté. Problème avec le fichier fourni.');
+                return $this->redirectToRoute('user_profile');
+            }
+
+            foreach ($users as $user) {
+                $entityManager->persist($user);
+            }
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Utilisateurs importés.');
+            return $this->redirectToRoute('user_profile');
+        }
+
+        return $this->render('user/user.import.html.twig', [
+            'usersImportForm' => $form
+        ]);
     }
 }

@@ -52,6 +52,7 @@ security:
     - { path: ^/outings/\d+$, roles: PUBLIC_ACCESS }
     - { path: ^/campuses, roles: ROLE_ADMIN }
     - { path: ^/cities, roles: ROLE_ADMIN }
+    - { path: ^/user/import, roles: ROLE_ADMIN }
     - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
   # - { path: ^/profile, roles: ROLE_USER }
 
