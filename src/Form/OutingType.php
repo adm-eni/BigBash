@@ -25,20 +25,20 @@ class OutingType extends AbstractType
                 ])
                 ->add('startAt', DateTimeType::class, [
                     'widget' => 'single_text',
-                    'required' => false,
+                    'required' => true,
                     'label' => 'Date et heure de la sortie',
                 ])
                 ->add('entryDeadline', DateType::class, [
                     'widget' => 'single_text',
-                    'required' => false,
+                    'required' => true,
                     'label' => 'Date limite d\'inscription',
                 ])
                 ->add('maxEntryCount', null, [
-                    'required' => false,
+                    'required' => true,
                     'label' => 'Nombre de places',
                 ])
                 ->add('duration', null, [
-                    'required' => false,
+                    'required' => true,
                     'label' => 'Durée',
                 ])
                 ->add('description', null, [
@@ -48,7 +48,7 @@ class OutingType extends AbstractType
                     'class' => Campus::class,
                     'choice_label' => 'name',
                     'choice_value' => 'id',
-                    'required' => false,
+                    'required' => true,
                 ])
                 ->add('location', EntityType::class, [
                     'class' => Location::class,
@@ -59,12 +59,18 @@ class OutingType extends AbstractType
                 ])
                 ->add('save', SubmitType::class, [
                     'label' => 'Enregistrer',
+                    'attr' => [
+                        'formnovalidate' => 'formnovalidate',
+                    ]
                 ])
                 ->add('create', SubmitType::class, [
                     'label' => 'Publier',
                 ])
                 ->add('delete', SubmitType::class, [
                     'label' => 'Supprimer',
+                    'attr' => [
+                        'formnovalidate' => 'formnovalidate',
+                    ]
                 ]);
         }
 
@@ -84,6 +90,9 @@ class OutingType extends AbstractType
             ->add('cancel', SubmitType::class, [
                 'label' => 'Annuler',
                 'validate' => false,
+                'attr' => [
+                    'formnovalidate' => 'formnovalidate',
+                ]
             ]);
     }
 

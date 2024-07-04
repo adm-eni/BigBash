@@ -67,42 +67,46 @@ class OutingService extends AbstractController
     $this->outingRepo->getEntityManager()->flush();
   }
 
-  /**
-   * @throws OutingStatusException
-   */
-  public function checkOutingStatus(Outing $outing,
-                                    bool   $closed,
-                                    bool   $ongoing,
-                                    bool   $past,
-                                    bool   $canceled,
-                                    bool   $open,
-                                    bool   $created): void
-  {
-    $status = $outing->getStatus();
+    /**
+     * @throws OutingStatusException
+     */
+    public function checkOutingStatus(Outing $outing,
+                                      bool   $closed,
+                                      bool   $ongoing,
+                                      bool   $past,
+                                      bool   $canceled,
+                                      bool   $open,
+                                      bool   $created,
+                                      bool   $full): void
+    {
+        $status = $outing->getStatus();
 
-    if ($closed && $status === Status::CLOSED) {
-      throw new OutingStatusException('Cette sortie a été clôturée.');
+        if ($closed && $status === Status::CLOSED) {
+            throw new OutingStatusException('Cette sortie a été clôturée.');
+        }
+        if ($ongoing && $status === Status::ONGOING) {
+            throw new OutingStatusException('Cette sortie est en cours.');
+        }
+        if ($past && $status === Status::PAST) {
+            throw new OutingStatusException('Cette sortie est terminée.');
+        }
+        if ($canceled && $status === Status::CANCELED) {
+            throw new OutingStatusException('Cette sortie a été annulée.');
+        }
+        if ($open && $status === Status::OPEN) {
+            throw new OutingStatusException('Cette sortie est déjà publiée.');
+        }
+        if ($created && $status === Status::CREATED) {
+            throw new OutingStatusException('Cette sortie est en cours de création.');
+        }
+        if($full && $outing->getAttendees()->count() >= $outing->getMaxEntryCount()) {
+            throw new OutingStatusException('Il n\'y a plus de place pour cette sortie.');
+        }
     }
-    if ($ongoing && $status === Status::ONGOING) {
-      throw new OutingStatusException('Cette sortie est en cours.');
-    }
-    if ($past && $status === Status::PAST) {
-      throw new OutingStatusException('Cette sortie est terminée.');
-    }
-    if ($canceled && $status === Status::CANCELED) {
-      throw new OutingStatusException('Cette sortie a été annulée.');
-    }
-    if ($open && $status === Status::OPEN) {
-      throw new OutingStatusException('Cette sortie est déjà publiée.');
-    }
-    if ($created && $status === Status::CREATED) {
-      throw new OutingStatusException('Cette sortie est en cours de création.');
-    }
-  }
 
-  public function deleteOuting(Outing $outing): void
-  {
-    $this->outingRepo->getEntityManager()->remove($outing);
-    $this->outingRepo->getEntityManager()->flush();
-  }
+    public function deleteOuting(Outing $outing): void
+    {
+        $this->outingRepo->getEntityManager()->remove($outing);
+        $this->outingRepo->getEntityManager()->flush();
+    }
 }

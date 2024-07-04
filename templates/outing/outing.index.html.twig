@@ -115,7 +115,6 @@
                       {% if status == constant('App\\Enum\\Status::CREATED') %}
                         <a href="{{ path('outing_edit', {'id': outing.id}) }}"
                            class="button p-2 bg-amber-400 bg-opacity-30 ">Modifier</a>
-                        <a href="#" class="button bg-amber-400 bg-opacity-30 p-2">Publier</a>
                       {% elseif status == constant('App\\Enum\\Status::OPEN') %}
                         <a href="{{ path('outing_cancel', {'id': outing.id}) }}"
                            class="button bg-amber-400 bg-opacity-30 p-2">Annuler</a>
