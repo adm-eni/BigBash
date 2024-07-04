@@ -1,14 +1,23 @@
 {% extends 'base.html.twig' %}
+{% form_theme profileForm 'views/form_theme.html.twig' %}
 
 {% block title %}Profil{% endblock %}
 
 {% block body %}
-    {% if user is not null and user.image is not null %}
-        <div>
-            <img src="{{ asset('img/profile-image/' ~ user.image) }}" alt="{{ user.image }}">
+    <div class="container mx-auto px-4 py-8 flex">
+        {% if user is not null and user.image is not null %}
+            <div class="mr-5">
+                <img src="{{ asset('img/profile-image/' ~ user.image) }}" alt="{{ user.image }}">
+            </div>
+        {% endif %}
+        {{ form_start(profileForm) }}
+        {% for field in ['pseudo', 'lastName', 'firstName', 'email', 'plainPassword', 'phoneNumber', 'image'] %}
+            {{ form_row(profileForm[field]) }}
+        {% endfor %}
+        <div class="flex space-x-2 mt-2 justify-center">
+            {{ form_row(profileForm.save) }}
+            {{ form_row(profileForm.cancel) }}
         </div>
-    {% endif %}
-    {{ form_start(profileForm) }}
-    {{ form_widget(profileForm) }}
-    {{ form_end(profileForm) }}
+        {{ form_end(profileForm) }}
+    </div>
 {% endblock %}

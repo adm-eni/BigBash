@@ -16,7 +16,15 @@
                 <div>{{ outing.title }}</div>
                 <div>{{ outing.startAt | date("d/m/Y") }}</div>
                 <div>{{ outing.campus.name }}</div>
-                <div>{{ outing.location.name ~ ', ' ~ outing.location.street ~ ', ' ~ outing.location.city.name }}</div>
+                {% if outing.location.city is null %}
+                    {% if outing.location.street is null %}
+                        <div>{{ outing.location.name }}</div>
+                    {% else %}
+                        <div>{{ outing.location.name ~ ', ' ~ outing.location.street }}</div>
+                    {% endif %}
+                {% else %}
+                    <div>{{ outing.location.name ~ ', ' ~ outing.location.street ~ ', ' ~ outing.location.city.name }}</div>
+                {% endif %}
             </div>
         </div>
 

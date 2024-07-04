@@ -66,10 +66,12 @@ class UserProfileType extends AbstractType
             ])
             ->add('save', SubmitType::class, [
                 'label' => 'Enregistrer',
+                'attr' => ['class' => 'button bg-blue-500 bg-opacity-45 min-w-28 px-4 py-2'],
             ])
             ->add('cancel', SubmitType::class, [
                 'label' => 'Annuler',
                 'validate' => false,
+                'attr' => ['class' => 'button bg-red-500 bg-opacity-40 min-w-28 px-4 py-2'],
             ])
         ;
     }
