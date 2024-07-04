@@ -3,12 +3,12 @@
 {% block title %}Détails de la sortie{% endblock %}
 
 {% block body %}
-  <div class="flex flex-col h-full px-16 py-6 space-y-8">
+  <div class="flex flex-col h-full px-16 py-6 lg:space-y-8 md:space-y-4 sm:space-y-2">
     <div>
       <h1 class="text-2xl font-bold text-center">Afficher une sortie</h1>
     </div>
 
-    <div class="p-4 flex justify-center items-center">
+    <div class="p-4 flex justify-center items-center lg:text-base md:text-xs sm:text-xs">
       <div class="grid md:grid-cols-4 sm:grid-cols-2 gap-x-6 gap-y-6 w-2/3 text-nowrap">
         <div class="font-semibold text-right">Nom de la sortie :</div>
         <div class="truncate">{{ outing.title|default('') }}</div>
