@@ -88,7 +88,7 @@
           <tbody class="bg-slate-950 bg-opacity-50">
           {% for outing in outings %}
             <tr class="border-b border-gray-700">
-              <td class="py-3 px-4 text-left">{{ outing.title }}</td>
+              <td class="py-3 px-4 text-left truncate">{{ outing.title }}</td>
               <td class="py-3 px-4 text-center whitespace-nowrap">{{ outing.startAt|format_datetime(locale='fr_FR',pattern="dd-MM-YYYY") }}</td>
               <td class="py-3 px-4 text-center whitespace-nowrap">{{ outing.startAt|format_datetime(locale='fr_FR',pattern="HH:mm") }}</td>
               <td class="py-3 px-4 text-center whitespace-nowrap">{{ outing.attendees.count }}
@@ -102,11 +102,11 @@
                   {{ outing.host.firstName ~ ' ' ~ outing.host.lastName }}
                 </a>
               </td>
-              <td class="py-3 px-4 text-center text-xs">
-                <div class="flex flex-wrap justify-center gap-2">
 
+              <td class="py-3 px-4 text-center text-xs whitespace-nowrap">
+                <div class="inline-flex flex-nowrap justify-center gap-2">
                   <a href="{{ path('outing_show', {'id': outing.id}) }}"
-                     class="button bg-amber-400 bg-opacity-30 p-2">Afficher</a>
+                     class="button bg-amber-400 bg-opacity-30 p-2 whitespace-nowrap">Afficher</a>
                   {% if app.user %}
                     {% set isHost = outing.host == app.user %}
                     {% set isAttendee = outing.attendees.contains(app.user) %}
@@ -114,21 +114,21 @@
                     {% if isHost %}
                       {% if status == constant('App\\Enum\\Status::CREATED') %}
                         <a href="{{ path('outing_edit', {'id': outing.id}) }}"
-                           class="button p-2 bg-amber-400 bg-opacity-30 ">Modifier</a>
+                           class="button p-2 bg-amber-400 bg-opacity-30 whitespace-nowrap">Modifier</a>
                       {% elseif status == constant('App\\Enum\\Status::OPEN') %}
                         <a href="{{ path('outing_cancel', {'id': outing.id}) }}"
-                           class="button bg-amber-400 bg-opacity-30 p-2">Annuler</a>
+                           class="button bg-amber-400 bg-opacity-30 p-2 whitespace-nowrap">Annuler</a>
                       {% endif %}
                     {% elseif status == constant('App\\Enum\\Status::OPEN') %}
                       <a href="{{ path(isAttendee ? 'user_withdraw' : 'user_join', {'outingId': outing.id}) }}"
-                         class="button bg-amber-400 bg-opacity-30 p-2">
+                         class="button bg-amber-400 bg-opacity-30 p-2 whitespace-nowrap">
                         {{ isAttendee ? 'Se désister' : 'S\'inscrire' }}
                       </a>
                     {% endif %}
                   {% endif %}
-
                 </div>
               </td>
+
             </tr>
           {% endfor %}
           </tbody>
