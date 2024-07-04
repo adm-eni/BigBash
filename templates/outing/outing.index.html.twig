@@ -3,7 +3,7 @@
 {% block title %}Consulter les sorties{% endblock %}
 
 {% block body %}
-  <div class="flex flex-col h-full space-y-8">
+  <div class="flex flex-col h-full space-y-8 items-center">
     <div class="flex-none">
       {{ form_start(filter_form, {'attr': {'class': 'ml-32'}}) }}
       <div class="grid lg:grid-cols-3 sm:grid-cols-1 gap-6">
@@ -62,84 +62,82 @@
         </div>
 
         <div class="flex flex-col justify-center lg:items-start sm:items-center">
-          {{ form_row(filter_form.submit, {'attr': {'class': 'button p-4 bg-amber-500 bg-opacity-30'}}) }}
+          {{ form_row(filter_form.submit, {'attr': {'class': 'button p-4 bg-amber-400 bg-opacity-45'}}) }}
         </div>
       </div>
       {{ form_end(filter_form) }}
     </div>
 
-    <div class="flex-grow overflow-hidden flex flex-col lg:text-base md:text-xs sm:text-xs shadow-lg">
-      <div class="flex-grow overflow-x-auto overflow-y-auto no-scrollbar">
-        <div class="flex justify-center">
-          <div class="overflow-hidden">
-            <table class="table-auto">
-              <thead class="bg-amber-300 bg-opacity-60 sticky top-0">
-              <tr class="uppercase leading-normal">
-                <th class="py-3 px-4 text-left whitespace-nowrap">Nom de la sortie</th>
-                <th class="py-3 px-4 text-center whitespace-nowrap">Date de la sortie</th>
-                <th class="py-3 px-4 text-center whitespace-nowrap">Inscrits / Places</th>
-                <th class="py-3 px-4 text-center whitespace-nowrap">Etat</th>
-                {% if app.user %}
-                  <th class="py-3 px-4 text-center whitespace-nowrap">Inscrit</th>
-                {% endif %}
-                <th class="py-3 px-4 text-center whitespace-nowrap">Organisateur</th>
-                <th class="py-3 px-4 text-center whitespace-nowrap">Actions</th>
-              </tr>
-              </thead>
-              <tbody class="bg-slate-950 bg-opacity-50">
-              {% for outing in outings %}
-                <tr class="border-b border-gray-700">
-                  <td class="py-3 px-4 text-left">{{ outing.title }}</td>
-                  <td class="py-3 px-4 text-center whitespace-nowrap">{{ outing.startAt|date('d-m-Y') }}</td>
-                  <td class="py-3 px-4 text-center whitespace-nowrap">{{ outing.attendees.count }}
-                    / {{ outing.maxEntryCount }}</td>
-                  <td class="py-3 px-4 text-center whitespace-nowrap">{{ outing.status.value }}</td>
-                  {% if app.user %}
-                    <td class="py-3 px-4 text-center whitespace-nowrap">{{ outing.host == app.user ? 'Organisateur' : (outing.attendees.contains(app.user) ? 'Oui' : 'Non') }}</td>
-                  {% endif %}
-                  <td class="py-3 px-4 text-center whitespace-nowrap">
-                    <a href="{{ path('user_show', {'id': outing.host.id} ) }}">
-                      {{ outing.host.firstName ~ ' ' ~ outing.host.lastName }}
-                    </a>
-                  </td>
-                  <td class="py-3 px-4 text-center">
-                    <div class="flex flex-wrap justify-center gap-2">
-                      <a href="{{ path('outing_show', {'id': outing.id}) }}"
-                         class="button bg-amber-400 bg-opacity-30 border border-gray-200 p-2">Afficher</a>
-                      {% if app.user %}
-                        {% set isHost = outing.host == app.user %}
-                        {% set isAttendee = outing.attendees.contains(app.user) %}
-                        {% set status = outing.status.value %}
+    <div class="flex-grow overflow-hidden flex justify-center">
+      <div class="overflow-x-auto overflow-y-auto max-h-full max-w-full">
+        <table class="table-auto lg:text-base md:text-xs sm:text-xs">
+          <thead class="bg-yellow-600 sticky top-0">
+          <tr class="uppercase leading-normal">
+            <th class="py-3 px-4 text-left whitespace-nowrap">Nom de la sortie</th>
+            <th class="py-3 px-4 text-center whitespace-nowrap">Date de la sortie</th>
+            <th class="py-3 px-4 text-center whitespace-nowrap">Inscrits / Places</th>
+            <th class="py-3 px-4 text-center whitespace-nowrap">Etat</th>
+            {% if app.user %}
+              <th class="py-3 px-4 text-center whitespace-nowrap">Inscrit</th>
+            {% endif %}
+            <th class="py-3 px-4 text-center whitespace-nowrap">Organisateur</th>
+            <th class="py-3 px-4 text-center whitespace-nowrap">Actions</th>
+          </tr>
+          </thead>
+          <tbody class="bg-slate-950 bg-opacity-50">
+          {% for outing in outings %}
+            <tr class="border-b border-gray-700">
+              <td class="py-3 px-4 text-left">{{ outing.title }}</td>
+              <td class="py-3 px-4 text-center whitespace-nowrap">{{ outing.startAt|date('d-m-Y') }}</td>
+              <td class="py-3 px-4 text-center whitespace-nowrap">{{ outing.attendees.count }}
+                / {{ outing.maxEntryCount }}</td>
+              <td class="py-3 px-4 text-center whitespace-nowrap">{{ outing.status.value }}</td>
+              {% if app.user %}
+                <td class="py-3 px-4 text-center whitespace-nowrap">{{ outing.host == app.user ? 'Organisateur' : (outing.attendees.contains(app.user) ? 'Oui' : 'Non') }}</td>
+              {% endif %}
+              <td class="py-3 px-4 text-center whitespace-nowrap">
+                <a href="{{ path('user_show', {'id': outing.host.id} ) }}">
+                  {{ outing.host.firstName ~ ' ' ~ outing.host.lastName }}
+                </a>
+              </td>
+              <td class="py-3 px-4 text-center text-xs">
+                <div class="flex flex-wrap justify-center gap-2">
 
-                        {% if isHost %}
-                          {% if status == 'En création' %}
-                            <a href="{{ path('outing_edit', {'id': outing.id}) }}"
-                               class="button border border-gray-200 p-2">Modifier</a>
-                            <a href="#" class="button bg-amber-400 bg-opacity-30 border border-gray-200 p-2">Publier</a>
-                          {% elseif status == 'Ouvert' %}
-                            <a href="{{ path('outing_cancel', {'id': outing.id}) }}"
-                               class="button bg-amber-400 bg-opacity-30 border border-gray-200 p-2">Annuler</a>
-                          {% endif %}
-                        {% elseif status == 'Ouvert' %}
-                          <a href="{{ path(isAttendee ? 'user_withdraw' : 'user_join', {'outingId': outing.id}) }}"
-                             class="button bg-amber-400 bg-opacity-30 border border-gray-200 p-2">
-                            {{ isAttendee ? 'Se désister' : 'S\'inscrire' }}
-                          </a>
-                        {% endif %}
+                  <a href="{{ path('outing_show', {'id': outing.id}) }}"
+                     class="button bg-amber-400 bg-opacity-30 p-2">Afficher</a>
+                  {% if app.user %}
+                    {% set isHost = outing.host == app.user %}
+                    {% set isAttendee = outing.attendees.contains(app.user) %}
+                    {% set status = outing.status.value %}
+                    {% if isHost %}
+                      {% if status == 'En création' %}
+                        <a href="{{ path('outing_edit', {'id': outing.id}) }}"
+                           class="button p-2">Modifier</a>
+                        <a href="#" class="button bg-amber-400 bg-opacity-30 p-2">Publier</a>
+                      {% elseif status == 'Ouvert' %}
+                        <a href="{{ path('outing_cancel', {'id': outing.id}) }}"
+                           class="button bg-amber-400 bg-opacity-30 p-2">Annuler</a>
                       {% endif %}
-                    </div>
-                  </td>
-                </tr>
-              {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </div>
+                    {% elseif status == 'Ouvert' %}
+                      <a href="{{ path(isAttendee ? 'user_withdraw' : 'user_join', {'outingId': outing.id}) }}"
+                         class="button bg-amber-400 bg-opacity-30 p-2">
+                        {{ isAttendee ? 'Se désister' : 'S\'inscrire' }}
+                      </a>
+                    {% endif %}
+                  {% endif %}
+
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
       </div>
     </div>
 
+
     <div class="flex-none py-4">
-      <a class="button p-4 text-center bg-amber-400 bg-opacity-30"
+      <a class="button p-4 text-center bg-amber-300 bg-opacity-45"
          href="{{ path('outing_new') }}">Créer une sortie</a>
     </div>
   </div>
