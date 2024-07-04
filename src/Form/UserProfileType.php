@@ -22,7 +22,7 @@ class UserProfileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('pseudo')
+            ->add('username')
             ->add('lastName', null, [
                 'label' => 'Nom',
             ])

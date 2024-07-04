@@ -12,7 +12,7 @@ security:
     app_user_provider_username:
       entity:
         class: App\Entity\User
-        property: pseudo
+        property: username
     all_users:
       chain:
         providers: [ 'app_user_provider_email','app_user_provider_username' ]

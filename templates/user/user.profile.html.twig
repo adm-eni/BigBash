@@ -11,7 +11,7 @@
             </div>
         {% endif %}
         {{ form_start(profileForm) }}
-        {% for field in ['pseudo', 'lastName', 'firstName', 'email', 'plainPassword', 'phoneNumber', 'image'] %}
+        {% for field in ['username', 'lastName', 'firstName', 'email', 'plainPassword', 'phoneNumber', 'image'] %}
             {{ form_row(profileForm[field]) }}
         {% endfor %}
         <div class="flex space-x-2 mt-2 justify-center">

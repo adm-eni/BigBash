@@ -37,7 +37,7 @@ class UserDeserialize
         foreach ($decodedData as $userData) {
             $user = new User();
             $user->setEmail($userData['email']);
-            $user->setPseudo($userData['pseudo']);
+            $user->setUsername($userData['username']);
             $user->setLastName($userData['lastName']);
             $user->setFirstName($userData['firstName']);
             $user->setPhoneNumber($userData['phoneNumber']);

@@ -48,7 +48,7 @@ class AppFixtures extends Fixture
     for ($i = 0; $i < $number; $i++) {
       $user = new User();
       $user->setEmail($this->faker->email());
-      $user->setPseudo($this->faker->userName());
+      $user->setUsername($this->faker->userName());
       $user->setLastName($this->faker->lastName());
       $user->setFirstName($this->faker->firstName());
       $user->setPhoneNumber($this->faker->phoneNumber());

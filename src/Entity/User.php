@@ -13,9 +13,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['pseudo'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
 #[UniqueEntity(fields: ['email'], message: 'Cet email est déjà utilisé par un autre utilisateur.')]
-#[UniqueEntity(fields: ['pseudo'], message: 'Ce pseudo est déjà utilisé par un autre utilisateur.')]
+#[UniqueEntity(fields: ['username'], message: 'Ce pseudo est déjà utilisé par un autre utilisateur.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -27,7 +27,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column(length: 80)]
-    private ?string $pseudo = null;
+    private ?string $username = null;
 
     #[ORM\Column(length: 255)]
     private ?string $lastName = null;
@@ -135,14 +135,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPseudo(): ?string
+    public function getUsername(): ?string
     {
-        return $this->pseudo;
+        return $this->username;
     }
 
-    public function setPseudo(?string $pseudo): void
+    public function setUsername(?string $username): void
     {
-        $this->pseudo = $pseudo;
+        $this->username = $username;
     }
 
     /**

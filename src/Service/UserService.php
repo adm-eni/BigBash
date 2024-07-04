@@ -27,7 +27,7 @@ class UserService extends AbstractController
 
         if (!empty($form->get('image')->getData())) {
             $file = $form->get('image')->getData();
-            $newFilename = $this->fileUploader->upload($file, $this->getParameter('profile_image_directory'), $user->getPseudo());
+            $newFilename = $this->fileUploader->upload($file, $this->getParameter('profile_image_directory'), $user->getUsername());
             $user->setImage($newFilename);
         }
 

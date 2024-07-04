@@ -21,7 +21,7 @@
                             <li><a href="{{ path('app_login') }}">Se connecter</a></li>
                             {% endif %}
                             {% if app.user %}
-                            <li>Bonjour, <a class="font-bold" href="{{ path('user_profile') }}">{{ app.user.pseudo }}</a></li>
+                            <li>Bonjour, <a class="font-bold" href="{{ path('user_profile') }}">{{ app.user.username }}</a></li>
                             {% endif %}
                         </ul>
                     </nav>
