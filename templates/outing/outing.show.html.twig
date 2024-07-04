@@ -17,13 +17,13 @@
 
         <div class="font-semibold text-right truncate">Date et heure de la sortie :</div>
         <div
-            class="truncate">{{ outing.startAt|format_datetime(locale='fr_FR',pattern="EEEE dd MMMM YYYY 'à' HH:MM")|capitalize|default('') }}</div>
+            class="truncate">{{ outing.startAt|format_datetime(locale='fr_FR',pattern="EEEE dd MMMM YYYY 'à' HH:mm")|capitalize|default('') }}</div>
         <div class="font-semibold text-right truncate">Lieu :</div>
         <div class="truncate">{{ outing.location.name|default('') }}</div>
 
         <div class="font-semibold text-right truncate">Date limite d'inscription :</div>
         <div
-            class="truncate">{{ outing.entryDeadline|format_datetime(locale='fr_FR',pattern="EEEE dd MMMM YYYY 'à' HH:MM")|capitalize|default('') }}</div>
+            class="truncate">{{ outing.entryDeadline|format_datetime(locale='fr_FR',pattern="EEEE dd MMMM YYYY")|capitalize|default('') }}</div>
         <div class="font-semibold text-right truncate">Rue :</div>
         <div class="truncate">{{ outing.location.street|default('') }}</div>
 

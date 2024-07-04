@@ -21,23 +21,20 @@ class OutingRepository extends ServiceEntityRepository
   public function findOutingsToUpdate(): array
   {
     $now = new \DateTime();
-    $oneMonthAgo = date_modify($now, '-1 month');
+    $oneMonthAgo = (clone $now)->modify('-1 month');
 
     $qb = $this->createQueryBuilder('o')
-        ->where('o.status = :openStatus AND o.startAt <= :now AND :now < o.entryDeadline')
-        ->orWhere('o.status = :bookedStatus AND o.entryDeadline <= :now AND :now < (o.startAt + o.duration)')
-        ->orWhere('o.status = :ongoingStatus AND (o.startAt + o.duration) <= :now AND :oneMonthAgo < (o.startAt + o.duration)')
-        ->orWhere('o.status IN (:endStatuses) AND (o.startAt + o.duration) <= :oneMonthAgo')
+        ->where('o.status IN (:endStatuses) AND DATE_ADD(o.startAt, o.duration, \'MINUTE\') <= :oneMonthAgo')
+        ->orWhere('o.status = :ongoingStatus AND DATE_ADD(o.startAt, o.duration, \'MINUTE\') <= :now AND :oneMonthAgo < DATE_ADD(o.startAt, o.duration, \'MINUTE\')')
+        ->orWhere('o.status = :bookedStatus AND o.startAt <= :now AND :now < (o.startAt + o.duration)')
+        ->orWhere('o.status = :openStatus AND o.entryDeadline <= :now AND :now < o.startAt')
         ->setParameter('now', $now)
         ->setParameter('oneMonthAgo', $oneMonthAgo)
         ->setParameter('bookedStatus', Status::BOOKED)
         ->setParameter('openStatus', Status::OPEN)
         ->setParameter('ongoingStatus', Status::ONGOING)
         ->setParameter('endStatuses', [Status::CANCELED, Status::PAST]);
-
-    $query = $qb->getQuery();
-
-    return $query->getResult();
+    return $qb->getQuery()->getResult();
   }
 
   public function findByDefault(?User $user = null): array
