@@ -135,7 +135,7 @@
                 <div class="bg-gray-800 rounded-lg shadow-md p-6 space-y-9">
                     <div class="space-y-3 p-2 rounded border border-blue-900">
                         <h3 class="text-xl font-semibold mb-2 text-amber-200">Enum pour les états des sorties</h3>
-                        <div class="flex justify-between items-center">
+                        <div class="flex justify-center gap-8 items-center">
                             <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
 <code class="language-php">// App\Enum\Status
 enum Status: string
@@ -150,18 +150,29 @@ enum Status: string
 }</code>
                             </pre>
                             <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
-<code class="language-php">if ($outing->getStatus() === Status::OPEN) {
+<code class="language-php">// App\Service\OutingService
+    if ($outing->getStatus() === Status::OPEN) {
     $outing->setStatus(Status::BOOKED);
+}</code>
+                            </pre>
+                            <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
+<code class="language-php">// App\templates\outing\outing.index.html.twig
+&#123;% if status == constant('App\\Enum\\Status::CREATED') %&#125;
+  &lt;a href="&#123;&#123; path('outing_edit', &#123;'id': outing.id&#125;) &#125;&#125;"
+     class="button"&gt;Modifier&lt;/a&gt;
+&#123;% elseif status == constant('App\\Enum\\Status::OPEN') %&#125;
 }</code>
                             </pre>
                         </div>
                     </div>
                     <div class="space-y-3">
                         <h3 class="text-xl font-semibold mb-2 text-amber-200">Format des dates avec twig/intl-extra</h3>
+                        <a href="{{ path('outing_show', {'id': 1}) }}">
                         <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto p-2 rounded border border-blue-900">
 <code class="language-twig">&lt;div class="font-semibold text-right truncate"&gt;Date et heure de la sortie :&lt;/div&gt;
 &lt;div class="truncate"&gt;{{ '{{ outing.startAt|format_datetime(locale=\'fr_FR\', pattern="EEEE dd MMMM YYYY \'à\' HH:mm")|capitalize|default(\'\') }}' }}&lt;/div&gt;</code>
                     </pre>
+                        </a>
                     </div>
 
                     <div class="space-y-3">
