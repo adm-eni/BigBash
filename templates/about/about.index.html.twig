@@ -8,11 +8,16 @@
             <h1 class="text-2xl font-bold">Présentation du Projet Web Symfony</h1>
         </nav>
 
+        <!-- Section 6: Démonstration -->
+        <section class="mb-16 min-h-screen content-center">
+            <h1 class="text-5xl font-bold mb-4 text-amber-300 text-center">2or</h1>
+        </section>
+
         <div class="container mx-auto px-4 py-8">
             <!-- Section 1: Présentation du projet -->
             <section class="mb-16 min-h-screen content-center">
                 <h2 class="text-3xl font-bold mb-4 text-amber-300 text-center">Présentation du projet</h2>
-                <div class="bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
+                <div class="bg-gray-800 rounded-lg shadow-md p-6 space-y-6 border border-green-900">
                     <h3 class="text-xl font-semibold mb-2 text-amber-200">Problématique</h3>
                     <p class="mb-4">
                         Le grand nombre de stagiaires et leur répartition sur différents campus ne permet pas une
@@ -35,7 +40,7 @@
             <!-- Section 2: Objectifs -->
             <section class="mb-16 min-h-screen content-center">
                 <h2 class="text-3xl font-bold mb-4 text-amber-300 text-center">Objectifs</h2>
-                <div class="bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="bg-gray-800 rounded-lg shadow-md p-6 border border-blue-900">
                     <h3 class="text-xl font-semibold mb-2 text-amber-200">Priorité 1 :</h3>
                     <ul class="list-disc pl-5 space-y-2 mb-4">
                         <li>Architecture en couches orientée objet faisant le lien entre un DOM et une base de données
@@ -56,15 +61,15 @@
             <!-- Section 3: L'organisation -->
             <section class="mb-16 min-h-screen content-center">
                 <h2 class="text-3xl font-bold mb-4 text-amber-300 text-center">L'Organisation</h2>
-                <div class="bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
-                    <img src="{{ asset('img/Organisation.png') }}" alt="Gantt" class="max-w-full h-auto mb-4">
+                <div class="bg-gray-800 rounded-lg shadow-md p-6 space-y-6 border border-green-900">
                     <h4 class="text-lg font-semibold">Versioning : GitHub sur branch master</h4>
+                    <h3 class="text-xl font-semibold mb-2 text-amber-200">L'équipe</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>Clément => Utilisateurs</li>
+                        <li>Adam => Sorties</li>
+                    </ul>
+                    <img src="{{ asset('img/Organisation.png') }}" alt="Gantt" class="max-w-full h-auto mb-4">
                     <div class="mt-8">
-                        <h3 class="text-xl font-semibold mb-2 text-amber-200">L'équipe</h3>
-                        <ul class="list-disc pl-5 space-y-2">
-                            <li>Clément => Utilisateurs</li>
-                            <li>Adam => Sorties</li>
-                        </ul>
                     </div>
                 </div>
             </section>
@@ -72,7 +77,7 @@
             <!-- Section 4: Outils et Technologies -->
             <section class="mb-16 min-h-screen content-center">
                 <h2 class="text-3xl font-bold mb-4 text-amber-300 text-center">Outils et Technologies utilisés</h2>
-                <div class="bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="bg-gray-800 rounded-lg shadow-md p-6 border border-green-900">
                     <div class="carousel-container">
                         <div class="carousel">
                             <div class="carousel__face"></div>
@@ -91,7 +96,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-800 rounded-lg shadow-md p-6 space-y-3 mt-4">
+                <div class="bg-gray-800 rounded-lg shadow-md p-6 space-y-3 mt-4 border border-blue-900">
                     <h4 class="text-lg font-semibold">Autres packages :</h4>
                     <ul class="list-disc pl-5 space-y-2">
                         <li>symfony/webpack-encore-bundle</li>
@@ -111,7 +116,7 @@
             <!-- Section 5: Diagrammes -->
             <section class="mb-16 min-h-screen content-center">
                 <h2 class="text-3xl font-bold mb-4 text-amber-300 text-center">Diagrammes</h2>
-                <div class="bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="bg-gray-800 rounded-lg shadow-md p-6 border border-blue-900">
 
                     <h3 class="text-xl font-semibold mb-2 text-amber-200">Diagramme de base de données</h3>
                     <img src="{{ asset('img/DiagClasseDark.png') }}" alt="Diagramme de classe"
@@ -128,7 +133,7 @@
             <section class="mb-16 min-h-screen content-center">
                 <h2 class="text-3xl font-bold mb-4 text-amber-300 text-center">Fonctionnalités</h2>
                 <div class="bg-gray-800 rounded-lg shadow-md p-6 space-y-9">
-                    <div class="space-y-3">
+                    <div class="space-y-3 p-2 rounded border border-blue-900">
                         <h3 class="text-xl font-semibold mb-2 text-amber-200">Enum pour les états des sorties</h3>
                         <div class="flex justify-between items-center">
                             <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
@@ -153,7 +158,7 @@ enum Status: string
                     </div>
                     <div class="space-y-3">
                         <h3 class="text-xl font-semibold mb-2 text-amber-200">Format des dates avec twig/intl-extra</h3>
-                        <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
+                        <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto p-2 rounded border border-blue-900">
 <code class="language-twig">&lt;div class="font-semibold text-right truncate"&gt;Date et heure de la sortie :&lt;/div&gt;
 &lt;div class="truncate"&gt;{{ '{{ outing.startAt|format_datetime(locale=\'fr_FR\', pattern="EEEE dd MMMM YYYY \'à\' HH:mm")|capitalize|default(\'\') }}' }}&lt;/div&gt;</code>
                     </pre>
@@ -161,7 +166,7 @@ enum Status: string
 
                     <div class="space-y-3">
                         <h3 class="text-xl font-semibold mb-2 text-amber-200">Mise à jour/archivage états</h3>
-                        <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
+                        <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto p-2 rounded border border-blue-900">
 <code class="language-php">// App\Repository\OutingRepository
     public function findOutingsToUpdate(): array
   {
@@ -183,7 +188,7 @@ enum Status: string
   }
 }</code>
                         </pre>
-                        <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
+                        <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto p-2 rounded border border-blue-900">
 <code class="language-php">// App\Service\OutingService
   public function updateOutingStatuses(): void
   {
@@ -201,7 +206,7 @@ enum Status: string
                         </pre>
                         <div class="space-y-3">
                             <h3 class="text-xl font-semibold mb-2 text-amber-200">Gestion des statuts de sortie</h3>
-                            <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
+                            <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto p-2 rounded border border-green-900">
 <code class="language-php">// App\Controller\OutingController
 public function create(/* ... */)
 {
@@ -214,7 +219,7 @@ public function create(/* ... */)
     // ...
 }</code>
                         </pre>
-                            <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
+                            <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto p-2 rounded border border-green-900">
 <code class="language-php">// App\Service\OutingService
 public function checkOutingStatus(Outing $outing, bool $closed, bool $ongoing, /* ... */)
 {
@@ -226,7 +231,7 @@ public function checkOutingStatus(Outing $outing, bool $closed, bool $ongoing, /
     // ... autres vérifications ...
 }</code>
                         </pre>
-                            <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
+                            <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto p-2 rounded border border-green-900">
 <code class="language-php">// App\Exception\OutingStatusException
 class OutingStatusException extends \Exception
 {
@@ -249,7 +254,7 @@ class OutingStatusException extends \Exception
 
                     <div class="bg-gray-800 rounded-lg shadow-md p-6 mt-8">
                         <h3 class="text-xl font-semibold mb-4 text-amber-200">Sécurité</h3>
-                        <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
+                        <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto p-2 rounded border border-green-900">
 <code class="language-yaml"># config/packages/security.yaml
 access_control:
     - { path: ^/login, roles: PUBLIC_ACCESS }
@@ -270,7 +275,7 @@ role_hierarchy:
             <!-- Section 8: Conclusion -->
             <section class="mb-16 min-h-screen content-center">
                 <h2 class="text-3xl font-bold mb-4 text-amber-300 text-center">Conclusion</h2>
-                <div class="bg-gray-800 rounded-lg shadow-md p-6">
+                <div class="bg-gray-800 rounded-lg shadow-md p-6 border border-green-900">
                     <h3 class="text-xl font-semibold mb-4 text-amber-200">Retour d'expérience</h3>
                     <div class="space-y-4">
                         <div>
