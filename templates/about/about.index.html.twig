@@ -3,183 +3,218 @@
 {% block title %}Présentation du Projet{% endblock %}
 
 {% block body %}
-  <div class="overflow-y-auto bg-gray-900 text-amber-100 bg-opacity-70">
-    <nav class="bg-purple-900 text-amber-100 p-4 sticky top-0 z-50">
-      <h1 class="text-2xl font-bold">Présentation du Projet Web Symfony</h1>
-    </nav>
+    <div class="overflow-y-auto bg-gray-900 text-amber-100 bg-opacity-70">
+        <nav class="bg-purple-900 text-amber-100 p-4 sticky top-0 z-50">
+            <h1 class="text-2xl font-bold">Présentation du Projet Web Symfony</h1>
+        </nav>
 
-    <div class="container mx-auto px-4 py-8">
-      <!-- Section 1: Introduction -->
-      <section class="mb-16">
-        <h2 class="text-3xl font-bold mb-4 text-amber-300">Présentation du projet</h2>
-        <div class="bg-gray-800 rounded-lg shadow-md p-6">
-          <h3 class="text-xl font-semibold mb-2 text-amber-200">Problématique</h3>
-          <p class="mb-4">
-            Les stagiaires ne disposent pas d'outils pour organiser des sorties entre eux.
-          </p>
-          <h3 class="text-xl font-semibold mb-2 text-amber-200">Public ciblé</h3>
-          <p>
-            Stagiaires de l'ENI, mais pourquoi pas aussi les formateurs et le personnel administratif.
-          </p>
+        <div class="container mx-auto px-4 py-8">
+            <!-- Section 1: Introduction -->
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-amber-300">Présentation du projet</h2>
+                <div class="bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
+                    <h3 class="text-xl font-semibold mb-2 text-amber-200">Problématique</h3>
+                    <p class="mb-4">
+                        Le grand nombre de stagiaires et leur répartition sur différents campus ne permet pas une
+                        organisation facile d’événements ou de sorties.
+                    </p>
+                    <ul>
+                        <li>• Il n’existe pas de canal de communication officiel pour proposer ou consulter les sorties.
+                        <li>• Les outils actuels ne permettent pas de gérer d’invitations suivant la situation ou les
+                            intérêts des stagiaires, nide gérer le nombre d’invités, ni la date limite d’inscription.
+                        </li>
+                    </ul>
+                    <h3 class="text-xl font-semibold mb-2 text-amber-200">Public ciblé</h3>
+                    <p>
+                        Stagiaires de l'ENI, mais pourquoi pas aussi les formateurs et le personnel administratif.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Section 2: L'équipe -->
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-amber-300">L'équipe</h2>
+                <div class="bg-gray-800 rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold mb-2 text-amber-200">Clément => Utilisateurs</h3>
+                    <h3 class="text-xl font-semibold mb-2 text-amber-200">Adam => Sorties</h3>
+                </div>
+            </section>
+
+            <!-- Section 3: Objectifs -->
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-amber-300">Objectifs</h2>
+                <div class="bg-gray-800 rounded-lg shadow-md p-6">
+                    Priorité 1 :
+                    <ul>
+                        <li>Architecture en couches orientée objet faisant le lien entre le DOM et la base de données
+                        </li>
+                        <li></li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section 4: Outils et Technologies -->
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-amber-300">Outils et Technologies utilisés</h2>
+                <div class="bg-gray-800 rounded-lg shadow-md p-6">
+                    <div class="carousel-container">
+                        <div class="carousel">
+                            <div class="carousel__face"></div>
+                            <div class="carousel__face"></div>
+                            <div class="carousel__face"></div>
+                            <div class="carousel__face"></div>
+                            <div class="carousel__face"></div>
+                            <div class="carousel__face"></div>
+                            <div class="carousel__face"></div>
+                            <div class="carousel__face"></div>
+                            <div class="carousel__face"></div>
+                            <div class="carousel__face"></div>
+                            <div class="carousel__face"></div>
+                            <div class="carousel__face"></div>
+                            <div class="carousel__face"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: Diagrammes -->
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-amber-300">Diagrammes</h2>
+                <div class="bg-gray-800 rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold mb-2 text-amber-200">Diagramme de cas d'utilisation</h3>
+                    <!-- Insérez votre diagramme de cas d'utilisation ici -->
+
+                    <h3 class="text-xl font-semibold mb-2 mt-6 text-amber-200">Diagramme de classe</h3>
+                    <img src="{{ asset('img/DiagClasseDark.png') }}" alt="Diagramme de classe"
+                         class="max-w-full h-auto">
+                </div>
+            </section>
+
+            <!-- Ajoutez d'autres sections selon vos besoins -->
+
+            <!-- Section finale: Conclusion -->
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-amber-300">Conclusion</h2>
+                <div class="bg-gray-800 rounded-lg shadow-md p-6">
+                    <!-- Ajoutez votre conclusion ici -->
+                </div>
+            </section>
         </div>
-      </section>
-
-      <!-- Section 2: L'équipe -->
-      <section class="mb-16">
-        <h2 class="text-3xl font-bold mb-4 text-amber-300">L'équipe</h2>
-        <div class="bg-gray-800 rounded-lg shadow-md p-6">
-          <h3 class="text-xl font-semibold mb-2 text-amber-200">Clément => Utilisateurs</h3>
-          <h3 class="text-xl font-semibold mb-2 text-amber-200">Adam => Sorties</h3>
-        </div>
-      </section>
-
-      <!-- Section 3: Objectifs -->
-      <section class="mb-16">
-        <h2 class="text-3xl font-bold mb-4 text-amber-300">Objectifs</h2>
-        <div class="bg-gray-800 rounded-lg shadow-md p-6">
-            Priorité 1 :
-          <ul>
-            <li>Architecture en couches orientée objet faisant le lien entre le DOM et la base de données</li>
-            <li>Les actions réalisées sur le navigateur entrainent des opérations dans la base de données, permettant d'en afficher le résultat</li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- Section 4: Outils et Technologies -->
-      <section class="mb-16">
-        <h2 class="text-3xl font-bold mb-4 text-amber-300">Outils et Technologies utilisés</h2>
-        <div class="bg-gray-800 rounded-lg shadow-md p-6">
-          <div class="carousel-container">
-            <div class="carousel">
-              <div class="carousel__face"></div>
-              <div class="carousel__face"></div>
-              <div class="carousel__face"></div>
-              <div class="carousel__face"></div>
-              <div class="carousel__face"></div>
-              <div class="carousel__face"></div>
-              <div class="carousel__face"></div>
-              <div class="carousel__face"></div>
-              <div class="carousel__face"></div>
-              <div class="carousel__face"></div>
-              <div class="carousel__face"></div>
-              <div class="carousel__face"></div>
-              <div class="carousel__face"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Section 5: Diagrammes -->
-      <section class="mb-16">
-        <h2 class="text-3xl font-bold mb-4 text-amber-300">Diagrammes</h2>
-        <div class="bg-gray-800 rounded-lg shadow-md p-6">
-          <h3 class="text-xl font-semibold mb-2 text-amber-200">Diagramme de cas d'utilisation</h3>
-          <!-- Insérez votre diagramme de cas d'utilisation ici -->
-
-          <h3 class="text-xl font-semibold mb-2 mt-6 text-amber-200">Diagramme de classe</h3>
-          <img src="{{ asset('img/DiagClasseDark.png') }}" alt="Diagramme de classe" class="max-w-full h-auto">
-        </div>
-      </section>
-
-      <!-- Ajoutez d'autres sections selon vos besoins -->
-
-      <!-- Section finale: Conclusion -->
-      <section class="mb-16">
-        <h2 class="text-3xl font-bold mb-4 text-amber-300">Conclusion</h2>
-        <div class="bg-gray-800 rounded-lg shadow-md p-6">
-          <!-- Ajoutez votre conclusion ici -->
-        </div>
-      </section>
     </div>
-  </div>
 
 {% endblock %}
 
 {% block stylesheets %}
-  {{ parent() }}
-<style>
-  .carousel-container {
-    position: relative;
-    width: 320px;
-    height: 280px;
-    margin: 100px auto 0 auto;
-    perspective: 1000px;
-  }
+    {{ parent() }}
+    <style>
+      .carousel-container {
+        position: relative;
+        width: 320px;
+        height: 280px;
+        margin: 100px auto 0 auto;
+        perspective: 1000px;
+      }
 
-  .carousel {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    animation: rotate360 60s infinite forwards linear;
-  }
-  .carousel__face {
-    position: absolute;
-    width: 205px;
-    height: 187px;
-    top: 15px;
-    left: 10px;
-    right: 10px;
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    box-shadow:inset 0 0 0 2000px rgba(0,0,0,0.3);
-    display: flex;
-  }
+      .carousel {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        animation: rotate360 60s infinite forwards linear;
+      }
 
-  span {
-    margin: auto;
-    font-size: 2rem;
-  }
+      .carousel__face {
+        position: absolute;
+        width: 205px;
+        height: 187px;
+        top: 15px;
+        left: 10px;
+        right: 10px;
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.3);
+        display: flex;
+      }
 
-  .carousel__face:nth-child(1) {
-    background-image: url("{{ asset('img/logo-about/apache-logo.png') }}");
-    transform: rotateY(  0deg) translateZ(430px); }
-  .carousel__face:nth-child(2) {
-    background-image: url("{{ asset('img/logo-about/composer-logo.png') }}");
-    transform: rotateY( 27.69deg) translateZ(430px); }
-  .carousel__face:nth-child(3) {
-    background-image: url("{{ asset('img/logo-about/doctrine-logo.webp') }}");
-    transform: rotateY( 55.38deg) translateZ(430px); }
-  .carousel__face:nth-child(4) {
-    background-image: url("{{ asset('img/logo-about/mysql-logo.png') }}");
-    transform: rotateY(83.07deg) translateZ(430px); }
-  .carousel__face:nth-child(5) {
-    background-image: url("{{ asset('img/logo-about/nodejs-logo.jpg') }}");
-    transform: rotateY(110.76deg) translateZ(430px); }
-  .carousel__face:nth-child(6) {
-    background-image: url("{{ asset('img/logo-about/php-logo.png') }}");
-    transform: rotateY(138.45deg) translateZ(430px); }
-  .carousel__face:nth-child(7) {
-    background-image: url("{{ asset('img/logo-about/phpstorm-logo.png') }}");
-    transform: rotateY(166.14deg) translateZ(430px); }
-  .carousel__face:nth-child(8) {
-    background-image: url("{{ asset('img/logo-about/symfony-logo.png') }}");
-    transform: rotateY(193.83deg) translateZ(430px); }
-  .carousel__face:nth-child(9) {
-    background-image: url("{{ asset('img/logo-about/tailwind-logo.svg') }}");
-    transform: rotateY(221.52deg) translateZ(430px); }
-  .carousel__face:nth-child(10) {
-    background-image: url("{{ asset('img/logo-about/twig-logo.png') }}");
-    transform: rotateY(249.21deg) translateZ(430px); }
-  .carousel__face:nth-child(11) {
-    background-image: url("{{ asset('img/logo-about/wamp-logo.png') }}");
-    transform: rotateY(276.9deg) translateZ(430px); }
-  .carousel__face:nth-child(12) {
-    background-image: url("{{ asset('img/logo-about/lamp-logo.png') }}");
-    transform: rotateY(304.59deg) translateZ(430px); }
-  .carousel__face:nth-child(13) {
-    background-image: url("{{ asset('img/logo-about/webpack-encore-logo.png') }}");
-    transform: rotateY(332.28deg) translateZ(430px); }
+      span {
+        margin: auto;
+        font-size: 2rem;
+      }
 
-  @keyframes rotate360 {
-    from {
-      transform: rotateY(0deg);
-    }
-    to {
-      transform: rotateY(-360deg);
-    }
-  }
+      .carousel__face:nth-child(1) {
+        background-image: url("{{ asset('img/logo-about/apache-logo.png') }}");
+        transform: rotateY(0deg) translateZ(430px);
+      }
 
-</style>
+      .carousel__face:nth-child(2) {
+        background-image: url("{{ asset('img/logo-about/composer-logo.png') }}");
+        transform: rotateY(27.69deg) translateZ(430px);
+      }
+
+      .carousel__face:nth-child(3) {
+        background-image: url("{{ asset('img/logo-about/doctrine-logo.webp') }}");
+        transform: rotateY(55.38deg) translateZ(430px);
+      }
+
+      .carousel__face:nth-child(4) {
+        background-image: url("{{ asset('img/logo-about/mysql-logo.png') }}");
+        transform: rotateY(83.07deg) translateZ(430px);
+      }
+
+      .carousel__face:nth-child(5) {
+        background-image: url("{{ asset('img/logo-about/nodejs-logo.jpg') }}");
+        transform: rotateY(110.76deg) translateZ(430px);
+      }
+
+      .carousel__face:nth-child(6) {
+        background-image: url("{{ asset('img/logo-about/php-logo.png') }}");
+        transform: rotateY(138.45deg) translateZ(430px);
+      }
+
+      .carousel__face:nth-child(7) {
+        background-image: url("{{ asset('img/logo-about/phpstorm-logo.png') }}");
+        transform: rotateY(166.14deg) translateZ(430px);
+      }
+
+      .carousel__face:nth-child(8) {
+        background-image: url("{{ asset('img/logo-about/symfony-logo.png') }}");
+        transform: rotateY(193.83deg) translateZ(430px);
+      }
+
+      .carousel__face:nth-child(9) {
+        background-image: url("{{ asset('img/logo-about/tailwind-logo.svg') }}");
+        transform: rotateY(221.52deg) translateZ(430px);
+      }
+
+      .carousel__face:nth-child(10) {
+        background-image: url("{{ asset('img/logo-about/twig-logo.png') }}");
+        transform: rotateY(249.21deg) translateZ(430px);
+      }
+
+      .carousel__face:nth-child(11) {
+        background-image: url("{{ asset('img/logo-about/wamp-logo.png') }}");
+        transform: rotateY(276.9deg) translateZ(430px);
+      }
+
+      .carousel__face:nth-child(12) {
+        background-image: url("{{ asset('img/logo-about/lamp-logo.png') }}");
+        transform: rotateY(304.59deg) translateZ(430px);
+      }
+
+      .carousel__face:nth-child(13) {
+        background-image: url("{{ asset('img/logo-about/webpack-encore-logo.png') }}");
+        transform: rotateY(332.28deg) translateZ(430px);
+      }
+
+      @keyframes rotate360 {
+        from {
+          transform: rotateY(0deg);
+        }
+        to {
+          transform: rotateY(-360deg);
+        }
+      }
+
+    </style>
 {% endblock %}
