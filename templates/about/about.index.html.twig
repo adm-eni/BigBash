@@ -165,6 +165,7 @@ enum Status: string
                             </pre>
                         </div>
                     </div>
+
                     <div class="space-y-3">
                         <h3 class="text-xl font-semibold mb-2 text-amber-200">Format des dates avec twig/intl-extra</h3>
                         <a href="{{ path('outing_show', {'id': 1}) }}">
@@ -173,6 +174,15 @@ enum Status: string
 &lt;div class="truncate"&gt;{{ '{{ outing.startAt|format_datetime(locale=\'fr_FR\', pattern="EEEE dd MMMM YYYY \'à\' HH:mm")|capitalize|default(\'\') }}' }}&lt;/div&gt;</code>
                     </pre>
                         </a>
+                    </div>
+
+                    <div class="space-y-3">
+                        <h3 class="text-xl font-semibold mb-2 text-amber-200">Objet et formulaire filtre</h3>
+                        <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto p-2 rounded border border-blue-900">
+<code class="language-twig">\\ App\Controller\OutingController (route outing_list)
+
+    $filters = new OutingsFilter();
+    $filterForm = $this->createForm(OutingsFilterType::class, $filters);</code></pre>
                     </div>
 
                     <div class="space-y-3">
