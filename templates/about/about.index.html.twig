@@ -15,7 +15,7 @@
         <div class="bg-gray-800 rounded-lg shadow-md p-6">
           <h3 class="text-xl font-semibold mb-2 text-amber-200">Problématique</h3>
           <p class="mb-4">
-            <!-- Ajoutez votre contenu ici -->
+            Proposer une application web permettant aux stagiaires d'organiser et de participer à des sorties.
           </p>
           <h3 class="text-xl font-semibold mb-2 text-amber-200">Public ciblé</h3>
           <p>
@@ -28,7 +28,8 @@
       <section class="mb-16">
         <h2 class="text-3xl font-bold mb-4 text-amber-300">L'équipe</h2>
         <div class="bg-gray-800 rounded-lg shadow-md p-6">
-          <!-- Ajoutez les détails de l'équipe ici -->
+          <h3 class="text-xl font-semibold mb-2 text-amber-200">Clément => Utilisateurs</h3>
+          <h3 class="text-xl font-semibold mb-2 text-amber-200">Adam => Sorties</h3>
         </div>
       </section>
 
@@ -36,7 +37,7 @@
       <section class="mb-16">
         <h2 class="text-3xl font-bold mb-4 text-amber-300">Objectifs</h2>
         <div class="bg-gray-800 rounded-lg shadow-md p-6">
-          <!-- Listez vos objectifs ici -->
+          Itération 1 : Les actions effectuées sur la vue entrainent des modifications dans la base de données.
         </div>
       </section>
 
@@ -46,6 +47,7 @@
         <div class="bg-gray-800 rounded-lg shadow-md p-6">
           <div class="carousel-container">
             <div class="carousel">
+              <div class="carousel__face"></div>
               <div class="carousel__face"></div>
               <div class="carousel__face"></div>
               <div class="carousel__face"></div>
@@ -160,6 +162,9 @@
     background-image: url("{{ asset('img/logo-about/wamp-logo.png') }}");
     transform: rotateY(300deg) translateZ(430px); }
   .carousel__face:nth-child(12) {
+    background-image: url("{{ asset('img/logo-about/lamp-logo.png') }}");
+    transform: rotateY(300deg) translateZ(430px); }
+  .carousel__face:nth-child(13) {
     background-image: url("{{ asset('img/logo-about/webpack-encore-logo.png') }}");
     transform: rotateY(330deg) translateZ(430px); }
 
