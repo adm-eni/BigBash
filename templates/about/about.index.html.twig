@@ -9,19 +9,20 @@
         </nav>
 
         <div class="container mx-auto px-4 py-8">
-            <!-- Section 1: Introduction -->
-            <section class="mb-16">
-                <h2 class="text-3xl font-bold mb-4 text-amber-300">Présentation du projet</h2>
+            <!-- Section 1: Présentation du projet -->
+            <section class="mb-16 min-h-screen content-center">
+                <h2 class="text-3xl font-bold mb-4 text-amber-300 text-center">Présentation du projet</h2>
                 <div class="bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
                     <h3 class="text-xl font-semibold mb-2 text-amber-200">Problématique</h3>
                     <p class="mb-4">
                         Le grand nombre de stagiaires et leur répartition sur différents campus ne permet pas une
-                        organisation facile d’événements ou de sorties.
+                        organisation facile d'événements ou de sorties.
                     </p>
-                    <ul>
-                        <li>• Il n’existe pas de canal de communication officiel pour proposer ou consulter les sorties.
-                        <li>• Les outils actuels ne permettent pas de gérer d’invitations suivant la situation ou les
-                            intérêts des stagiaires, nide gérer le nombre d’invités, ni la date limite d’inscription.
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>Il n'existe pas de canal de communication officiel pour proposer ou consulter les sorties.
+                        </li>
+                        <li>Les outils actuels ne permettent pas de gérer d'invitations suivant la situation ou les
+                            intérêts des stagiaires, ni de gérer le nombre d'invités, ni la date limite d'inscription.
                         </li>
                     </ul>
                     <h3 class="text-xl font-semibold mb-2 text-amber-200">Public ciblé</h3>
@@ -31,52 +32,46 @@
                 </div>
             </section>
 
-            <!-- Section 2: L'équipe -->
-            <section class="mb-16">
-                <h2 class="text-3xl font-bold mb-4 text-amber-300">L'équipe</h2>
+            <!-- Section 2: Objectifs -->
+            <section class="mb-16 min-h-screen content-center">
+                <h2 class="text-3xl font-bold mb-4 text-amber-300 text-center">Objectifs</h2>
                 <div class="bg-gray-800 rounded-lg shadow-md p-6">
-                    <h3 class="text-xl font-semibold mb-2 text-amber-200">Clément => Utilisateurs</h3>
-                    <h3 class="text-xl font-semibold mb-2 text-amber-200">Adam => Sorties</h3>
-                </div>
-            </section>
-
-            <!-- Section 2: L'organisation -->
-            <section class="mb-16">
-                <h2 class="text-3xl font-bold mb-4 text-amber-300">L'Organisation</h2>
-                <div class="bg-gray-800 rounded-lg shadow-md p-6">
-                    <img src="{{ asset('img/Organisation.png') }}" alt="'Gantt'"
-                         class="max-w-full h-auto">
-                    <h4>Versioning : GitHub sur branch master</h4>
-                </div>
-            </section>
-
-            <!-- Section 3: Objectifs -->
-            <section class="mb-16">
-                <h2 class="text-3xl font-bold mb-4 text-amber-300">Objectifs</h2>
-                <div class="bg-gray-800 rounded-lg shadow-md p-6">
-                    Priorité 1 :
-                    <ul>
-                        <li>• Architecture en couches orientée objet faisant le lien entre un DOM et une base de données
+                    <h3 class="text-xl font-semibold mb-2 text-amber-200">Priorité 1 :</h3>
+                    <ul class="list-disc pl-5 space-y-2 mb-4">
+                        <li>Architecture en couches orientée objet faisant le lien entre un DOM et une base de données
                         </li>
-                        <li>• Respecter la structure IHM des maquettes, puis les exigences de la MOA</li>
-                        <li>• Rendre notre application maintenable</li>
-                        <li></li>
+                        <li>Respecter la structure IHM des maquettes, puis les exigences de la MOA</li>
+                        <li>Rendre notre application maintenable</li>
                     </ul>
-                    Priorité 2 :
-                    <ul>
-                        <li>• Etre exhaustif sur la qualité des fonctionnalités principales avant de passer à autre
+                    <h3 class="text-xl font-semibold mb-2 text-amber-200">Priorité 2 :</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>Etre exhaustif sur la qualité des fonctionnalités principales avant de passer à autre
                             chose
                         </li>
-                        <li>• Proposer une experience utilisateur esthétique et ergonomique</li>
-                        <li></li>
-                        <li></li>
+                        <li>Proposer une experience utilisateur esthétique et ergonomique</li>
                     </ul>
+                </div>
+            </section>
+
+            <!-- Section 3: L'organisation -->
+            <section class="mb-16 min-h-screen content-center">
+                <h2 class="text-3xl font-bold mb-4 text-amber-300 text-center">L'Organisation</h2>
+                <div class="bg-gray-800 rounded-lg shadow-md p-6 space-y-6">
+                    <img src="{{ asset('img/Organisation.png') }}" alt="Gantt" class="max-w-full h-auto mb-4">
+                    <h4 class="text-lg font-semibold">Versioning : GitHub sur branch master</h4>
+                    <div class="mt-8">
+                        <h3 class="text-xl font-semibold mb-2 text-amber-200">L'équipe</h3>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>Clément => Utilisateurs</li>
+                            <li>Adam => Sorties</li>
+                        </ul>
+                    </div>
                 </div>
             </section>
 
             <!-- Section 4: Outils et Technologies -->
-            <section class="mb-16">
-                <h2 class="text-3xl font-bold mb-4 text-amber-300">Outils et Technologies utilisés</h2>
+            <section class="mb-16 min-h-screen content-center">
+                <h2 class="text-3xl font-bold mb-4 text-amber-300 text-center">Outils et Technologies utilisés</h2>
                 <div class="bg-gray-800 rounded-lg shadow-md p-6">
                     <div class="carousel-container">
                         <div class="carousel">
@@ -96,303 +91,331 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-800 rounded-lg shadow-md p-6 space-y-3">
-                    <h4>Autres packages :</h4>
-                    <ul>
-                        <li>• symfony/webpack-encore-bundle</li>
-                        <li>• symfony/asset-mapper</li>
-                        <li>• symfony/twig-pack</li>
-                        <li>• doctrine/doctrine-fixtures-bundle</li>
-                        <li>• fakerphp/faker</li>
-                        <li>• symfonycasts/tailwind-bundle</li>
-                        <li>• twig/intl-extra</li>
-                        <li>• tailwindcss/typography</li>
-                        <li>• tailwindcss/forms'</li>
-                        <li>• tailwindcss/aspect-ratio'</li>
+                <div class="bg-gray-800 rounded-lg shadow-md p-6 space-y-3 mt-4">
+                    <h4 class="text-lg font-semibold">Autres packages :</h4>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>symfony/webpack-encore-bundle</li>
+                        <li>symfony/asset-mapper</li>
+                        <li>symfony/twig-pack</li>
+                        <li>doctrine/doctrine-fixtures-bundle</li>
+                        <li>fakerphp/faker</li>
+                        <li>symfonycasts/tailwind-bundle</li>
+                        <li>twig/intl-extra</li>
+                        <li>tailwindcss/typography</li>
+                        <li>tailwindcss/forms</li>
+                        <li>tailwindcss/aspect-ratio</li>
                     </ul>
                 </div>
             </section>
 
             <!-- Section 5: Diagrammes -->
-            <section class="mb-16">
-                <h2 class="text-3xl font-bold mb-4 text-amber-300">Diagrammes</h2>
+            <section class="mb-16 min-h-screen content-center">
+                <h2 class="text-3xl font-bold mb-4 text-amber-300 text-center">Diagrammes</h2>
                 <div class="bg-gray-800 rounded-lg shadow-md p-6">
-                    <!-- Insérez votre diagramme de cas d'utilisation ici -->
 
-                    <h3 class="text-xl font-semibold mb-2 mt-6 text-amber-200">Diagramme de base de données</h3>
+                    <h3 class="text-xl font-semibold mb-2 text-amber-200">Diagramme de base de données</h3>
                     <img src="{{ asset('img/DiagClasseDark.png') }}" alt="Diagramme de classe"
                          class="max-w-full h-auto">
                 </div>
             </section>
 
-            <!-- Section 6: Sécurité -->
-            <section class="mb-16">
-                <h2 class="text-3xl font-bold mb-4 text-amber-300">Sécurité</h2>
-                <div class="bg-gray-800 rounded-lg shadow-md p-6">
-                    <h3 class="text-xl font-semibold mb-2 mt-6 text-amber-200">Authentication</h3>
-                    <div>security.yaml</div>
-                    <pre>
-                        access_control:
-                            - { path: ^/login, roles: PUBLIC_ACCESS }
-                            - { path: ^/$, roles: PUBLIC_ACCESS }
-                            - { path: ^/outings/\d+$, roles: PUBLIC_ACCESS }
-                            - { path: ^/campuses, roles: ROLE_ADMIN }
-                            - { path: ^/cities, roles: ROLE_ADMIN }
-                            - { path: ^/user/import, roles: ROLE_ADMIN }
-                            - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
-
-                        role_hierarchy:
-                            ROLE_ADMIN: ROLE_USER
-                    </pre>
-                </div>
+            <!-- Section 6: Démonstration -->
+            <section class="mb-16 min-h-screen content-center">
+                <h2 class="text-3xl font-bold mb-4 text-amber-300 text-center">Démonstration</h2>
             </section>
 
-            <!-- Ajoutez d'autres sections selon vos besoins -->
-
-            <!-- Section 7: Code -->
-            <section class="mb-16">
-                <h2 class="text-3xl font-bold mb-4 text-amber-300">Fonctionnalités</h2>
+            <!-- Section 7: Fonctionnalités -->
+            <section class="mb-16 min-h-screen content-center">
+                <h2 class="text-3xl font-bold mb-4 text-amber-300 text-center">Fonctionnalités</h2>
                 <div class="bg-gray-800 rounded-lg shadow-md p-6 space-y-9">
                     <div class="space-y-3">
-                        <p>Enum pour les états des sorties :</p>
-                        <div class="flex justify-center space-x-8 items-center">
-                    <pre class="border-solid border p-6">&lt;?php
-
-namespace App\Enum;
-
+                        <h3 class="text-xl font-semibold mb-2 text-amber-200">Enum pour les états des sorties</h3>
+                        <div class="flex justify-between items-center">
+                            <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
+<code class="language-php">// App\Enum\Status
 enum Status: string
 {
-  case CREATED = 'En création';
-  case OPEN = 'Ouvert';
-  case BOOKED = 'Complet';
-  case ONGOING = 'En cours';
-  case CANCELED = 'Annulé';
-  case PAST = 'Terminé';
-  case CLOSED = 'Clôturé';</pre>
-
-                            <pre class="border-solid border p-6">if ($outing->getStatus() === Status::OPEN) $outing->setStatus(Status::BOOKED);</pre>
+    case CREATED = 'En création';
+    case OPEN = 'Ouvert';
+    case BOOKED = 'Complet';
+    case ONGOING = 'En cours';
+    case CANCELED = 'Annulé';
+    case PAST = 'Terminé';
+    case CLOSED = 'Clôturé';
+}</code>
+                            </pre>
+                            <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
+<code class="language-php">if ($outing->getStatus() === Status::OPEN) {
+    $outing->setStatus(Status::BOOKED);
+}</code>
+                            </pre>
                         </div>
                     </div>
                     <div class="space-y-3">
-                        <p>Format des dates avec twig/intl-extra :</p>
-                        <a href="{{ path('outing_show', {'id': 1}) }}"
-                           class="flex justify-center space-x-8 items-center">
-                    <pre class="border-b border p-6 max-w-fit">
-&lt;div class="font-semibold text-right truncate">Date et heure de la sortie :&lt;/div&gt;
-&lt;div class="truncate"&gt; &#123;&#123; outing.startAt|format_datetime(locale='fr_FR',pattern="EEEE dd MMMM YYYY 'à' HH:mm")|capitalize|default('') &#125;&#125;&lt;/div&gt; </pre>
+                        <h3 class="text-xl font-semibold mb-2 text-amber-200">Format des dates avec twig/intl-extra</h3>
+                        <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
+<code class="language-twig">&lt;div class="font-semibold text-right truncate"&gt;Date et heure de la sortie :&lt;/div&gt;
+&lt;div class="truncate"&gt;{{ '{{ outing.startAt|format_datetime(locale=\'fr_FR\', pattern="EEEE dd MMMM YYYY \'à\' HH:mm")|capitalize|default(\'\') }}' }}&lt;/div&gt;</code>
+                    </pre>
+                    </div>
 
-                        </a>
+                    <div class="space-y-3">
+                        <h3 class="text-xl font-semibold mb-2 text-amber-200">Mise à jour/archivage états</h3>
+                        <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
+<code class="language-php">// App\Repository\OutingRepository
+    public function findOutingsToUpdate(): array
+  {
+    $now = new \DateTime();
+    $oneMonthAgo = (clone $now)-&gt;modify('-1 month');
+
+    $qb = $this-&gt;createQueryBuilder('o')
+        -&gt;where('o.status IN (:endStatuses) AND DATE_ADD(o.startAt, o.duration, \'MINUTE\') &lt;= :oneMonthAgo')
+        -&gt;orWhere('o.status = :ongoingStatus AND DATE_ADD(o.startAt, o.duration, \'MINUTE\') &lt;= :now AND :oneMonthAgo &lt; DATE_ADD(o.startAt, o.duration, \'MINUTE\')')
+        -&gt;orWhere('o.status = :bookedStatus AND o.startAt &lt;= :now AND :now &lt; (o.startAt + o.duration)')
+        -&gt;orWhere('o.status = :openStatus AND o.entryDeadline &lt;= :now AND :now &lt; o.startAt')
+        -&gt;setParameter('now', $now)
+        -&gt;setParameter('oneMonthAgo', $oneMonthAgo)
+        -&gt;setParameter('bookedStatus', Status::BOOKED)
+        -&gt;setParameter('openStatus', Status::OPEN)
+        -&gt;setParameter('ongoingStatus', Status::ONGOING)
+        -&gt;setParameter('endStatuses', [Status::CANCELED, Status::PAST]);
+    return $qb-&gt;getQuery()-&gt;getResult();
+  }
+}</code>
+                        </pre>
+                        <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
+<code class="language-php">// App\Service\OutingService
+  public function updateOutingStatuses(): void
+  {
+    $outings = $this->outingRepo->findOutingsToUpdate();
+
+    foreach ($outings as $outing) {
+      if ($outing->getStatus() === Status::OPEN) $outing->setStatus(Status::BOOKED);
+      elseif ($outing->getStatus() === Status::BOOKED) $outing->setStatus(Status::ONGOING);
+      elseif ($outing->getStatus() === Status::ONGOING) $outing->setStatus(Status::PAST);
+      else $outing->setStatus(Status::CLOSED);
+    }
+    $this->outingRepo->getEntityManager()->flush();
+  }
+}</code>
+                        </pre>
+                        <div class="space-y-3">
+                            <h3 class="text-xl font-semibold mb-2 text-amber-200">Gestion des statuts de sortie</h3>
+                            <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
+<code class="language-php">// App\Controller\OutingController
+public function create(/* ... */)
+{
+    try {
+        $outingService->checkOutingStatus($outing, true, true, true, true, true, false, false);
+    } catch (OutingStatusException $e) {
+        $this->addFlash($e->getFlashType(), $e->getMessage());
+        return $this->redirectToRoute('outing_public_list');
+    }
+    // ...
+}</code>
+                        </pre>
+                            <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
+<code class="language-php">// App\Service\OutingService
+public function checkOutingStatus(Outing $outing, bool $closed, bool $ongoing, /* ... */)
+{
+    $status = $outing->getStatus();
+
+    if ($closed && $status === Status::CLOSED) {
+        throw new OutingStatusException('Cette sortie a été clôturée.');
+    }
+    // ... autres vérifications ...
+}</code>
+                        </pre>
+                            <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
+<code class="language-php">// App\Exception\OutingStatusException
+class OutingStatusException extends \Exception
+{
+    private string $flashType;
+
+    public function __construct(string $message, string $flashType = 'error', int $code = 0, \Throwable $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+        $this->flashType = $flashType;
+    }
+
+    public function getFlashType(): string
+    {
+        return $this->flashType;
+    }
+}</code>
+                        </pre>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-800 rounded-lg shadow-md p-6 mt-8">
+                        <h3 class="text-xl font-semibold mb-4 text-amber-200">Sécurité</h3>
+                        <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto">
+<code class="language-yaml"># config/packages/security.yaml
+access_control:
+    - { path: ^/login, roles: PUBLIC_ACCESS }
+    - { path: ^/$, roles: PUBLIC_ACCESS }
+    - { path: ^/outings/\d+$, roles: PUBLIC_ACCESS }
+    - { path: ^/campuses, roles: ROLE_ADMIN }
+    - { path: ^/cities, roles: ROLE_ADMIN }
+    - { path: ^/user/import, roles: ROLE_ADMIN }
+    - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
+
+role_hierarchy:
+    ROLE_ADMIN: ROLE_USER</code>
+                    </pre>
                     </div>
                 </div>
+            </section>
 
-                <div class="bg-gray-800 rounded-lg shadow-md p-6 mt-4">
-                    <pre class="border-b border p-6 max-w-fit">
-                        class OutingController extends AbstractController {
-                            ...
-                            public function create(
-                                ...
-                                try {
-                                    $outingService->checkOutingStatus($outing, true, true, true, true, true, false, false);
-                                } catch (OutingStatusException $e) {
-                                    $this->addFlash($e->getFlashType(), $e->getMessage());
-                                    return $this->redirectToRoute('outing_public_list');
-                                }
-                    </pre>
-                    <pre class="border-b border p-6 max-w-fit">
-                        class OutingService extends AbstractController {
-                        ...
-                        public function checkOutingStatus(Outing $outing,
-                                      bool   $closed,
-                                      bool   $ongoing,
-                                      bool   $past,
-                                      bool   $canceled,
-                                      bool   $open,
-                                      bool   $created,
-                                      bool   $full): void {
-                            $status = $outing->getStatus();
-
-                            if ($closed && $status === Status::CLOSED) {
-                                throw new OutingStatusException('Cette sortie a été clôturée.');
-                            }
-                            if ($ongoing && $status === Status::ONGOING) {
-                                throw new OutingStatusException('Cette sortie est en cours.');
-                            }
-                            if ($past && $status === Status::PAST) {
-                                throw new OutingStatusException('Cette sortie est terminée.');
-                            }
-                            if ($canceled && $status === Status::CANCELED) {
-                                throw new OutingStatusException('Cette sortie a été annulée.');
-                            }
-                            if ($open && $status === Status::OPEN) {
-                                throw new OutingStatusException('Cette sortie est déjà publiée.');
-                            }
-                            if ($created && $status === Status::CREATED) {
-                                throw new OutingStatusException('Cette sortie est en cours de création.');
-                            }
-                            if($full && $outing->getAttendees()->count() >= $outing->getMaxEntryCount()) {
-                                throw new OutingStatusException('Il n\'y a plus de place pour cette sortie.');
-                            }
-                        }
-                    </pre>
-                    <pre class="border-b border p-6 max-w-fit">
-                        class OutingStatusException extends \Exception {
-                            private string $flashType;
-
-                            public function __construct(string $message, string $flashType = 'error', int $code = 0, \Throwable $previous = null)
-                            {
-                                parent::__construct($message, $code, $previous);
-                                $this->flashType = $flashType;
-                            }
-
-                            public function getFlashType(): string
-                            {
-                                return $this->flashType;
-                            }
-                        }
-                    </pre>
+            <!-- Section 8: Conclusion -->
+            <section class="mb-16 min-h-screen content-center">
+                <h2 class="text-3xl font-bold mb-4 text-amber-300 text-center">Conclusion</h2>
+                <div class="bg-gray-800 rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-semibold mb-4 text-amber-200">Retour d'expérience</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">Difficultés rencontrées</h4>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Gestion des états des sorties</li>
+                                <li>Implémentation de la sécurité</li>
+                                <li>Intégration de Tailwind CSS avec Symfony</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold mb-2">Réussites</h4>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Mise en place d'une architecture robuste</li>
+                                <li>Utilisation efficace des outils modernes (Symfony, Tailwind, etc.)</li>
+                                <li>Collaboration efficace au sein de l'équipe</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <!-- Section 8: Demo -->
-            <section class="mb-16">
-                <h2 class="text-3xl font-bold mb-4 text-amber-300">Démonstration</h2>
-            </section>
-
-            <!-- Section finale: Conclusion -->
-            <section class="mb-16">
-                <h2 class="text-3xl font-bold mb-4 text-amber-300">Conclusion</h2>
+            <!-- Section 9: Merci -->
+            <section class="mb-16 min-h-screen content-center">
+                <h2 class="text-3xl font-bold mb-4 text-amber-300 text-center">Merci !</h2>
                 <div class="bg-gray-800 rounded-lg shadow-md p-6">
-                    Retour d'expérience
-                    <ul>
-                        <li>• Difficultés</li>
-                        <li>• Réussites</li>
-                    </ul>
-                </div>
-            </section>
-
-            <!-- Section finale-bis: Q&R -->
-            <section class="mb-16">
-                <h2 class="text-3xl font-bold mb-4 text-amber-300">Merci !</h2>
-                <div class="bg-gray-800 rounded-lg shadow-md p-6">
-                    Questions & Réponses
+                    <h3 class="text-xl font-semibold mb-4 text-amber-200">Questions & Réponses</h3>
+                    <p>Nous sommes maintenant ouverts à vos questions. N'hésitez pas à nous interroger sur n'importe
+                        quel aspect du projet que nous avons présenté aujourd'hui.</p>
                 </div>
             </section>
         </div>
     </div>
-
 {% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        .carousel-container {
-            position: relative;
-            width: 320px;
-            height: 280px;
-            margin: 100px auto 0 auto;
-            perspective: 1000px;
-        }
+      .carousel-container {
+        position: relative;
+        width: 320px;
+        height: 280px;
+        margin: 100px auto 0 auto;
+        perspective: 1000px;
+      }
 
-        .carousel {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            animation: rotate360 60s infinite forwards linear;
-        }
+      .carousel {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        transform-style: preserve-3d;
+        animation: rotate360 60s infinite forwards linear;
+      }
 
-        .carousel__face {
-            position: absolute;
-            width: 205px;
-            height: 187px;
-            top: 15px;
-            left: 10px;
-            right: 10px;
-            background-position: center;
-            background-size: contain;
-            background-repeat: no-repeat;
-            box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.3);
-            display: flex;
-        }
+      .carousel__face {
+        position: absolute;
+        width: 205px;
+        height: 187px;
+        top: 15px;
+        left: 10px;
+        right: 10px;
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        box-shadow: inset 0 0 0 2000px rgba(0, 0, 0, 0.3);
+        display: flex;
+      }
 
-        span {
-            margin: auto;
-            font-size: 2rem;
-        }
+      span {
+        margin: auto;
+        font-size: 2rem;
+      }
 
-        .carousel__face:nth-child(1) {
-            background-image: url("{{ asset('img/logo-about/apache-logo.png') }}");
-            transform: rotateY(0deg) translateZ(430px);
-        }
+      .carousel__face:nth-child(1) {
+        background-image: url("{{ asset('img/logo-about/apache-logo.png') }}");
+        transform: rotateY(0deg) translateZ(430px);
+      }
 
-        .carousel__face:nth-child(2) {
-            background-image: url("{{ asset('img/logo-about/composer-logo.png') }}");
-            transform: rotateY(27.69deg) translateZ(430px);
-        }
+      .carousel__face:nth-child(2) {
+        background-image: url("{{ asset('img/logo-about/composer-logo.png') }}");
+        transform: rotateY(27.69deg) translateZ(430px);
+      }
 
-        .carousel__face:nth-child(3) {
-            background-image: url("{{ asset('img/logo-about/doctrine-logo.webp') }}");
-            transform: rotateY(55.38deg) translateZ(430px);
-        }
+      .carousel__face:nth-child(3) {
+        background-image: url("{{ asset('img/logo-about/doctrine-logo.webp') }}");
+        transform: rotateY(55.38deg) translateZ(430px);
+      }
 
-        .carousel__face:nth-child(4) {
-            background-image: url("{{ asset('img/logo-about/mysql-logo.png') }}");
-            transform: rotateY(83.07deg) translateZ(430px);
-        }
+      .carousel__face:nth-child(4) {
+        background-image: url("{{ asset('img/logo-about/mysql-logo.png') }}");
+        transform: rotateY(83.07deg) translateZ(430px);
+      }
 
-        .carousel__face:nth-child(5) {
-            background-image: url("{{ asset('img/logo-about/nodejs-logo.jpg') }}");
-            transform: rotateY(110.76deg) translateZ(430px);
-        }
+      .carousel__face:nth-child(5) {
+        background-image: url("{{ asset('img/logo-about/nodejs-logo.jpg') }}");
+        transform: rotateY(110.76deg) translateZ(430px);
+      }
 
-        .carousel__face:nth-child(6) {
-            background-image: url("{{ asset('img/logo-about/php-logo.png') }}");
-            transform: rotateY(138.45deg) translateZ(430px);
-        }
+      .carousel__face:nth-child(6) {
+        background-image: url("{{ asset('img/logo-about/php-logo.png') }}");
+        transform: rotateY(138.45deg) translateZ(430px);
+      }
 
-        .carousel__face:nth-child(7) {
-            background-image: url("{{ asset('img/logo-about/phpstorm-logo.png') }}");
-            transform: rotateY(166.14deg) translateZ(430px);
-        }
+      .carousel__face:nth-child(7) {
+        background-image: url("{{ asset('img/logo-about/phpstorm-logo.png') }}");
+        transform: rotateY(166.14deg) translateZ(430px);
+      }
 
-        .carousel__face:nth-child(8) {
-            background-image: url("{{ asset('img/logo-about/symfony-logo.png') }}");
-            transform: rotateY(193.83deg) translateZ(430px);
-        }
+      .carousel__face:nth-child(8) {
+        background-image: url("{{ asset('img/logo-about/symfony-logo.png') }}");
+        transform: rotateY(193.83deg) translateZ(430px);
+      }
 
-        .carousel__face:nth-child(9) {
-            background-image: url("{{ asset('img/logo-about/tailwind-logo.svg') }}");
-            transform: rotateY(221.52deg) translateZ(430px);
-        }
+      .carousel__face:nth-child(9) {
+        background-image: url("{{ asset('img/logo-about/tailwind-logo.svg') }}");
+        transform: rotateY(221.52deg) translateZ(430px);
+      }
 
-        .carousel__face:nth-child(10) {
-            background-image: url("{{ asset('img/logo-about/twig-logo.png') }}");
-            transform: rotateY(249.21deg) translateZ(430px);
-        }
+      .carousel__face:nth-child(10) {
+        background-image: url("{{ asset('img/logo-about/twig-logo.png') }}");
+        transform: rotateY(249.21deg) translateZ(430px);
+      }
 
-        .carousel__face:nth-child(11) {
-            background-image: url("{{ asset('img/logo-about/wamp-logo.png') }}");
-            transform: rotateY(276.9deg) translateZ(430px);
-        }
+      .carousel__face:nth-child(11) {
+        background-image: url("{{ asset('img/logo-about/wamp-logo.png') }}");
+        transform: rotateY(276.9deg) translateZ(430px);
+      }
 
-        .carousel__face:nth-child(12) {
-            background-image: url("{{ asset('img/logo-about/lamp-logo.png') }}");
-            transform: rotateY(304.59deg) translateZ(430px);
-        }
+      .carousel__face:nth-child(12) {
+        background-image: url("{{ asset('img/logo-about/lamp-logo.png') }}");
+        transform: rotateY(304.59deg) translateZ(430px);
+      }
 
-        .carousel__face:nth-child(13) {
-            background-image: url("{{ asset('img/logo-about/webpack-encore-logo.png') }}");
-            transform: rotateY(332.28deg) translateZ(430px);
-        }
+      .carousel__face:nth-child(13) {
+        background-image: url("{{ asset('img/logo-about/webpack-encore-logo.png') }}");
+        transform: rotateY(332.28deg) translateZ(430px);
+      }
 
-        @keyframes rotate360 {
-            from {
-                transform: rotateY(0deg);
-            }
-            to {
-                transform: rotateY(-360deg);
-            }
+      @keyframes rotate360 {
+        from {
+          transform: rotateY(0deg);
         }
-
+        to {
+          transform: rotateY(-360deg);
+        }
+      }
     </style>
 {% endblock %}
