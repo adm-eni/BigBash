@@ -130,6 +130,7 @@
                 <h2 class="text-3xl font-bold mb-4 text-amber-300">Sécurité</h2>
                 <div class="bg-gray-800 rounded-lg shadow-md p-6">
                     <h3 class="text-xl font-semibold mb-2 mt-6 text-amber-200">Authentication</h3>
+                    <div>security.yaml</div>
                     <pre>
                         access_control:
                             - { path: ^/login, roles: PUBLIC_ACCESS }
@@ -148,9 +149,9 @@
 
             <!-- Ajoutez d'autres sections selon vos besoins -->
 
-            <!-- Section finale: Conclusion -->
+            <!-- Section 7: Code -->
             <section class="mb-16">
-                <h2 class="text-3xl font-bold mb-4 text-amber-300">Bouts de code</h2>
+                <h2 class="text-3xl font-bold mb-4 text-amber-300">Fonctionnalités</h2>
                 <div class="bg-gray-800 rounded-lg shadow-md p-6 space-y-9">
                     <div class="space-y-3">
                         <p>Enum pour les états des sorties :</p>
@@ -183,13 +184,97 @@ enum Status: string
                         </a>
                     </div>
                 </div>
+
+                <div class="bg-gray-800 rounded-lg shadow-md p-6 mt-4">
+                    <pre class="border-b border p-6 max-w-fit">
+                        class OutingController extends AbstractController {
+                            ...
+                            public function create(
+                                ...
+                                try {
+                                    $outingService->checkOutingStatus($outing, true, true, true, true, true, false, false);
+                                } catch (OutingStatusException $e) {
+                                    $this->addFlash($e->getFlashType(), $e->getMessage());
+                                    return $this->redirectToRoute('outing_public_list');
+                                }
+                    </pre>
+                    <pre class="border-b border p-6 max-w-fit">
+                        class OutingService extends AbstractController {
+                        ...
+                        public function checkOutingStatus(Outing $outing,
+                                      bool   $closed,
+                                      bool   $ongoing,
+                                      bool   $past,
+                                      bool   $canceled,
+                                      bool   $open,
+                                      bool   $created,
+                                      bool   $full): void {
+                            $status = $outing->getStatus();
+
+                            if ($closed && $status === Status::CLOSED) {
+                                throw new OutingStatusException('Cette sortie a été clôturée.');
+                            }
+                            if ($ongoing && $status === Status::ONGOING) {
+                                throw new OutingStatusException('Cette sortie est en cours.');
+                            }
+                            if ($past && $status === Status::PAST) {
+                                throw new OutingStatusException('Cette sortie est terminée.');
+                            }
+                            if ($canceled && $status === Status::CANCELED) {
+                                throw new OutingStatusException('Cette sortie a été annulée.');
+                            }
+                            if ($open && $status === Status::OPEN) {
+                                throw new OutingStatusException('Cette sortie est déjà publiée.');
+                            }
+                            if ($created && $status === Status::CREATED) {
+                                throw new OutingStatusException('Cette sortie est en cours de création.');
+                            }
+                            if($full && $outing->getAttendees()->count() >= $outing->getMaxEntryCount()) {
+                                throw new OutingStatusException('Il n\'y a plus de place pour cette sortie.');
+                            }
+                        }
+                    </pre>
+                    <pre class="border-b border p-6 max-w-fit">
+                        class OutingStatusException extends \Exception {
+                            private string $flashType;
+
+                            public function __construct(string $message, string $flashType = 'error', int $code = 0, \Throwable $previous = null)
+                            {
+                                parent::__construct($message, $code, $previous);
+                                $this->flashType = $flashType;
+                            }
+
+                            public function getFlashType(): string
+                            {
+                                return $this->flashType;
+                            }
+                        }
+                    </pre>
+                </div>
+            </section>
+
+            <!-- Section 8: Demo -->
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-amber-300">Démonstration</h2>
             </section>
 
             <!-- Section finale: Conclusion -->
             <section class="mb-16">
                 <h2 class="text-3xl font-bold mb-4 text-amber-300">Conclusion</h2>
                 <div class="bg-gray-800 rounded-lg shadow-md p-6">
-                    <!-- Ajoutez votre conclusion ici -->
+                    Retour d'expérience
+                    <ul>
+                        <li>• Difficultés</li>
+                        <li>• Réussites</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section finale-bis: Q&R -->
+            <section class="mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-amber-300">Merci !</h2>
+                <div class="bg-gray-800 rounded-lg shadow-md p-6">
+                    Questions & Réponses
                 </div>
             </section>
         </div>
