@@ -249,7 +249,24 @@ public function checkOutingStatus(Outing $outing, bool $closed, bool $ongoing, /
     if ($closed && $status === Status::CLOSED) {
         throw new OutingStatusException('Cette sortie a été clôturée.');
     }
-    // ... autres vérifications ...
+    if ($ongoing && $status === Status::ONGOING) {
+        throw new OutingStatusException('Cette sortie est en cours.');
+    }
+    if ($past && $status === Status::PAST) {
+        throw new OutingStatusException('Cette sortie est terminée.');
+    }
+    if ($canceled && $status === Status::CANCELED) {
+        throw new OutingStatusException('Cette sortie a été annulée.');
+    }
+    if ($open && $status === Status::OPEN) {
+        throw new OutingStatusException('Cette sortie est déjà publiée.');
+    }
+    if ($created && $status === Status::CREATED) {
+        throw new OutingStatusException('Cette sortie est en cours de création.');
+    }
+    if($full && $outing->getAttendees()->count() >= $outing->getMaxEntryCount()) {
+        throw new OutingStatusException('Il n\'y a plus de place pour cette sortie.');
+    }
 }</code>
                         </pre>
                             <pre class="bg-gray-700 p-4 rounded-lg overflow-x-auto p-2 rounded border border-green-900">
